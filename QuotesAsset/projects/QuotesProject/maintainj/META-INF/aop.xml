@@ -1,0 +1,21 @@
+<aspectj>
+	<aspects>
+		<concrete-aspect name="com.maintainj.inst.JUnitAspect" extends="com.maintainj.aspect.JUnitExecutionDataAspect">
+			<pointcut name="anyExecution" expression="execution(public  * *.*(..)) || execution(public  *.new(..))"/>
+			<pointcut name="junitTest" expression="execution(@org.junit.Test * *(..)) || execution(* junit.framework.TestCase+.test*()) "/>
+		</concrete-aspect>
+	</aspects>
+	<weaver options="-proceedOnError -nowarn -XaddSerialVersionUID  -Xset:makeTjpFieldsTransient=true -Xset:avoidFinal=true">
+		<include within="com.eric.command..*"/>
+		<include within="com.eric.controller..*"/>
+		<include within="com.eric.domain..*"/>
+		<include within="com.eric.factory..*"/>
+		<include within="com.eric.managers..*"/>
+		<include within="com.eric.ui..*"/>
+		<include within="com.eric.validator..*"/>
+		<exclude within="*ObjectFactory"/>
+		<exclude within="*..*$$EnhancerByCGLIB$$*"/>
+		<exclude within="*..*$$EnhancerBySpringCGLIB$$*"/>
+		<exclude within="com.maintainj..*"/>
+	</weaver>
+</aspectj>

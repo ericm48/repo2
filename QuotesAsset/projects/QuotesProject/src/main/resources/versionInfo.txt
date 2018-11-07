@@ -1,0 +1,20 @@
+#
+# VersionInfo.txt:
+#
+
+ToDo:
+	1.  Refactor p1 plannel to have have 2 inner panels.
+	2.  Add functionality to handle quotes.txt in local dir, as well as in .jar.
+	
+
+Version:
+3.0.0.0-SNAPSHOT	-Added versionInfo.txt
+					-Refactored UI to have 
+						-JDK
+						-Version
+					-Added functionality to handle local quotes.txt, as well as .jar.
+						
+
+
+
+
