@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.Test;
 
+import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.BaseTestConstants;
 import com.eric.ui.listener.QuoteListener;
@@ -14,7 +15,7 @@ import com.eric.ui.listener.QuoteListener;
 public class QuotesAdapter_UT
 {
 	 private static Log methIDrunToQuoteListenerBadInternalBadExternalQuotesFileFAIL;
-	 private static Log methIDrunToQuoteListenerNoMaxQuotesFAIL;
+	 private static Log methIDrunToQuoteListenerInternalNoMaxQuotesFAIL;
 	 private static Log methIDrunToQuoteListenerInternalQuotesFileSUCCESS;
 	 private static Log methIDrunToQuoteListenerExternalQuotesFileSUCCESS;
 	 
@@ -24,9 +25,9 @@ public class QuotesAdapter_UT
 				  	.getLog(QuotesAdapter_UT.class.getName()
 						+ ".runToQuoteListenerBadInternalBadExternalQuotesFileFAIL()");
 		 
-		 methIDrunToQuoteListenerNoMaxQuotesFAIL = LogFactory
+		 methIDrunToQuoteListenerInternalNoMaxQuotesFAIL = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToQuoteListenerNoMaxQuotesFAIL()");
+						+ ".runToQuoteListenerInternalNoMaxQuotesFAIL()");
 
 		 methIDrunToQuoteListenerInternalQuotesFileSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
@@ -39,27 +40,28 @@ public class QuotesAdapter_UT
 	 }
 
 	 @Test
-	 public void runToQuoteListenerNoMaxQuotesFAIL()
+	 public void runToQuoteListenerInternalNoMaxQuotesFAIL()
 	 {
-		  Log logger = methIDrunToQuoteListenerNoMaxQuotesFAIL;
+		  Log logger = methIDrunToQuoteListenerInternalNoMaxQuotesFAIL;
 		  QuoteListener ql = null;		  
 
-		  // Here's the important Part!!		  
+		  // Here's the important Part!!
+		  String targetKey = AppPropFileKey.INTERNAL.toString();
 		  String targetPropFileName = BaseTestConstants.QUOTES_BAD_INTERNAL_AND_EXTERNAL_QUOTES_FILENAME;
 		  
-		  logger.debug("Begins...");
+		  logger.debug(BaseTestConstants.BEGINS);
 		  
-		  System.setProperty(BaseConstants.PROP_FILE, targetPropFileName);
+		  System.setProperty(targetKey, targetPropFileName);
 		  logger.info("Using PropertyFile: " + targetPropFileName);
 		  
 		  Assert.assertNull(ql);
 		  ql = QuotesAdapter.toQuoteListener();
 
-		  Assert.assertNull(ql);
-
-		  System.clearProperty(BaseConstants.PROP_FILE);		  
+		  System.clearProperty(targetKey);		  
 		  
-		  logger.debug("Ends...");
+		  Assert.assertNull(ql);
+		  
+		  logger.debug(BaseTestConstants.ENDS);
 
 		  return;
 	 }
@@ -70,20 +72,23 @@ public class QuotesAdapter_UT
 		  Log logger = methIDrunToQuoteListenerBadInternalBadExternalQuotesFileFAIL;
 		  QuoteListener ql = null;
 		  
-		  // Here's the important Part!!		  
+		  // Here's the important Part!!
+		  String targetKey = AppPropFileKey.EXTERNAL.toString();		  
 		  String targetPropFileName = BaseTestConstants.QUOTES_BAD_INTERNAL_AND_EXTERNAL_QUOTES_FILENAME;
 		  
-		  logger.debug("Begins...");
+		  logger.debug(BaseTestConstants.BEGINS);
 
-		  System.setProperty(BaseConstants.PROP_FILE, targetPropFileName);
+		  System.setProperty(targetKey, targetPropFileName);
 		  logger.info("Using PropertyFile: " + targetPropFileName);
 		  
 		  Assert.assertNull(ql);
 		  ql = QuotesAdapter.toQuoteListener();
 
+		  System.clearProperty(targetKey);		  
+		  
 		  Assert.assertNull(ql);
-
-		  logger.debug("Ends...");
+		  
+		  logger.debug(BaseTestConstants.ENDS);
 
 		  return;
 
@@ -96,12 +101,13 @@ public class QuotesAdapter_UT
 		  QuoteListener ql = null;
 		  int maxQuotes = 0;
 
-		  // Here's the important Part!!		  
+		  // Here's the important Part!!		 
+		  String targetKey = AppPropFileKey.INTERNAL.toString();
 		  String targetPropFileName = BaseTestConstants.QUOTES_BAD_EXTERNAL_QUOTES_FILENAME;
 		  
-		  logger.debug("Begins...");
+		  logger.debug(BaseTestConstants.BEGINS);
 
-		  System.setProperty(BaseConstants.PROP_FILE, targetPropFileName);
+		  System.setProperty(targetKey, targetPropFileName);
 		  logger.info("Using PropertyFile: " + targetPropFileName);
 		  
 		  Assert.assertNull(ql);
@@ -109,12 +115,14 @@ public class QuotesAdapter_UT
 		  
 		  ql = QuotesAdapter.toQuoteListener();
 
+		  System.clearProperty(targetKey);		  
+		  
 		  Assert.assertNotNull(ql);
 
 		  maxQuotes = ql.getMaxQuotes();		  
 		  Assert.assertEquals(maxQuotes, BaseTestConstants.MAX_QUOTES_INERNTAL);		  
 		  
-		  logger.debug("Ends...");
+		  logger.debug(BaseTestConstants.ENDS);
 
 		  return;
 
@@ -127,21 +135,24 @@ public class QuotesAdapter_UT
 		  QuoteListener ql = null;
 		  int maxQuotes = 0;
 		  
-		  // Here's the important Part!!		  
+		  // Here's the important Part!!	
+		  String targetKey = AppPropFileKey.EXTERNAL.toString();		  
 		  String targetPropFileName = BaseTestConstants.QUOTES_BAD_INTERNAL_QUOTES_FILENAME;
 		  
-		  logger.debug("Begins...");
+		  logger.debug(BaseTestConstants.BEGINS);
 
 		  Assert.assertNull(ql);
 		  Assert.assertEquals(maxQuotes, 0);
 		  
 		  ql = QuotesAdapter.toQuoteListener();
 
+		  System.clearProperty(targetKey);		  
+		  
 		  Assert.assertNotNull(ql);
 		  maxQuotes = ql.getMaxQuotes();		  
 		  Assert.assertTrue((maxQuotes > 0) && (maxQuotes > BaseTestConstants.MAX_QUOTES_INERNTAL));		  
 		  
-		  logger.debug("Ends...");
+		  logger.debug(BaseTestConstants.ENDS);
 
 		  return;
 
@@ -150,7 +161,8 @@ public class QuotesAdapter_UT
 	 @After
 	 public void cleanUp()
 	 {
-		  System.clearProperty(BaseConstants.PROP_FILE);		  
+		  System.clearProperty(AppPropFileKey.INTERNAL.toString());		 
+		  System.clearProperty(AppPropFileKey.EXTERNAL.toString());	
 		  return;		 
 	 }
 

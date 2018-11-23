@@ -20,7 +20,8 @@ public class BaseConstants
     public final static String INTERNAL					= "INTERNAL";
     public final static String EXTERNAL					= "EXTERNAL";    
     public final static String NOT_SET					= "NOT_SET";
-    public final static String PROP_FILE				= "PropFile";
+    public final static String EXT_PROP_FILE			= "ext.propfile";
+    public final static String INT_PROP_FILE			= "int.propfile";    
     
 	public final static String QUOTES_PROPS				= "/Quotes.properties";
 	//public final static String QUOTES_FILE         	= "/QUOTES.TXT";    

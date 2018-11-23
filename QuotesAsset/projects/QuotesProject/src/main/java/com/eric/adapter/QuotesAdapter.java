@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.common.enumeration.QuoteInputFile;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
@@ -135,6 +136,9 @@ public class QuotesAdapter
 		
 		    logger.info("Attempting To Load: " + propFileName);
 
+		    // ToDo: Refactor this to handle ext, int.
+		    // Loading Internal... Refactor if int/ext
+		    
 		    props.load(QuotesAdapter.class
 			    .getResourceAsStream(propFileName));	    
 	
@@ -285,19 +289,52 @@ public class QuotesAdapter
 		
     }
 
+    // ToDo: Refactor this, gotta check for the -D w/ext first, then int.  Grab that.			
     private static String getPropFileName()
     {
 		Log logger = methIDgetPropFileName;
 
 		String returnValue = null;
+		String targetKey = null;
+		boolean keepOnTruckin = true;
 		
 		logger.debug(BaseConstants.BEGINS);
 		
-		returnValue = System.getProperty(BaseConstants.PROP_FILE);
-
-		if ( StringUtils.isEmpty( returnValue ))
+		// First check for the -D external key, then the -D internal key.  If neither is set,
+		// then default to internal.
+		
+		while ( keepOnTruckin )
 		{
-			returnValue = BaseConstants.QUOTES_PROPS;
+			targetKey = AppPropFileKey.EXTERNAL.toString();
+			
+			logger.debug("FIRST Attempting To Retrieve -D Key: " + targetKey);
+			
+			returnValue = System.getProperty(targetKey);
+			
+			if ( StringUtils.isNotEmpty( returnValue ))
+			{
+				break;
+			}
+			
+			targetKey = AppPropFileKey.INTERNAL.toString();
+			
+			logger.debug("SECOND Attempting To Retrieve -D Key: " + targetKey);
+			
+			returnValue = System.getProperty(targetKey);
+
+			if ( StringUtils.isNotEmpty( returnValue ))
+			{
+				break;
+			}
+			else
+			{
+				returnValue = BaseConstants.QUOTES_PROPS;
+			}
+			
+			// Safety Purposes
+			keepOnTruckin = false;
+			break;
+			
 		}
 		
 		logger.debug("Retrieved PropFile Name: " + returnValue);
