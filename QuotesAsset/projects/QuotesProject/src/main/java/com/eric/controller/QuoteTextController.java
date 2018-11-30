@@ -1,8 +1,6 @@
 
 package com.eric.controller;
 
-import java.util.Random;
-
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.factory.QuoteFactory;

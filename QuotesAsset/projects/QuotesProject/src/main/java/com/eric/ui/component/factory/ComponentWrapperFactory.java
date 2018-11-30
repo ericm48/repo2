@@ -1,10 +1,8 @@
 package com.eric.ui.component.factory;
 
 import javax.swing.JProgressBar;
-import javax.swing.JComponent;
 
 import com.eric.ui.component.progress.JProgressBarImpl;
-import com.eric.ui.component.progress.ProgressComponent;
 
 // Make this a delegate-factory-container class ???  Needs NEW I/F 4 contract behavior.
 

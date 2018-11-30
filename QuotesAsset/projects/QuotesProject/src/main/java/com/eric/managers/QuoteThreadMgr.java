@@ -28,7 +28,6 @@ public class QuoteThreadMgr implements Runnable
 
 	 static
 	 {
-
 		  methIDLocateQuote = LogFactory.getLog(QuoteThreadMgr.class.getName()
 					 + ".locateQuote()");
 		  methIDInitQFile = LogFactory.getLog(QuoteThreadMgr.class.getName()
@@ -36,10 +35,6 @@ public class QuoteThreadMgr implements Runnable
 		  methIDRun = LogFactory
 					 .getLog(QuoteThreadMgr.class.getName() + ".run()");
 	 }
-
-	 // Constants
-	 final static String QUOTES_FILE = "c:\\apps\\classes\\QUOTES.TXT";
-	 final static String MSG_ERROR_QFILE_MIA = "Error Unable To Open File: ";
 
 	 // Declare file reader and writer streams
 	 private FileReader fileReader = null;
@@ -400,9 +395,9 @@ public class QuoteThreadMgr implements Runnable
 
 		  } // end try for File I/O
 
-		  catch ( IOException e )
+		  catch ( IOException ex )
 		  {
-				System.err.println("Error: " + e);
+			    logger.error(ex.getMessage());
 				bReturnValue = false;
 		  }
 

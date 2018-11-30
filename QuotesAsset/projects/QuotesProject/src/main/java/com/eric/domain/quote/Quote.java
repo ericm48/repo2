@@ -1,13 +1,11 @@
 package com.eric.domain.quote;
 
 public class Quote 
-{
-	
+{	
     private String    quoteText;    
     private int       quoteNumber;
     private String	  quoteAuthor;	
-    
-
+ 
 	public Quote()
     {    	
     }

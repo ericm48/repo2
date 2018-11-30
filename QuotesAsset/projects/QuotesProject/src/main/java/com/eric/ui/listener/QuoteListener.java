@@ -11,9 +11,12 @@ import javax.swing.event.EventListenerList;
 
 import com.eric.domain.quote.Quote;
 
+
+// ToDo: Refactor name as "DialogListener"
+// ToDo: Refactor Yank first-5 attribs to another class as QuoteHolder, or QuoteTO.
+
 public class QuoteListener 
-{
-	
+{	
 	private Quote quote							= null;	
 	private int targetQuoteNumber				= 0;
     private int maxQuotes						= 0;	

@@ -1,10 +1,9 @@
 package com.eric.command;
 
-import com.eric.domain.constant.BaseConstants;
-import com.eric.managers.QuoteThreadMgr;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.eric.domain.constant.BaseConstants;
 
 public class FormatQuoteCommand extends BaseCommand
 {

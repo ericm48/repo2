@@ -7,6 +7,9 @@ package com.eric.ui.transfer;
 import com.eric.ui.component.progress.ProgressComponent;
 import com.eric.ui.listener.QuoteListener;
 
+
+// ToDo: Refactor as "DialogHolder"
+
 public class QuoteTO
 {
 	private ProgressComponent		progressComponent;    

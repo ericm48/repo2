@@ -2,6 +2,7 @@ package com.eric.adapter;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class QuotesAdapter
 {
 	
     private static final Log methIDinitFileSet;
+    private static final Log methIDgetPropFileKeyType;
     private static final Log methIDtoQuoteListener;
     private static final Log methIDgetAppVersion;
     private static final Log methIDgetMaxQuotes;
@@ -32,6 +34,7 @@ public class QuotesAdapter
     {
     	methIDinitFileSet 					= LogFactory.getLog(QuotesAdapter.class.getName() + ".initFileSet()");
     	methIDtoQuoteListener 				= LogFactory.getLog(QuotesAdapter.class.getName() + ".toQuoteListener()");
+    	methIDgetPropFileKeyType 			= LogFactory.getLog(QuotesAdapter.class.getName() + ".getPropFileKeyType()");    	
     	methIDgetAppVersion 				= LogFactory.getLog(QuotesAdapter.class.getName() + ".getAppVersion()");
     	methIDgetMaxQuotes					= LogFactory.getLog(QuotesAdapter.class.getName() + ".getMaxQuotes()");     	
     	methIDgetMaxQuotesFromFile			= LogFactory.getLog(QuotesAdapter.class.getName() + ".getMaxQuotesFromFile()");
@@ -117,11 +120,62 @@ public class QuotesAdapter
     	return( returnValue );
     }
     
-    private static Properties initFileSet()
+    public static String getPropFileName()
+	{
+		Log logger = methIDgetPropFileName;
+	
+		String returnValue = null;
+		String targetKey = null;
+		
+		AppPropFileKey targetKeyType = AppPropFileKey.NOT_SET;
+	
+		logger.debug(BaseConstants.BEGINS);
+		
+		targetKeyType = getPropFileKeyType();
+		
+		if (targetKeyType.equals(AppPropFileKey.EXTERNAL))
+		{
+			targetKey = BaseConstants.EXT_PROP_FILE;
+			
+			logger.debug("Attempting To Retrieve Property Key: " + targetKey);
+			
+			returnValue = System.getProperty(targetKey);
+			
+			logger.debug("Retrieved PropFile Name: " + returnValue);			
+		}
+		
+		if (targetKeyType.equals(AppPropFileKey.INTERNAL))
+		{
+			targetKey = BaseConstants.INT_PROP_FILE;
+			
+			logger.debug("Attempting To Retrieve INTERNAL Key: " + targetKey);
+			
+			returnValue = System.getProperty(targetKey);
+			
+			logger.debug("Retrieved PropFile Name: " + returnValue);			
+		}
+
+		if (StringUtils.isEmpty(returnValue))
+		{
+			returnValue = BaseConstants.QUOTES_PROPS;			
+			logger.debug("No PropertyFileKey Set, Defaulting To: " + returnValue);	
+		}
+		
+		logger.info("Using PropFile Name: " + returnValue);
+		
+		logger.debug(BaseConstants.ENDS);
+		
+		return( returnValue );		
+	}
+
+	private static Properties initFileSet()
     {
 		Log logger = methIDinitFileSet;
 		String propFileName = null;
 		Properties props = null;
+		FileInputStream fis = null;
+		
+		AppPropFileKey propFileKeyType = AppPropFileKey.NOT_SET;
 		
 		logger.debug(BaseConstants.BEGINS);
 	
@@ -131,17 +185,31 @@ public class QuotesAdapter
 		}
 	
 		try
-		{
+		{			
+			propFileKeyType = getPropFileKeyType();
+			
 			propFileName = getPropFileName();
 		
-		    logger.info("Attempting To Load: " + propFileName);
+		    if ( propFileKeyType.equals(AppPropFileKey.EXTERNAL))
+		    {
+			    // Loads External		    	
+			    logger.info("Attempting To Load EXTERNAL PropertyFile: " + propFileName);
 
-		    // ToDo: Refactor this to handle ext, int.
-		    // Loading Internal... Refactor if int/ext
+			    fis = new FileInputStream(propFileName);
+			    
+			    props.load(fis);			    
+		    }
 		    
-		    props.load(QuotesAdapter.class
-			    .getResourceAsStream(propFileName));	    
-	
+		    if ( propFileKeyType.equals(AppPropFileKey.INTERNAL))
+		    {
+			    // Loads Internal
+		    	logger.info("Attempting To Load INTERNAL PropertyFile: " + propFileName);
+		    	
+			    props.load(QuotesAdapter.class
+				    .getResourceAsStream(propFileName));	    
+		    }  
+		    
+			    
 		}
 		catch ( FileNotFoundException fnfe )
 		{
@@ -181,10 +249,8 @@ public class QuotesAdapter
 		
 		logger.debug(BaseConstants.ENDS);
 		
-		return( returnValue );
-    	
+		return( returnValue );    	
     }      
-
 
     private static int getMaxQuotesFromFile(Properties props, QuoteInputFile quoteInputFile)
     {
@@ -204,7 +270,6 @@ public class QuotesAdapter
 		
 		if ( props != null )
 		{
-
 		    // Quotes File Name			
 			if ( quoteInputFile.equals(QuoteInputFile.INTERNAL ))
 			{			
@@ -221,16 +286,17 @@ public class QuotesAdapter
 		
 				try
 				{				
-					
+
 					if ( quoteInputFile.equals(QuoteInputFile.INTERNAL ))
 					{					
-						//Get  Internal file from resources folder
+						// Internal file get from resources folder with classloader.
 						classLoader 	= QuotesAdapter.class.getClassLoader();
 						file 			= new File(classLoader.getResource(fileName).getFile());					
 						fileReader 		= new FileReader(file);					
 					}
 					else if ( quoteInputFile.equals(QuoteInputFile.EXTERNAL ))
 					{
+						// External file, just read it.
 						fileReader 		= new FileReader(fileName);						
 					}					
 					
@@ -285,34 +351,33 @@ public class QuotesAdapter
 		
 		logger.debug(BaseConstants.ENDS);
 		
-		return( returnValue );
-		
+		return( returnValue );		
     }
 
-    // ToDo: Refactor this, gotta check for the -D w/ext first, then int.  Grab that.			
-    private static String getPropFileName()
-    {
-		Log logger = methIDgetPropFileName;
-
-		String returnValue = null;
-		String targetKey = null;
-		boolean keepOnTruckin = true;
-		
+    private static AppPropFileKey getPropFileKeyType()
+    { 
+		Log logger = methIDgetPropFileKeyType;
+    	
+    	boolean keepOnTruckin = true;
+    	AppPropFileKey returnValue = AppPropFileKey.NOT_SET;
+    	String targetKey = null;
+    	String targetKeyValue = null;
+    	
 		logger.debug(BaseConstants.BEGINS);
-		
-		// First check for the -D external key, then the -D internal key.  If neither is set,
-		// then default to internal.
-		
+
 		while ( keepOnTruckin )
 		{
 			targetKey = AppPropFileKey.EXTERNAL.toString();
 			
 			logger.debug("FIRST Attempting To Retrieve -D Key: " + targetKey);
 			
-			returnValue = System.getProperty(targetKey);
+			targetKeyValue = System.getProperty(targetKey);
 			
-			if ( StringUtils.isNotEmpty( returnValue ))
+			if ( StringUtils.isNotEmpty( targetKeyValue ))
 			{
+				logger.debug(targetKey + " Key Received: " + targetKeyValue);				
+				returnValue = AppPropFileKey.EXTERNAL;
+				
 				break;
 			}
 			
@@ -320,15 +385,18 @@ public class QuotesAdapter
 			
 			logger.debug("SECOND Attempting To Retrieve -D Key: " + targetKey);
 			
-			returnValue = System.getProperty(targetKey);
+			targetKeyValue = System.getProperty(targetKey);
 
-			if ( StringUtils.isNotEmpty( returnValue ))
+			if ( StringUtils.isNotEmpty( targetKeyValue ))
 			{
+				logger.debug(targetKey + " Key Received: " + targetKeyValue);				
+				returnValue = AppPropFileKey.INTERNAL;				
 				break;
 			}
 			else
 			{
-				returnValue = BaseConstants.QUOTES_PROPS;
+				logger.debug("No PropertyFile Key Set, Defaulting To INTERNAL.");				
+				returnValue = AppPropFileKey.INTERNAL;
 			}
 			
 			// Safety Purposes
@@ -336,15 +404,11 @@ public class QuotesAdapter
 			break;
 			
 		}
-		
-		logger.debug("Retrieved PropFile Name: " + returnValue);
-		
+    	
 		logger.debug(BaseConstants.ENDS);
 		
-		return( returnValue );
-		
+    	return( returnValue );    	
     }
-    
     
     private static String getAppVersion(Properties props)
     {
@@ -368,8 +432,7 @@ public class QuotesAdapter
 		
 		logger.debug(BaseConstants.ENDS);
 		
-		return( returnValue );
-		
+		return( returnValue );		
     }
     
     private static String getJDKVersion()
