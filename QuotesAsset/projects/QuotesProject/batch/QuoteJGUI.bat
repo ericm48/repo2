@@ -11,17 +11,20 @@ set CP=
 set CP_BASE=
 set CP_LIB=
 
-set CP_BASE=..
-set CP_LIB=%CP_BASE%\lib
+set CP_BASE=.
+set CP_LIB=.
+
+
 
 
 set CP=%CP_BASE%
-set CP=%CP%;%CP_BASE%\build\Release\Quotes.jar;%CP_BASE%\src\main\resources
-set CP=%CP%;%CP_LIB%\log4j-1.2.8.jar
-set CP=%CP%;%CP_LIB%\logger.jar
+set CP=%CP%;%CP_BASE%\quotes-3.1.0.0-SNAPSHOT.jar
+REM set CP=%CP%;%CP_BASE%\Quotes.jar
+set CP=%CP%;%CP_BASE%\commons-logging-1.1.1.jar
+set CP=%CP%;%CP_BASE%\commons-lang3-3.7.jar
+set CP=%CP%;%CP_BASE%\log4j-1.2.14.jar
 
 set CP
-
 
 :RUN_IT
 
@@ -29,11 +32,13 @@ set CP
       goto SPECIFIC
 
 :SPECIFIC
-	Start java -Xmx1536m -classpath %CP% com/eric/controller/CommandLineController "-g" "%1"
+	REM Start java -Xmx1536m -classpath %CP% com/eric/controller/CommandLineController "-g" "%1"
+	Start java -classpath %CP% com/eric/controller/CommandLineController "-g" "%1"	
 	goto END
 
 :RANDOM
-	Start java -Xmx1536m -classpath %CP% com/eric/controller/CommandLineController "-g"
+	REM Start java -Xmx1536m -classpath %CP% com/eric/controller/CommandLineController "-g"
+	Start java -classpath %CP% com/eric/controller/CommandLineController "-g"	
 	goto END
 
 :END
