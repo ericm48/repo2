@@ -1,5 +1,5 @@
 /**
- * QuoteLisenter Class includes domain quote class, plus listener items.
+ * DialogListener Class includes domain quote class, plus listener items.
  */
 package com.eric.ui.listener;
 
@@ -10,19 +10,13 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 import com.eric.domain.quote.Quote;
+import com.eric.domain.quote.QuoteHolder;
 
+// TODO: Refactor Yank first-5 attribs to another class as QuoteHolder, or QuoteTO.
 
-// ToDo: Refactor name as "DialogListener"
-// ToDo: Refactor Yank first-5 attribs to another class as QuoteHolder, or QuoteTO.
-
-public class QuoteListener 
+public class DialogListener 
 {	
-	private Quote quote							= null;	
-	private int targetQuoteNumber				= 0;
-    private int maxQuotes						= 0;	
-    private String currentJDK					= null;
-    private String quotesAppVersion				= null;
-	
+	private QuoteHolder quoteHolder				= null;	
     protected ChangeListener changeListener     = null; 
     protected EventListenerList listenerList    = new EventListenerList();
     protected transient ChangeEvent changeEvent = null;
@@ -40,12 +34,12 @@ public class QuoteListener
     }
 
     //-----------------------------------------------------------------
-    public QuoteListener()
+    public DialogListener()
     {
         return;
     }
     //-----------------------------------------------------------------
-    public QuoteListener(int newValue)
+    public DialogListener(int newValue)
     {
         this.setTargetQuoteNumber( newValue );
 
@@ -90,52 +84,78 @@ public class QuoteListener
     {
         return new ModelListener();
     }
+    
+    public void setQuoteHolder(QuoteHolder newValue)
+    {
+    	if ( newValue != null)
+    	{
+    		this.quoteHolder = newValue;
+    	}
+    	
+    }
+    
+    public QuoteHolder getQuoteHolder()
+    {
+    	return( this.quoteHolder );
+    }
+    
 	public int getTargetQuoteNumber() 
 	{
-		return targetQuoteNumber;
+		//return targetQuoteNumber;
+		return( quoteHolder.getTargetQuoteNumber() );
 	}
 	public void setTargetQuoteNumber(int targetQuoteNumber) 
 	{
-		this.targetQuoteNumber = targetQuoteNumber;
+		//this.targetQuoteNumber = targetQuoteNumber;
+		this.quoteHolder.setTargetQuoteNumber(targetQuoteNumber);
 		this.fireStateChanged();
 	}
 	public Quote getQuote() 
 	{		
-		return quote;
+		//return quote;
+		return( quoteHolder.getQuote() );
 	}
 	public void setQuote(Quote quote) 
 	{
-		this.quote = quote;
+		//this.quote = quote;
+		this.quoteHolder.setQuote(quote);
+		
 		this.fireStateChanged();		
 	}
 	public int getMaxQuotes() 
 	{
-		return maxQuotes;
+		//return maxQuotes;
+		return( quoteHolder.getMaxQuotes() );
 	}
 	public void setMaxQuotes(int maxQuotes) 
 	{
-		this.maxQuotes = maxQuotes;
+		//this.maxQuotes = maxQuotes;
+		this.quoteHolder.setMaxQuotes(maxQuotes);
 		this.fireStateChanged();		
 	}
 	
 	public void setCurrentJDK(String newString)
 	{
-		this.currentJDK = newString;
+		//this.currentJDK = newString;
+		this.quoteHolder.setCurrentJDK(newString);
 	}
 	
 	public String getCurrentJDK()
 	{
-		return this.currentJDK;
+		//return this.currentJDK;
+		return( quoteHolder.getCurrentJDK() );
 	}
 	
 	public void setQuotesAppVersion(String newString)
 	{
-		this.quotesAppVersion = newString;
+		//this.quotesAppVersion = newString;
+		this.quoteHolder.setQuotesAppVersion(newString);
 	}
 	
 	public String getQuotesAppVersion()
 	{
-		return this.quotesAppVersion;
+		//return this.quotesAppVersion;
+		return( this.quoteHolder.getQuotesAppVersion());
 	}	
 	
 

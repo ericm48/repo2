@@ -25,8 +25,8 @@ import com.eric.domain.constant.BaseConstants;
 import com.eric.managers.QuoteThreadMgr;
 import com.eric.ui.component.factory.ComponentWrapperFactory;
 import com.eric.ui.frame.MyFrameWithExitHandling;
-import com.eric.ui.listener.QuoteListener;
-import com.eric.ui.transfer.QuoteTO;
+import com.eric.ui.holder.DialogHolder;
+import com.eric.ui.listener.DialogListener;
 
 public class QuoteGUIController extends JApplet implements ActionListener, QuoteController
 {
@@ -51,8 +51,8 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
     private ChangeListener theChangeListener;
 
     private QuoteThreadMgr quoteMgr  				= null;
-    private QuoteListener  quoteListener   			= null;
-    private QuoteTO        quoteTO    				= null;
+    private DialogListener dialogListener  			= null;
+    private DialogHolder   dialogHolder				= null;
     private int 		   targetQuoteNumber		= 0;
 
     
@@ -164,7 +164,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
 
         	if ( targetQuoteNumber > 0 )
         	{	
-        		quoteTO.getQuoteListener().setTargetQuoteNumber( targetQuoteNumber );
+        		dialogHolder.getDialogListener().setTargetQuoteNumber( targetQuoteNumber );
         	}
 
 //       		sJDK = System.getProperty(BaseConstants.JAVA_VERSION);       	
@@ -217,27 +217,27 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
 
         // Clear these up (from last time?)
 
-        this.quoteTO             = null;
-        this.quoteListener       = null;
-        this.theChangeListener   = null;
+        this.dialogHolder        	= null;
+        this.dialogListener      	= null;
+        this.theChangeListener   	= null;
 
-        quoteTO           	= new QuoteTO();
+        dialogHolder				= new DialogHolder();
 
         // Here Dude!        
        	// Load up Properties, Max Quotes.... 	
         //quoteListener       = new QuoteListener();
 
-        quoteListener = QuotesAdapter.toQuoteListener();
+        dialogListener = QuotesAdapter.toDialogListener();
     	
         // Create the listener for the Quote Object.
         theChangeListener   = new QuoteMonitor();
 
         // Set to our quote reference.
         
-        if ( quoteListener != null )
+        if ( dialogListener != null )
         {
-        	quoteTO.setQuoteListener( quoteListener );
-        	quoteListener.setTargetQuoteNumber( targetQuoteNumber );
+        	dialogHolder.setQuoteListener( dialogListener );
+        	dialogListener.setTargetQuoteNumber( targetQuoteNumber );
         }
 
         // Set to our progress bar
@@ -249,13 +249,13 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         	// in the form of the wrapper, then setting it into the TO as a Progress
         	// component.
         	
-        	quoteTO.setProgressComponent( ComponentWrapperFactory.getInstance().create( progressBar ));
+        	dialogHolder.setProgressComponent( ComponentWrapperFactory.getInstance().create( progressBar ));
         }
 
-        quoteTO.getQuoteListener().setTargetQuoteNumber( targetQuoteNumber );
+        dialogHolder.getDialogListener().setTargetQuoteNumber( targetQuoteNumber );
 
         // Add the Change listener to this Quote Object....
-        quoteListener.addChangeListener( theChangeListener );
+        dialogListener.addChangeListener( theChangeListener );
 	        
        	logger.debug(BaseConstants.ENDS);
        	
@@ -270,7 +270,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         {        
 	        if ( quoteMgr == null )
 	        {
-	           quoteMgr = new QuoteThreadMgr( quoteTO );
+	           quoteMgr = new QuoteThreadMgr( dialogHolder );
 	
 	           if ( quoteMgr == null )
 	           {
@@ -423,8 +423,8 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
            while( control )
            {
               // Set this to for a Random Selection.
-              this.targetQuoteNumber = 0;
-              this.quoteTO			 = null;              
+              this.targetQuoteNumber 	= 0;
+              this.dialogHolder			= null;              
               
               // FIX ME
               bReturnValue = this.setControlFields();
@@ -444,7 +444,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
               }
 
               quoteMgr = null;              
-              quoteMgr = new QuoteThreadMgr( quoteTO );
+              quoteMgr = new QuoteThreadMgr( dialogHolder );
               
               bReturnValue = this.initQuoteMgr();              
 
@@ -500,10 +500,10 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         
         jlbTitle.repaint();
 
-        if (( quoteTO != null ) && ( quoteTO.getQuoteListener() != null ))
+        if (( dialogHolder != null ) && ( dialogHolder.getDialogListener() != null ))
         {	
         	
-        	sMaxQ	 = Integer.toString(quoteTO.getQuoteListener().getMaxQuotes());
+        	sMaxQ	 = Integer.toString(dialogHolder.getDialogListener().getMaxQuotes());
            
            	jlbTotalQuotes.setText(BaseConstants.TOTAL_QUOTES + 
         		   				  sMaxQ + 
@@ -512,11 +512,11 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
            	iTemp     = null;
            	sMaxQ     = null;
            
-           	sJDK = quoteTO.getQuoteListener().getCurrentJDK();       	
+           	sJDK = dialogHolder.getDialogListener().getCurrentJDK();       	
            	jlbJDK.setText(BaseConstants.JDK + sJDK);
            	jlbJDK.repaint();           
            
-        	sAppVersion = quoteTO.getQuoteListener().getQuotesAppVersion();
+        	sAppVersion = dialogHolder.getDialogListener().getQuotesAppVersion();
         	jlbQuotesAppVer.setText(BaseConstants.VERSION + sAppVersion);
         	jlbQuotesAppVer.repaint();
 
@@ -566,9 +566,9 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
 
         String  sTemp2        = null;
         
-        if ( quoteListener.getQuote() != null )
+        if ( dialogListener.getQuote() != null )
         {        	
-           sTemp2 = quoteListener.getQuote().getQuoteText();
+           sTemp2 = dialogListener.getQuote().getQuoteText();
         }
 
         // Has the Quote Text Arrived Yet?
@@ -609,9 +609,9 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
     	
        	logger.debug(BaseConstants.BEGINS);        
         
-        while ( quoteListener != null )
+        while ( dialogListener != null )
         {
-           setTargetQuoteNumber( quoteListener.getTargetQuoteNumber() );
+           setTargetQuoteNumber( dialogListener.getTargetQuoteNumber() );
 
            bReturnValue = setControlFields();
 

@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,28 +12,28 @@ import org.apache.commons.logging.LogFactory;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.ui.component.progress.ProgressComponent;
-import com.eric.ui.listener.QuoteListener;
-import com.eric.ui.transfer.QuoteTO;
+import com.eric.ui.holder.DialogHolder;
+import com.eric.ui.listener.DialogListener;
+import com.eric.util.MathUtil;
 
 public class QuoteFactory
 {
 
-    private static final Log methIDGetQuote;
-    private static final Log methIDInitQFile;
-    private static final Log methIDLoadQuote;
-    private static final Log methIDGetQuoteWithListener;
+    private static final Log methIDgetQuote;
+    private static final Log methIDinitQFile;
+    private static final Log methIDloadQuote;
+    private static final Log methIDgetQuoteWithHolder;
 
     static
     {
-		methIDGetQuote = LogFactory.getLog(QuoteFactory.class.getName()
+		methIDgetQuote = LogFactory.getLog(QuoteFactory.class.getName()
 			+ ".getQuote()");
-		methIDInitQFile = LogFactory.getLog(QuoteFactory.class.getName()
+		methIDinitQFile = LogFactory.getLog(QuoteFactory.class.getName()
 			+ ".initQFile()");
-		methIDLoadQuote = LogFactory.getLog(QuoteFactory.class.getName()
+		methIDloadQuote = LogFactory.getLog(QuoteFactory.class.getName()
 			+ ".LoadQuote()");
-		methIDGetQuoteWithListener = LogFactory.getLog(QuoteFactory.class
-			.getName()
-			+ ".getQuoteWithListener()");
+		methIDgetQuoteWithHolder = LogFactory.getLog(QuoteFactory.class.getName()
+			+ ".getQuoteWithHolder()");
 	    }
     // Declare file reader and writer streams
     private FileReader fileReader = null;
@@ -51,7 +50,11 @@ public class QuoteFactory
     // -----------------------------------------------------------------
     private int initQFile()
     {
-		Log logger = methIDInitQFile;
+    	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
+    	// a context?  Factory already has KT of UI dialogs so we can maintain the progress bar....Hmmm...
+    	// The holder can basically become the context???
+    	
+		Log logger = methIDinitQFile;
 		String fileName = null;
 		String sLineIn = null;
 		Properties props = null;
@@ -127,17 +130,16 @@ public class QuoteFactory
      *            -Listener Object To Process & Return.
      * 
      */
-    public QuoteTO getQuoteWithTO(QuoteTO quoteTO)
+    public DialogHolder getQuoteWithHolder(DialogHolder dialogHolder)
     {
-		Log logger = methIDGetQuoteWithListener;
+		Log logger = methIDgetQuoteWithHolder;
 		logger.debug(BaseConstants.BEGINS);
 	
 		boolean control = true;
 		boolean returnValue = true;
 	
 		Quote quote = null;
-		QuoteListener quoteListener = null;
-	
+		DialogListener dialogListener = null;	
 		ProgressComponent progressComp = null;
 	
 		int targetQuoteNumber = 0;
@@ -145,17 +147,17 @@ public class QuoteFactory
 		while (control)
 		{
 	
-		    if ( quoteTO == null )
+		    if ( dialogHolder == null )
 		    {
 				logger.error("QuoteTO is NULL!!!");
 				control = false;
 				break;
 		    }
 	
-		    if ( quoteTO.getQuoteListener() != null )
+		    if ( dialogHolder.getDialogListener() != null )
 		    {
 				// Set Our pointer to the Listener Object.
-				quoteListener = quoteTO.getQuoteListener();
+				dialogListener = dialogHolder.getDialogListener();
 		    }
 		    else
 		    {
@@ -164,9 +166,9 @@ public class QuoteFactory
 				break;
 		    }
 	
-		    if ( quoteTO.getProgressComponent() != null )
+		    if ( dialogHolder.getProgressComponent() != null )
 		    {
-				progressComp = quoteTO.getProgressComponent();
+				progressComp = dialogHolder.getProgressComponent();
 		
 				progressComp.setMinValue(iPBMin);
 				progressComp.setMaxValue(iPBMax);
@@ -185,7 +187,7 @@ public class QuoteFactory
 	
 		    if ( maxQuotes > 0 )
 		    {
-		    	quoteTO.getQuoteListener().setMaxQuotes(maxQuotes);
+		    	dialogHolder.getDialogListener().setMaxQuotes(maxQuotes);
 		    }
 		    else
 		    {
@@ -194,9 +196,9 @@ public class QuoteFactory
 				break;
 		    }
 	
-		    if ( quoteListener.getTargetQuoteNumber() <= maxQuotes )
+		    if ( dialogListener.getTargetQuoteNumber() <= maxQuotes )
 		    {
-		    	targetQuoteNumber = quoteListener.getTargetQuoteNumber();
+		    	targetQuoteNumber = dialogListener.getTargetQuoteNumber();
 		    }
 		    else
 		    {
@@ -210,7 +212,7 @@ public class QuoteFactory
 		    if ( targetQuoteNumber == 0 )
 		    {
 				// Generate a Random, less than the max.
-				targetQuoteNumber = this.getRandomNumber();
+				targetQuoteNumber = MathUtil.getRandomNumber();
 		
 				if ( targetQuoteNumber > this.getMaxQuotes() )
 				{
@@ -219,7 +221,7 @@ public class QuoteFactory
 		
 				logger.info("Random Number Generated: " + targetQuoteNumber);
 		
-				quoteListener.setTargetQuoteNumber(targetQuoteNumber);
+				dialogListener.setTargetQuoteNumber(targetQuoteNumber);
 	
 		    }
 	
@@ -232,7 +234,7 @@ public class QuoteFactory
 				progressComp.setValue(iPBMin);
 		    }
 	
-		    quote = loadQuote(targetQuoteNumber, quoteTO);
+		    quote = loadQuote(targetQuoteNumber, dialogHolder);
 	
 		    if ( quote == null )
 		    {
@@ -248,7 +250,7 @@ public class QuoteFactory
 	
 		logger.debug(BaseConstants.ENDS);
 	
-		return(quoteTO);
+		return(dialogHolder);
     }
 
     /**
@@ -261,7 +263,7 @@ public class QuoteFactory
      */
     public Quote getQuote(int targetQuoteNumber)
     {
-		Log logger = methIDGetQuote;
+		Log logger = methIDgetQuote;
 		logger.debug(BaseConstants.BEGINS);
 	
 		boolean control = true;
@@ -302,7 +304,7 @@ public class QuoteFactory
 		    if ( targetQuoteNumber == 0 )
 		    {
 				// Generate a Random, less than the max.
-				targetQuoteNumber = this.getRandomNumber();
+				targetQuoteNumber = MathUtil.getRandomNumber();
 		
 				if ( targetQuoteNumber > this.getMaxQuotes() )
 				{
@@ -333,9 +335,9 @@ public class QuoteFactory
 
     // -----------------------------------------------------------------
     // -----------------------------------------------------------------
-    private Quote loadQuote(int targetQuoteNumber, QuoteTO quoteTO)
+    private Quote loadQuote(int targetQuoteNumber, DialogHolder dialogHolder)
     {
-		Log logger 		= methIDLoadQuote;
+		Log logger 		= methIDloadQuote;
 		boolean bReturnValue 	= true;
 		boolean control 	= true;
 	
@@ -355,16 +357,16 @@ public class QuoteFactory
 		{
 		    sLineIn = "";
 	
-		    if ( quoteTO != null )
+		    if ( dialogHolder != null )
 		    {
-				if ( quoteTO.getThread() != null )
+				if ( dialogHolder.getThread() != null )
 				{
-				    thread = quoteTO.getThread();
+				    thread = dialogHolder.getThread();
 				}
 		
-				if ( quoteTO.getProgressComponent() != null )
+				if ( dialogHolder.getProgressComponent() != null )
 				{
-				    progressBar = quoteTO.getProgressComponent();
+				    progressBar = dialogHolder.getProgressComponent();
 				}
 		    }
 	
@@ -426,11 +428,11 @@ public class QuoteFactory
 				quote.setQuoteText(sQuote);
 				quote.setQuoteNumber(iNQuote);
 		
-				if ( quoteTO != null )
+				if ( dialogHolder != null )
 				{
-				    if ( quoteTO.getQuoteListener() != null )
+				    if ( dialogHolder.getDialogListener() != null )
 				    {
-				    	quoteTO.getQuoteListener().setQuote(quote);
+				    	dialogHolder.getDialogListener().setQuote(quote);
 				    }
 				}
 	
@@ -448,30 +450,7 @@ public class QuoteFactory
 		return(quote);
 
     }
-
-    // -----------------------------------------------------------------
-    // Get Random Number
-    // -----------------------------------------------------------------
-    private int getRandomNumber()
-    {
-		int iThisRand;
-	
-		// Get A Random Number
-		Random rRand = new Random();
-	
-		// Make it an Int
-		iThisRand = rRand.nextInt();
-	
-		// Call The Main Constructor.
-	
-		if ( iThisRand < 0 )
-		{
-		    iThisRand *= -1;
-		}
-
-		return(iThisRand);
-    }
-
+ 
     // -----------------------------------------------------------------
     // -----------------------------------------------------------------
     private boolean closeQFile()

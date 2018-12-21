@@ -16,14 +16,16 @@ import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.common.enumeration.QuoteInputFile;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
-import com.eric.ui.listener.QuoteListener;
+import com.eric.domain.quote.Quote;
+import com.eric.domain.quote.QuoteHolder;
+import com.eric.ui.listener.DialogListener;
 
 public class QuotesAdapter
 {
 	
     private static final Log methIDinitFileSet;
     private static final Log methIDgetPropFileKeyType;
-    private static final Log methIDtoQuoteListener;
+    private static final Log methIDtoDialogListener;
     private static final Log methIDgetAppVersion;
     private static final Log methIDgetMaxQuotes;
     private static final Log methIDgetMaxQuotesFromFile;
@@ -33,7 +35,7 @@ public class QuotesAdapter
     static
     {
     	methIDinitFileSet 					= LogFactory.getLog(QuotesAdapter.class.getName() + ".initFileSet()");
-    	methIDtoQuoteListener 				= LogFactory.getLog(QuotesAdapter.class.getName() + ".toQuoteListener()");
+    	methIDtoDialogListener 				= LogFactory.getLog(QuotesAdapter.class.getName() + ".toDialogListener()");
     	methIDgetPropFileKeyType 			= LogFactory.getLog(QuotesAdapter.class.getName() + ".getPropFileKeyType()");    	
     	methIDgetAppVersion 				= LogFactory.getLog(QuotesAdapter.class.getName() + ".getAppVersion()");
     	methIDgetMaxQuotes					= LogFactory.getLog(QuotesAdapter.class.getName() + ".getMaxQuotes()");     	
@@ -43,11 +45,14 @@ public class QuotesAdapter
     	
     }
     
-    public static QuoteListener toQuoteListener()
+    public static DialogListener toDialogListener()
     {
-    	Log logger = methIDtoQuoteListener;
+    	Log logger = methIDtoDialogListener;
     	
-    	QuoteListener returnValue = null; 
+    	DialogListener dialogListener = null; 
+    	QuoteHolder quoteHolder = null;
+    	Quote quote = null;
+    	
     	Properties props = null;
     	String appVersion = null;
     	String JDKVersion = null;
@@ -103,11 +108,19 @@ public class QuotesAdapter
 	    		break;	    			    		
 	    	}
 	    	
-	    	returnValue = new QuoteListener();
+	    	// Build the Object Structure
+	    	dialogListener = new DialogListener();
 
-	    	returnValue.setQuotesAppVersion(appVersion);
-	    	returnValue.setMaxQuotes(maxQuotes);
-	    	returnValue.setCurrentJDK(JDKVersion);
+	    	quoteHolder = new QuoteHolder();	    	
+	    	dialogListener.setQuoteHolder(quoteHolder);
+	    	
+	    	dialogListener.setQuotesAppVersion(appVersion);
+	    	dialogListener.setMaxQuotes(maxQuotes);
+	    	dialogListener.setCurrentJDK(JDKVersion);
+	    	
+	    	// TODO: Do we Need This?
+	    	//quote = new Quote();	    	
+	    	//dialogListener.getQuoteHolder().setQuote(quote);
 	    	
 			// Safety Purposes
 			keepOnTruckin = false;
@@ -117,7 +130,7 @@ public class QuotesAdapter
     	
 		logger.debug(BaseConstants.ENDS);
 
-    	return( returnValue );
+    	return( dialogListener );
     }
     
     public static String getPropFileName()

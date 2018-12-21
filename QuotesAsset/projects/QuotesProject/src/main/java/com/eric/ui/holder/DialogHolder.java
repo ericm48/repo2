@@ -2,27 +2,25 @@
  * QuoteTransfer Object Class.       -Holds the Quote as well as the progress bar
  *                                   that is updated as the Factory locates the quote.
  */
-package com.eric.ui.transfer;
+package com.eric.ui.holder;
 
 import com.eric.ui.component.progress.ProgressComponent;
-import com.eric.ui.listener.QuoteListener;
+import com.eric.ui.listener.DialogListener;
 
 
-// ToDo: Refactor as "DialogHolder"
-
-public class QuoteTO
+public class DialogHolder
 {
 	private ProgressComponent		progressComponent;    
-    private QuoteListener       	quoteListener;  
+    private DialogListener       	dialogListener;  
     private Thread    				thread;
 	
-	public QuoteListener getQuoteListener() 
+	public DialogListener getDialogListener() 
 	{
-		return quoteListener;
+		return dialogListener;
 	}
-	public void setQuoteListener(QuoteListener newValue) 
+	public void setQuoteListener(DialogListener newValue) 
 	{
-		this.quoteListener = newValue;
+		this.dialogListener = newValue;
 	}
 
 	public Thread getThread() 

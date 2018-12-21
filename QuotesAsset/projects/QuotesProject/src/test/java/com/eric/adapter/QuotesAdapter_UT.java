@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.BaseTestConstants;
-import com.eric.ui.listener.QuoteListener;
+import com.eric.ui.listener.DialogListener;
 
 public class QuotesAdapter_UT
 {
@@ -19,10 +19,10 @@ public class QuotesAdapter_UT
 	private static Log methIDrunGetPropFileNameExternalKeyPresentSUCCESS;
 	private static Log methIDrunGetPropFileNameInternalKeyPresentSUCCESS;
 	private static Log methIDrunGetPropFileNameNoKeyPresentSUCCESS;
-	private static Log methIDrunToQuoteListenerBadInternalBadExternalQuotesFileFAIL;
-	private static Log methIDrunToQuoteListenerInternalNoMaxQuotesFAIL;
-	private static Log methIDrunToQuoteListenerInternalQuotesFileSUCCESS;
-	private static Log methIDrunToQuoteListenerExternalQuotesFileSUCCESS;
+	private static Log methIDrunToDialogListenerBadInternalBadExternalQuotesFileFAIL;
+	private static Log methIDrunToDialogListenerInternalNoMaxQuotesFAIL;
+	private static Log methIDrunToDialogListenerInternalQuotesFileSUCCESS;
+	private static Log methIDrunToDialogListenerExternalQuotesFileSUCCESS;
 	 
 	static
 	{
@@ -39,21 +39,21 @@ public class QuotesAdapter_UT
 				  	.getLog(QuotesAdapter_UT.class.getName()
 						+ ".runGetPropFileNameNoKeyPresentSUCCESS()");
 		
-		 methIDrunToQuoteListenerBadInternalBadExternalQuotesFileFAIL = LogFactory
+		 methIDrunToDialogListenerBadInternalBadExternalQuotesFileFAIL = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToQuoteListenerBadInternalBadExternalQuotesFileFAIL()");
+						+ ".runToDialogListenerBadInternalBadExternalQuotesFileFAIL()");
 		 
-		 methIDrunToQuoteListenerInternalNoMaxQuotesFAIL = LogFactory
+		 methIDrunToDialogListenerInternalNoMaxQuotesFAIL = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToQuoteListenerInternalNoMaxQuotesFAIL()");
+						+ ".runToDialogListenerInternalNoMaxQuotesFAIL()");
 
-		 methIDrunToQuoteListenerInternalQuotesFileSUCCESS = LogFactory
+		 methIDrunToDialogListenerInternalQuotesFileSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToQuoteListenerInternalQuotesFileSUCCESS()");
+						+ ".runToDialogListenerInternalQuotesFileSUCCESS()");
 
-		 methIDrunToQuoteListenerExternalQuotesFileSUCCESS = LogFactory
+		 methIDrunToDialogListenerExternalQuotesFileSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToQuoteListenerExternalQuotesFileSUCCESS()");		 
+						+ ".runToDialogListenerExternalQuotesFileSUCCESS()");		 
 		 
 	}
 	 
@@ -141,10 +141,10 @@ public class QuotesAdapter_UT
 	}	 
 	 
 	@Test
-	public void runToQuoteListenerInternalNoMaxQuotesFAIL()
+	public void runToDialogListenerInternalNoMaxQuotesFAIL()
 	{
-		Log logger = methIDrunToQuoteListenerInternalNoMaxQuotesFAIL;
-		QuoteListener ql = null;		  
+		Log logger = methIDrunToDialogListenerInternalNoMaxQuotesFAIL;
+		DialogListener ql = null;		  
 
 		// Here's the important Part!!
 		String targetKey = AppPropFileKey.INTERNAL.toString();
@@ -156,7 +156,7 @@ public class QuotesAdapter_UT
 		logger.info("Using PropertyFile: " + targetPropFileName);
 		  
 		Assert.assertNull(ql);
-		ql = QuotesAdapter.toQuoteListener();
+		ql = QuotesAdapter.toDialogListener();
 	
 		System.clearProperty(targetKey);		  
 		  
@@ -168,10 +168,10 @@ public class QuotesAdapter_UT
 	}
 	 	 
 	@Test
-	public void runToQuoteListenerBadInternalBadExternalQuotesFileFAIL()
+	public void runToDialogListenerBadInternalBadExternalQuotesFileFAIL()
 	{
-		Log logger = methIDrunToQuoteListenerBadInternalBadExternalQuotesFileFAIL;
-		QuoteListener ql = null;
+		Log logger = methIDrunToDialogListenerBadInternalBadExternalQuotesFileFAIL;
+		DialogListener ql = null;
 		  
 		// Here's the important Part!!
 		String targetKey = AppPropFileKey.EXTERNAL.toString();		  
@@ -183,7 +183,7 @@ public class QuotesAdapter_UT
 		logger.info("Using PropertyFile: " + targetPropFileName);
 		  
 		Assert.assertNull(ql);
-		ql = QuotesAdapter.toQuoteListener();
+		ql = QuotesAdapter.toDialogListener();
 
 		System.clearProperty(targetKey);		  
 		  
@@ -195,10 +195,10 @@ public class QuotesAdapter_UT
 	}
  
 	@Test
-	public void runToQuoteListenerInternalQuotesFileSUCCESS()
+	public void runToDialogListenerInternalQuotesFileSUCCESS()
 	{
-		Log logger = methIDrunToQuoteListenerInternalQuotesFileSUCCESS;
-		QuoteListener ql = null;
+		Log logger = methIDrunToDialogListenerInternalQuotesFileSUCCESS;
+		DialogListener ql = null;
 		int maxQuotes = 0;
 
 		// Here's the important Part!!		 
@@ -213,7 +213,7 @@ public class QuotesAdapter_UT
 		Assert.assertNull(ql);
 		Assert.assertEquals(maxQuotes, 0);
 		  
-		ql = QuotesAdapter.toQuoteListener();
+		ql = QuotesAdapter.toDialogListener();
 
 		System.clearProperty(targetKey);		  
 		
@@ -228,10 +228,10 @@ public class QuotesAdapter_UT
 	}
 	 
 	@Test
-	public void runToQuoteListenerExternalQuotesFileSUCCESS()
+	public void runToDialogListenerExternalQuotesFileSUCCESS()
 	{
-		Log logger = methIDrunToQuoteListenerExternalQuotesFileSUCCESS;
-		QuoteListener ql = null;
+		Log logger = methIDrunToDialogListenerExternalQuotesFileSUCCESS;
+		DialogListener ql = null;
 		int maxQuotes = 0;
 		  
 		// Here's the important Part!!	
@@ -246,7 +246,7 @@ public class QuotesAdapter_UT
 		Assert.assertNull(ql);
 		Assert.assertEquals(maxQuotes, 0);
 		  
-		ql = QuotesAdapter.toQuoteListener();
+		ql = QuotesAdapter.toDialogListener();
 
 		System.clearProperty(targetKey);		  
 		  

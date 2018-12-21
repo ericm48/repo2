@@ -16,24 +16,19 @@ import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.factory.QuoteFactory;
 import com.eric.ui.component.progress.ProgressComponent;
-import com.eric.ui.listener.QuoteListener;
-import com.eric.ui.transfer.QuoteTO;
+import com.eric.ui.holder.DialogHolder;
+import com.eric.ui.listener.DialogListener;
 
 public class QuoteThreadMgr implements Runnable
 {
 
 	 private static final Log methIDLocateQuote;
-	 private static final Log methIDInitQFile;
 	 private static final Log methIDRun;
 
 	 static
 	 {
-		  methIDLocateQuote = LogFactory.getLog(QuoteThreadMgr.class.getName()
-					 + ".locateQuote()");
-		  methIDInitQFile = LogFactory.getLog(QuoteThreadMgr.class.getName()
-					 + ".initQFile()");
-		  methIDRun = LogFactory
-					 .getLog(QuoteThreadMgr.class.getName() + ".run()");
+		  methIDLocateQuote = LogFactory.getLog(QuoteThreadMgr.class.getName() + ".locateQuote()");
+		  methIDRun = LogFactory.getLog(QuoteThreadMgr.class.getName() + ".run()");
 	 }
 
 	 // Declare file reader and writer streams
@@ -52,7 +47,7 @@ public class QuoteThreadMgr implements Runnable
 
 	 private Thread ourThread;
 
-	 private QuoteListener quoteListener = null;
+	 private DialogListener dialogListener = null;
 
 	 // Progress Bar Items.
 	 private final int iPBMin = 0;
@@ -64,7 +59,7 @@ public class QuoteThreadMgr implements Runnable
 	 private int iMaxQuotes = 0;
 	 private int targetQuoteNumber = 0;
 	 protected boolean bInitialized = true;
-	 private QuoteTO quoteTO;
+	 private DialogHolder dialogHolder;
 
 	 // -----------------------------------------------------------------
 	 // Default Constructor
@@ -78,7 +73,7 @@ public class QuoteThreadMgr implements Runnable
 	 // -----------------------------------------------------------------
 	 // Constructor a quote from specific quote number.
 	 // -----------------------------------------------------------------
-	 public QuoteThreadMgr(QuoteTO newValue)
+	 public QuoteThreadMgr(DialogHolder newValue)
 	 {
 		  super();
 
@@ -87,9 +82,9 @@ public class QuoteThreadMgr implements Runnable
 		  while (bReturnValue)
 		  {
 
-				this.quoteTO = newValue;
+				this.dialogHolder = newValue;
 
-				bReturnValue = this.loadFromTO(quoteTO);
+				bReturnValue = this.loadFromTO(dialogHolder);
 
 				break;
 
@@ -101,7 +96,7 @@ public class QuoteThreadMgr implements Runnable
 	 // -----------------------------------------------------------------
 	 // Load View Param's
 	 // -----------------------------------------------------------------
-	 private boolean loadFromTO(QuoteTO quoteTO)
+	 private boolean loadFromTO(DialogHolder quoteTO)
 	 {
 
 		  boolean bReturnValue = true;
@@ -116,15 +111,14 @@ public class QuoteThreadMgr implements Runnable
 					 this.initProgressComp();
 				}
 
-				if ( quoteTO.getQuoteListener() != null )
+				if ( dialogHolder.getDialogListener() != null )
 				{
-					 this.setTargetQuoteNumber(quoteTO.getQuoteListener()
-								.getTargetQuoteNumber());
+					 this.setTargetQuoteNumber(dialogHolder.getDialogListener().getTargetQuoteNumber());
 				}
 
-				if ( quoteTO.getQuoteListener() != null )
+				if ( dialogHolder.getDialogListener() != null )
 				{
-					 this.quoteListener = quoteTO.getQuoteListener();
+					 this.dialogListener = dialogHolder.getDialogListener();
 				}
 				else
 				{
@@ -170,7 +164,7 @@ public class QuoteThreadMgr implements Runnable
 	 // -----------------------------------------------------------------
 	 // Set the Holder Stuff for sub-sequent runs....
 	 // -----------------------------------------------------------------
-	 public boolean setQuoteTO(QuoteTO quoteTO)
+	 public boolean setQuoteTO(DialogHolder quoteTO)
 	 {
 		  boolean bReturnValue = true;
 
@@ -240,9 +234,9 @@ public class QuoteThreadMgr implements Runnable
 						  break;
 					 }
 
-					 quoteTO = qf.getQuoteWithTO(quoteTO);
+					 dialogHolder = qf.getQuoteWithHolder(dialogHolder);
 
-					 qc = new FormatQuoteCommand(quoteTO.getQuoteListener()
+					 qc = new FormatQuoteCommand(dialogHolder.getDialogListener()
 								.getQuote().getQuoteText());
 
 					 returnValue = qc.execute();
@@ -250,12 +244,12 @@ public class QuoteThreadMgr implements Runnable
 					 if ( returnValue )
 					 {
 					  
-	          		   quoteTO.getQuoteListener().getQuote().setQuoteText(qc.getResult().toString());
+						dialogHolder.getDialogListener().getQuote().setQuoteText(qc.getResult().toString());
 	          		   
-	          		   quote = quoteTO.getQuoteListener().getQuote();
+	          		    quote = dialogHolder.getDialogListener().getQuote();
 
-	          		   // Reset the Quote To FIRE the listener.
-	          		   quoteTO.getQuoteListener().setQuote(quote);        		   
+	          		    // Reset the Quote To FIRE the listener.
+	          		    dialogHolder.getDialogListener().setQuote(quote);        		   
 
 					 }
 
@@ -283,7 +277,7 @@ public class QuoteThreadMgr implements Runnable
 
 		  if ( ourThread != null )
 		  {
-				quoteTO.setThread(ourThread);
+				dialogHolder.setThread(ourThread);
 		  }
 		  else
 		  {
@@ -403,7 +397,7 @@ public class QuoteThreadMgr implements Runnable
 
 		  if ( bReturnValue )
 		  {
-				quoteListener.getQuote().setQuoteText(strBuffer.toString());
+				dialogListener.getQuote().setQuoteText(strBuffer.toString());
 		  }
 
 		  logger.debug(BaseConstants.ENDS);
@@ -419,11 +413,11 @@ public class QuoteThreadMgr implements Runnable
 
 		  iPBCount = iPBMin;
 
-		  if ( quoteTO.getProgressComponent() != null )
+		  if ( dialogHolder.getProgressComponent() != null )
 		  {
-				quoteTO.getProgressComponent().setMinValue(iPBMin);
-				quoteTO.getProgressComponent().setMaxValue(iPBMin);
-				quoteTO.getProgressComponent().setValue(iPBMin);
+			  dialogHolder.getProgressComponent().setMinValue(iPBMin);
+			  dialogHolder.getProgressComponent().setMaxValue(iPBMin);
+			  dialogHolder.getProgressComponent().setValue(iPBMin);
 		  }
 
 		  return(bReturnValue);
@@ -505,9 +499,9 @@ public class QuoteThreadMgr implements Runnable
 		  return(iMaxQuotes);
 	 }
 
-	 public QuoteTO getQuoteTO()
+	 public DialogHolder getDialogHolder()
 	 {
-		  return quoteTO;
+		  return dialogHolder;
 	 }
 
 }
