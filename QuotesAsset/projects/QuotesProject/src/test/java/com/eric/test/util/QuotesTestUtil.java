@@ -11,10 +11,10 @@ import org.apache.commons.logging.LogFactory;
 
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.BaseTestConstants;
+import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.domain.quote.QuoteHolder;
 import com.eric.ui.component.factory.ComponentWrapperFactory;
-import com.eric.ui.component.progress.ProgressComponent;
 import com.eric.ui.holder.DialogHolder;
 import com.eric.ui.listener.DialogListener;
 
@@ -33,7 +33,6 @@ public class QuotesTestUtil
 	public static DialogHolder toDialogHolder()
 	{
 		DialogHolder   dialogHolder 		= null;
-		DialogListener dialogListener 		= null;
 	    JProgressBar  progressBar 			= null;
 		
 		dialogHolder = new DialogHolder();
@@ -116,7 +115,7 @@ public class QuotesTestUtil
 		}
 		catch ( FileNotFoundException fnfe )
 		{
-		    logger.error(BaseConstants.ERROR_QFILE_MIA + targetFileName);
+		    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + targetFileName);
 		    logger.error(fnfe.getMessage());
 		}
 		catch ( IOException ioex )

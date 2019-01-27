@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.eric.domain.constant.BaseConstants;
+import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.ui.component.progress.ProgressComponent;
 import com.eric.ui.holder.DialogHolder;
@@ -43,19 +44,95 @@ public class QuoteFactory
 
     private int maxQuotes = 0;
 
-    private int iPBMax = 0;
-    private final int iPBMin = 0;
+    private int pbMax = 0;
+    private final int pbMin = 0;
 
     // -----------------------------------------------------------------
     // -----------------------------------------------------------------
 
     //private int initQFile()
-    private int initQFile(Properties props)    
-    {
-    	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
-    	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
-    	// The holder can basically become the context???
-    	
+//    private int initQFile(Properties props)    
+//    {
+//    	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
+//    	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
+//    	// The holder can basically become the context???
+//    	
+//		Log logger 			= methIDinitQFile;
+//		String fileName 	= null;
+//		String lineIn 		= null;
+//	
+//		logger.debug(BaseConstants.BEGINS);
+//	
+//		if (( props != null ) && ( props.size() > 0))
+//		{
+//			
+//			try
+//			{	
+//			    // Quotes File Name
+//			    fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);
+//		
+//			    if ( fileName != null )
+//			    {
+//					logger.info("Attempting To Read: " + fileName);
+//			
+//					fileReader 	= new FileReader(fileName);
+//			
+//					bufferedReader 	= new BufferedReader(fileReader);
+//			
+//					// Read 1st Line & Trim It.
+//					lineIn 	= bufferedReader.readLine();
+//					lineIn 	= lineIn.trim();
+//			
+//					// Convert to int
+//					this.setMaxQuotes(Integer.parseInt(lineIn));
+//			
+//					logger.info("Max Quotes Available: " + this.getMaxQuotes());
+//		
+//			    }
+//			    else
+//			    {
+//					logger.error("*** ERROR *** Property for key: "
+//						+ BaseConstants.QUOTES_EXT_FILE_KEY
+//						+ " is NULL or DOES NOT EXIST in Property File: "
+//						+ BaseConstants.QUOTES_PROPS + " !!");
+//			    }
+//			    
+//		
+//			}
+//			catch ( FileNotFoundException fnfe )
+//			{
+//			    logger.error(BaseConstants.ERROR_QFILE_MIA + fileName);
+//			    logger.error(fnfe.getMessage());
+//			}
+//			catch ( IOException ioex )
+//			{
+//			    logger.error(ioex.getMessage());
+//			}	
+//			catch ( Exception ex )
+//			{
+//			    logger.error("*** ERROR Exception Encountered!! Message: "
+//				    + ex.getMessage());
+//			}
+//
+//		}
+//		else
+//		{
+//		    logger.error("Properties ARE NULL or EMPTY!!!");			
+//		}
+//		
+//		logger.debug(BaseConstants.ENDS);
+//	
+//		return(this.getMaxQuotes());
+//    }
+
+// TODO: Rewire this to return the fileStream....
+    
+  private int initQFile(Properties props)    
+  {
+  	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
+  	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
+  	// The holder can basically become the context???
+  	
 		Log logger 			= methIDinitQFile;
 		String fileName 	= null;
 		String lineIn 		= null;
@@ -100,7 +177,7 @@ public class QuoteFactory
 			}
 			catch ( FileNotFoundException fnfe )
 			{
-			    logger.error(BaseConstants.ERROR_QFILE_MIA + fileName);
+			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
 			    logger.error(fnfe.getMessage());
 			}
 			catch ( IOException ioex )
@@ -122,8 +199,9 @@ public class QuoteFactory
 		logger.debug(BaseConstants.ENDS);
 	
 		return(this.getMaxQuotes());
-    }
-
+  }
+    
+    
     /**
      * 
      * Returns a Simple Quote for a specific Quote Number
@@ -173,11 +251,9 @@ public class QuoteFactory
 		    {
 				progressComp = dialogHolder.getProgressComponent();
 		
-				progressComp.setMinValue(iPBMin);
-				progressComp.setMaxValue(iPBMax);
-		
-				progressComp.setValue(iPBMin);
-	
+				progressComp.setMinValue(pbMin);
+				progressComp.setMaxValue(pbMax);		
+				progressComp.setValue(pbMin);	
 		    }
 		    else
 		    {
@@ -246,11 +322,11 @@ public class QuoteFactory
 	
 		    if ( progressComp != null )
 		    {
-				iPBMax = targetQuoteNumber;
+				pbMax = targetQuoteNumber;
 		
-				progressComp.setMinValue(iPBMin);
-				progressComp.setMaxValue(iPBMax);
-				progressComp.setValue(iPBMin);
+				progressComp.setMinValue(pbMin);
+				progressComp.setMaxValue(pbMax);
+				progressComp.setValue(pbMin);
 		    }
 	
 		    quote = loadQuote(targetQuoteNumber, dialogHolder);

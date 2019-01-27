@@ -135,9 +135,6 @@ public class QuoteFactory_UT
 	}	 
 	
 	
-	
-	
-	
 	@Test
 	public void runTestGetQuoteWithHolderSUCCESS()
 	{

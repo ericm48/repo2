@@ -1,7 +1,10 @@
 package com.eric.util;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -11,7 +14,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.common.enumeration.AppPropFileKey;
+import com.eric.domain.common.enumeration.QuoteInputFile;
 import com.eric.domain.constant.BaseConstants;
+import com.eric.domain.constant.ErrorMessageConstants;
 
 public class FileUtil 
 {
@@ -19,12 +24,19 @@ public class FileUtil
     private static final Log methIDinitFileSet;
     private static final Log methIDgetPropFileKeyType;
     private static final Log methIDgetPropFileName;
+    private static final Log methIDgetMaxQuotes;
+    private static final Log methIDgetMaxQuotesFromFile;
+    private static final Log methIDgetBufferedReaderToQuotesFile;
     
     static
     {
     	methIDinitFileSet 					= LogFactory.getLog(FileUtil.class.getName() + ".initFileSet()");  
-    	methIDgetPropFileKeyType 			= LogFactory.getLog(QuotesAdapter.class.getName() + ".getPropFileKeyType()");
-    	methIDgetPropFileName				= LogFactory.getLog(QuotesAdapter.class.getName() + ".getPropFileName()");    	
+    	methIDgetPropFileKeyType 			= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileKeyType()");
+    	methIDgetPropFileName				= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileName()");
+    	methIDgetMaxQuotes					= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotes()");     	
+    	methIDgetMaxQuotesFromFile			= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotesFromFile()");    	
+    	methIDgetBufferedReaderToQuotesFile	= LogFactory.getLog(FileUtil.class.getName() + ".getBufferedReaderToQuotesFile()");    	
+    	
     }
     
     
@@ -73,7 +85,7 @@ public class FileUtil
 		}
 		catch ( FileNotFoundException fnfe )
 		{
-		    logger.error(BaseConstants.ERROR_QFILE_MIA + propFileName);
+		    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + propFileName);
 		    logger.error(fnfe.getMessage());
 		}
 		catch ( IOException ioex )
@@ -194,4 +206,209 @@ public class FileUtil
  		return( returnValue );		
  	}
     
+    public static int getMaxQuotes(Properties props)
+    {
+		Log logger = methIDgetMaxQuotes;
+		
+		int returnValue = 0;
+		
+		logger.debug(BaseConstants.BEGINS);
+		
+		returnValue = getMaxQuotesFromFile(props, QuoteInputFile.EXTERNAL);
+		
+		if ( returnValue <= 0 )
+		{
+			returnValue = getMaxQuotesFromFile(props, QuoteInputFile.INTERNAL);			
+		}		
+		
+		logger.debug(BaseConstants.ENDS);
+		
+		return( returnValue );    	
+    }      
+
+    public static int getMaxQuotesFromFile(Properties props, QuoteInputFile quoteInputFile)
+    {
+		Log logger = methIDgetMaxQuotesFromFile;
+    	
+		int returnValue = 0;
+	    FileReader fileReader = null;
+
+	    // Buffered Reader
+	    BufferedReader bufferedReader = null;
+		String fileName = null;
+		String lineIn = null;
+		ClassLoader classLoader = null;		
+		File file = null;
+		boolean keepOnTruckin = true;
+				
+		logger.debug(BaseConstants.BEGINS);
+		
+		while ( keepOnTruckin )
+		{
+
+			if ( props == null )
+			{
+				logger.error(ErrorMessageConstants.PROPS_ARE_NULL);				
+				keepOnTruckin = false;
+				break;				
+			}
+			
+			if ( quoteInputFile == null )
+			{
+				logger.error(ErrorMessageConstants.QUOTES_FILE_NAME_IS_NULL);				
+				keepOnTruckin = false;
+				break;				
+			}
+			
+			bufferedReader = getBufferedReaderToQuotesFile(props, quoteInputFile);
+
+			if ( bufferedReader == null ){
+				logger.error(ErrorMessageConstants.BUFFERED_READER_IS_NULL);				
+				keepOnTruckin = false;
+				break;
+			}
+			
+			logger.info("Attempting To Read: " + quoteInputFile);
+		
+			try
+			{				
+				
+				// Read 1st Line & Trim It.
+				lineIn 	= bufferedReader.readLine();
+				lineIn 	= lineIn.trim();
+		
+				if ( lineIn != null )
+				{					
+					// Convert to int
+					returnValue = Integer.parseInt(lineIn);
+					logger.info("Max Quotes Available: " + lineIn);
+				}
+				
+				bufferedReader.close();
+				bufferedReader = null;
+
+				// TODO: FIX ME!!!!
+				fileReader.close();
+				fileReader = null;
+			
+			}
+			catch ( FileNotFoundException fnfe )
+			{
+			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
+			    logger.error(fnfe.getMessage());
+			}
+			catch ( IOException ioex )
+			{
+			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);					
+			    logger.error(ioex.getMessage());
+			}
+		
+			catch ( Exception ex )
+			{
+			    logger.error("*** ERROR Exception Encountered!! Message: "
+				    + ex.getMessage());
+			}
+				
+			// Safety Purposes
+			keepOnTruckin = false;
+			break;			
+		
+				
+		}	// End-While
+		
+		logger.debug(BaseConstants.ENDS);
+		
+		return( returnValue );		
+    }
+    
+    // TODO:  Change this to returning a file handle, let the caller open the Buffered Reader, that way
+    // we can wire up a .close() method at file level for both Adapter & Factory to use...
+    
+    
+    public static BufferedReader getBufferedReaderToQuotesFile(Properties props, QuoteInputFile quoteInputFile)
+    {
+		Log logger = methIDgetBufferedReaderToQuotesFile;
+    	
+	    FileReader fileReader = null;
+
+	    // Buffered Reader
+	    BufferedReader bufferedReader = null;
+		String fileName = null;
+		ClassLoader classLoader = null;		
+		File file = null;
+		
+		logger.debug(BaseConstants.BEGINS);
+		
+		if ( props != null )
+		{
+		    // Quotes File Name			
+			if ( quoteInputFile.equals(QuoteInputFile.INTERNAL ))
+			{			
+				fileName = props.getProperty(BaseConstants.QUOTES_INT_FILE_KEY);
+			}
+			else if ( quoteInputFile.equals(QuoteInputFile.EXTERNAL ))
+			{
+				fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);				
+			}
+			
+		    if ( fileName != null )
+		    {
+				logger.info("Attempting To Read: " + fileName);
+		
+				try
+				{				
+
+					if ( quoteInputFile.equals(QuoteInputFile.INTERNAL ))
+					{					
+						// Internal file get from resources folder with classloader.
+						classLoader 	= QuotesAdapter.class.getClassLoader();
+						file 			= new File(classLoader.getResource(fileName).getFile());					
+						fileReader 		= new FileReader(file);					
+					}
+					else if ( quoteInputFile.equals(QuoteInputFile.EXTERNAL ))
+					{
+						// External file, just read it.
+						fileReader 		= new FileReader(fileName);						
+					}										
+					
+					bufferedReader 	= new BufferedReader(fileReader);
+					
+				}
+				catch ( FileNotFoundException fnfe )
+				{
+				    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
+				    logger.error(fnfe.getMessage());
+				}
+				catch ( IOException ioex )
+				{
+				    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);					
+				    logger.error(ioex.getMessage());
+				}
+			
+				catch ( Exception ex )
+				{
+				    logger.error("*** ERROR Exception Encountered!! Message: "
+					    + ex.getMessage());
+				}
+
+				
+		    }
+		    else
+		    {
+				logger.error("*** ERROR *** Property for key: "
+					+ BaseConstants.QUOTES_EXT_FILE_KEY
+					+ " is NULL or DOES NOT EXIST in Property File: "
+					+ BaseConstants.QUOTES_PROPS + " !!");
+		    }
+		    
+		    
+		}
+		else
+		{
+			logger.error(ErrorMessageConstants.PROPS_ARE_NULL);
+		}
+
+	    return( bufferedReader );
+    }
+
 }

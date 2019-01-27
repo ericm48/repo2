@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.constant.BaseConstants;
+import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.managers.QuoteThreadMgr;
 import com.eric.ui.component.factory.ComponentWrapperFactory;
 import com.eric.ui.frame.MyFrameWithExitHandling;
@@ -186,7 +187,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
            
            	if ( !bReturnValue )
            	{
-           		logger.error(BaseConstants.ERROR_QMGR_INIT);        	   
+           		logger.error(ErrorMessageConstants.ERROR_QMGR_INIT);        	   
            		break;
            	}
            

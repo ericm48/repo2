@@ -16,7 +16,7 @@ public class BaseConstants
     public final static String PERIODS         			= ".......";
     public final static String BLANK           			= " ";
     public final static String DONE            			= "Done";
-    public final static String ERROR_QMGR_INIT 			= "*** Error QuoteManger Failed To Initialize";
+//    public final static String ERROR_QMGR_INIT 			= "*** Error QuoteManger Failed To Initialize";
     public final static String INTERNAL					= "INTERNAL";
     public final static String EXTERNAL					= "EXTERNAL";    
     public final static String NOT_SET					= "NOT_SET";
@@ -29,7 +29,7 @@ public class BaseConstants
 	public final static String QUOTES_INT_FILE_KEY		= "int.quotes.file";	
 	public final static String QUOTES_APP_VERSION_KEY	= "quotes.app.version";
 	public final static String JAVA_VERSION				= "java.version";
-	public final static String ERROR_QFILE_MIA 			= "Error Unable To Open File: ";
+//	public final static String ERROR_QFILE_MIA 			= "Error Unable To Open File: ";
 	public final static String CARRIAGE_RETURN	    	= "\n";
 	public final static String LINE_FEED	    		= "\r";	
 	
