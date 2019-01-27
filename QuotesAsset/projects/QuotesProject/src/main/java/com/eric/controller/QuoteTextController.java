@@ -46,7 +46,8 @@ public class QuoteTextController implements QuoteController
         		break;
         	}
         	
-        	quote = qFactory.getQuote( targetQuoteNumber );
+        	// TODO: FIX THIS!!!
+        	//quote = qFactory.getQuote( targetQuoteNumber );
         	
         	if ( quote == null )
         	{

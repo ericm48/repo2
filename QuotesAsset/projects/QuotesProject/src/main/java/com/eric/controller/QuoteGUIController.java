@@ -37,12 +37,14 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
     private static final Log methIDupdateGUI;	
     private static final Log methIDinitGUIControls;    
     private static final Log methIDsetControlFields;
+    private static final Log methIDinitQuoteMgr;
     
     static
     {
 		methIDshowQuote 			= LogFactory.getLog(QuoteGUIController.class.getName() + ".showQuote()");
 		methIDinit					= LogFactory.getLog(QuoteGUIController.class.getName() + ".init()");	
 		methIDinitQuoteTO			= LogFactory.getLog(QuoteGUIController.class.getName() + ".initQuoteTO()");		
+		methIDinitQuoteMgr			= LogFactory.getLog(QuoteGUIController.class.getName() + ".initQuoteMgr()");		
 		methIDupdateGUI	 			= LogFactory.getLog(QuoteGUIController.class.getName() + ".updateGUI()");
 		methIDinitGUIControls	 	= LogFactory.getLog(QuoteGUIController.class.getName() + ".initGUIControls()");		
 		methIDsetControlFields	 	= LogFactory.getLog(QuoteGUIController.class.getName() + ".setControlFields()");		
@@ -266,6 +268,9 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
     {
     	boolean returnValue = true;
     	
+    	Log logger = methIDinitQuoteMgr;
+       	logger.debug(BaseConstants.BEGINS);        
+    	
         try
         {        
 	        if ( quoteMgr == null )
@@ -282,10 +287,11 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         }
         catch (Exception ex)
         {
-        	System.out.println(ex.getMessage());
+		    logger.error(ex.getMessage());
         }
      
-    	
+       	logger.debug(BaseConstants.ENDS);        
+        
     	return( returnValue );    
     }    
     //-------------------------------------------------------------------------

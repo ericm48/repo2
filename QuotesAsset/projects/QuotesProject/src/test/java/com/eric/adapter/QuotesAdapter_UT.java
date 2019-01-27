@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.eric.domain.common.enumeration.AppPropFileKey;
@@ -16,134 +17,140 @@ import com.eric.ui.listener.DialogListener;
 public class QuotesAdapter_UT
 {
 	 
-	private static Log methIDrunGetPropFileNameExternalKeyPresentSUCCESS;
-	private static Log methIDrunGetPropFileNameInternalKeyPresentSUCCESS;
-	private static Log methIDrunGetPropFileNameNoKeyPresentSUCCESS;
-	private static Log methIDrunToDialogListenerBadInternalBadExternalQuotesFileFAIL;
-	private static Log methIDrunToDialogListenerInternalNoMaxQuotesFAIL;
-	private static Log methIDrunToDialogListenerInternalQuotesFileSUCCESS;
-	private static Log methIDrunToDialogListenerExternalQuotesFileSUCCESS;
+	private static Log methIDrunTestGetPropFileNameExternalKeyPresentSUCCESS;
+	private static Log methIDrunTestGetPropFileNameInternalKeyPresentSUCCESS;
+	private static Log methIDrunTestGetPropFileNameNoKeyPresentSUCCESS;
+	private static Log methIDrunTestToDialogListenerBadInternalBadExternalQuotesFileFAIL;
+	private static Log methIDrunTestToDialogListenerInternalNoMaxQuotesFAIL;
+	private static Log methIDrunTestToDialogListenerInternalQuotesFileSUCCESS;
+	private static Log methIDrunTestToDialogListenerExternalQuotesFileSUCCESS;
 	 
 	static
 	{
 		
-		methIDrunGetPropFileNameExternalKeyPresentSUCCESS = LogFactory
+		methIDrunTestGetPropFileNameExternalKeyPresentSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runGetPropFileNameExternalKeyPresentSUCCESS()");
+						+ ".runTestGetPropFileNameExternalKeyPresentSUCCESS()");
 
-		methIDrunGetPropFileNameInternalKeyPresentSUCCESS = LogFactory
+		methIDrunTestGetPropFileNameInternalKeyPresentSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runGetPropFileNameInternalKeyPresentSUCCESS()");
+						+ ".runTestGetPropFileNameInternalKeyPresentSUCCESS()");
 
-		methIDrunGetPropFileNameNoKeyPresentSUCCESS = LogFactory
+		methIDrunTestGetPropFileNameNoKeyPresentSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runGetPropFileNameNoKeyPresentSUCCESS()");
+						+ ".runTestGetPropFileNameNoKeyPresentSUCCESS()");
 		
-		 methIDrunToDialogListenerBadInternalBadExternalQuotesFileFAIL = LogFactory
+		 methIDrunTestToDialogListenerBadInternalBadExternalQuotesFileFAIL = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToDialogListenerBadInternalBadExternalQuotesFileFAIL()");
+						+ ".runTestToDialogListenerBadInternalBadExternalQuotesFileFAIL()");
 		 
-		 methIDrunToDialogListenerInternalNoMaxQuotesFAIL = LogFactory
+		 methIDrunTestToDialogListenerInternalNoMaxQuotesFAIL = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToDialogListenerInternalNoMaxQuotesFAIL()");
+						+ ".runTestToDialogListenerInternalNoMaxQuotesFAIL()");
 
-		 methIDrunToDialogListenerInternalQuotesFileSUCCESS = LogFactory
+		 methIDrunTestToDialogListenerInternalQuotesFileSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToDialogListenerInternalQuotesFileSUCCESS()");
+						+ ".runTestToDialogListenerInternalQuotesFileSUCCESS()");
 
-		 methIDrunToDialogListenerExternalQuotesFileSUCCESS = LogFactory
+		 methIDrunTestToDialogListenerExternalQuotesFileSUCCESS = LogFactory
 				  	.getLog(QuotesAdapter_UT.class.getName()
-						+ ".runToDialogListenerExternalQuotesFileSUCCESS()");		 
+						+ ".runTestToDialogListenerExternalQuotesFileSUCCESS()");		 
 		 
 	}
 	 
-	@Test
-	public void runGetPropFileNameExternalKeyPresentSUCCESS()
+	@Before
+	public void setUp()
 	{
-		Log logger = methIDrunGetPropFileNameExternalKeyPresentSUCCESS;
-
-		// Here's the important Part!!
-		String targetKey = AppPropFileKey.EXTERNAL.toString();
-		String targetPropFileName = BaseTestConstants.QUOTES_BAD_INTERNAL_AND_EXTERNAL_QUOTES_FILENAME;
-		String returnValue = null;
-		
-		logger.debug(BaseTestConstants.BEGINS);
-
-		Assert.assertNull(returnValue);
-		
-		System.setProperty(targetKey, targetPropFileName);
-
-		returnValue = QuotesAdapter.getPropFileName();
-
-		Assert.assertNotNull(returnValue);
-		
-		System.clearProperty(targetKey);		  
-		
-		Assert.assertTrue(StringUtils.equals(returnValue, targetPropFileName));
-		
-		logger.debug(BaseTestConstants.ENDS);
-
-		return;		
-	}	 
-
-	@Test
-	public void runGetPropFileNameInternalKeyPresentSUCCESS()
-	{
-		Log logger = methIDrunGetPropFileNameInternalKeyPresentSUCCESS;
-
-		// Here's the important Part!!
-		String targetKey = AppPropFileKey.INTERNAL.toString();
-		String targetPropFileName = BaseConstants.QUOTES_PROPS;		
-		String returnValue = null;
-		
-		logger.debug(BaseTestConstants.BEGINS);
-		
-		Assert.assertNull(returnValue);
-		
-		System.setProperty(targetKey, targetPropFileName);
-
-		returnValue = QuotesAdapter.getPropFileName();
-
-		Assert.assertNotNull(returnValue);
-		
-		System.clearProperty(targetKey);		  
-		
-		Assert.assertTrue(StringUtils.equals(returnValue, targetPropFileName));
-		
-		logger.debug(BaseTestConstants.ENDS);
-
 		return;
-	}	 
-	 
-	@Test
-	public void runGetPropFileNameNoKeyPresentSUCCESS()
-	{
-		Log logger = methIDrunGetPropFileNameNoKeyPresentSUCCESS;
+	}
 	
-		// Here's the important Part!!
-		String targetKey = null;
-		String targetPropFileName = BaseConstants.QUOTES_PROPS;		
-		String returnValue = null;
-		
-		logger.debug(BaseTestConstants.BEGINS);
-		
-		Assert.assertNull(returnValue);
-		
-		returnValue = QuotesAdapter.getPropFileName();
-
-		Assert.assertNotNull(returnValue);
-		
-		Assert.assertTrue(StringUtils.equals(returnValue, targetPropFileName));		
-		
-		logger.debug(BaseTestConstants.ENDS);
-
-		return;	
-	}	 
+//	@Test
+//	public void runTestGetPropFileNameExternalKeyPresentSUCCESS()
+//	{
+//		Log logger = methIDrunTestGetPropFileNameExternalKeyPresentSUCCESS;
+//
+//		// Here's the important Part!!
+//		String targetKey = AppPropFileKey.EXTERNAL.toString();
+//		String targetPropFileName = BaseTestConstants.QUOTES_BAD_INTERNAL_AND_EXTERNAL_QUOTES_FILENAME;
+//		String returnValue = null;
+//		
+//		logger.debug(BaseTestConstants.BEGINS);
+//
+//		Assert.assertNull(returnValue);
+//		
+//		System.setProperty(targetKey, targetPropFileName);
+//
+//		returnValue = QuotesAdapter.getPropFileName();
+//
+//		Assert.assertNotNull(returnValue);
+//		
+//		System.clearProperty(targetKey);		  
+//		
+//		Assert.assertTrue(StringUtils.equals(returnValue, targetPropFileName));
+//		
+//		logger.debug(BaseTestConstants.ENDS);
+//
+//		return;		
+//	}	 
+//
+//	@Test
+//	public void runTestGetPropFileNameInternalKeyPresentSUCCESS()
+//	{
+//		Log logger = methIDrunTestGetPropFileNameInternalKeyPresentSUCCESS;
+//
+//		// Here's the important Part!!
+//		String targetKey = AppPropFileKey.INTERNAL.toString();
+//		String targetPropFileName = BaseConstants.QUOTES_PROPS;		
+//		String returnValue = null;
+//		
+//		logger.debug(BaseTestConstants.BEGINS);
+//		
+//		Assert.assertNull(returnValue);
+//		
+//		System.setProperty(targetKey, targetPropFileName);
+//
+//		returnValue = QuotesAdapter.getPropFileName();
+//
+//		Assert.assertNotNull(returnValue);
+//		
+//		System.clearProperty(targetKey);		  
+//		
+//		Assert.assertTrue(StringUtils.equals(returnValue, targetPropFileName));
+//		
+//		logger.debug(BaseTestConstants.ENDS);
+//
+//		return;
+//	}	 
+//	 
+//	@Test
+//	public void runTestGetPropFileNameNoKeyPresentSUCCESS()
+//	{
+//		Log logger = methIDrunTestGetPropFileNameNoKeyPresentSUCCESS;
+//	
+//		// Here's the important Part!!
+//		String targetKey = null;
+//		String targetPropFileName = BaseConstants.QUOTES_PROPS;		
+//		String returnValue = null;
+//		
+//		logger.debug(BaseTestConstants.BEGINS);
+//		
+//		Assert.assertNull(returnValue);
+//		
+//		returnValue = QuotesAdapter.getPropFileName();
+//
+//		Assert.assertNotNull(returnValue);
+//		
+//		Assert.assertTrue(StringUtils.equals(returnValue, targetPropFileName));		
+//		
+//		logger.debug(BaseTestConstants.ENDS);
+//
+//		return;	
+//	}	 
 	 
 	@Test
-	public void runToDialogListenerInternalNoMaxQuotesFAIL()
+	public void runTestToDialogListenerInternalNoMaxQuotesFAIL()
 	{
-		Log logger = methIDrunToDialogListenerInternalNoMaxQuotesFAIL;
+		Log logger = methIDrunTestToDialogListenerInternalNoMaxQuotesFAIL;
 		DialogListener ql = null;		  
 
 		// Here's the important Part!!
@@ -168,9 +175,9 @@ public class QuotesAdapter_UT
 	}
 	 	 
 	@Test
-	public void runToDialogListenerBadInternalBadExternalQuotesFileFAIL()
+	public void runTestToDialogListenerBadInternalBadExternalQuotesFileFAIL()
 	{
-		Log logger = methIDrunToDialogListenerBadInternalBadExternalQuotesFileFAIL;
+		Log logger = methIDrunTestToDialogListenerBadInternalBadExternalQuotesFileFAIL;
 		DialogListener ql = null;
 		  
 		// Here's the important Part!!
@@ -195,9 +202,9 @@ public class QuotesAdapter_UT
 	}
  
 	@Test
-	public void runToDialogListenerInternalQuotesFileSUCCESS()
+	public void runTestToDialogListenerInternalQuotesFileSUCCESS()
 	{
-		Log logger = methIDrunToDialogListenerInternalQuotesFileSUCCESS;
+		Log logger = methIDrunTestToDialogListenerInternalQuotesFileSUCCESS;
 		DialogListener ql = null;
 		int maxQuotes = 0;
 
@@ -228,9 +235,9 @@ public class QuotesAdapter_UT
 	}
 	 
 	@Test
-	public void runToDialogListenerExternalQuotesFileSUCCESS()
+	public void runTestToDialogListenerExternalQuotesFileSUCCESS()
 	{
-		Log logger = methIDrunToDialogListenerExternalQuotesFileSUCCESS;
+		Log logger = methIDrunTestToDialogListenerExternalQuotesFileSUCCESS;
 		DialogListener ql = null;
 		int maxQuotes = 0;
 		  

@@ -4,6 +4,7 @@
 package com.eric.ui.listener;
 
 import java.io.Serializable;
+import java.util.Properties;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -12,14 +13,14 @@ import javax.swing.event.EventListenerList;
 import com.eric.domain.quote.Quote;
 import com.eric.domain.quote.QuoteHolder;
 
-// TODO: Refactor Yank first-5 attribs to another class as QuoteHolder, or QuoteTO.
-
 public class DialogListener 
 {	
 	private QuoteHolder quoteHolder				= null;	
-    protected ChangeListener changeListener     = null; 
+    private Properties props					= null;
+	protected ChangeListener changeListener     = null; 
     protected EventListenerList listenerList    = new EventListenerList();
     protected transient ChangeEvent changeEvent = null;
+    
 
     //===================================================================
     // Inner Class
@@ -101,62 +102,60 @@ public class DialogListener
     
 	public int getTargetQuoteNumber() 
 	{
-		//return targetQuoteNumber;
 		return( quoteHolder.getTargetQuoteNumber() );
 	}
 	public void setTargetQuoteNumber(int targetQuoteNumber) 
 	{
-		//this.targetQuoteNumber = targetQuoteNumber;
 		this.quoteHolder.setTargetQuoteNumber(targetQuoteNumber);
 		this.fireStateChanged();
 	}
 	public Quote getQuote() 
 	{		
-		//return quote;
 		return( quoteHolder.getQuote() );
 	}
 	public void setQuote(Quote quote) 
 	{
-		//this.quote = quote;
-		this.quoteHolder.setQuote(quote);
-		
+		this.quoteHolder.setQuote(quote);		
 		this.fireStateChanged();		
 	}
 	public int getMaxQuotes() 
 	{
-		//return maxQuotes;
 		return( quoteHolder.getMaxQuotes() );
 	}
 	public void setMaxQuotes(int maxQuotes) 
 	{
-		//this.maxQuotes = maxQuotes;
 		this.quoteHolder.setMaxQuotes(maxQuotes);
 		this.fireStateChanged();		
 	}
 	
 	public void setCurrentJDK(String newString)
 	{
-		//this.currentJDK = newString;
 		this.quoteHolder.setCurrentJDK(newString);
 	}
 	
 	public String getCurrentJDK()
 	{
-		//return this.currentJDK;
 		return( quoteHolder.getCurrentJDK() );
 	}
 	
 	public void setQuotesAppVersion(String newString)
 	{
-		//this.quotesAppVersion = newString;
 		this.quoteHolder.setQuotesAppVersion(newString);
 	}
 	
 	public String getQuotesAppVersion()
 	{
-		//return this.quotesAppVersion;
 		return( this.quoteHolder.getQuotesAppVersion());
 	}	
 	
+	public void setProperties(Properties newProps)
+	{
+		this.props = newProps;
+	}
 
+	public Properties getProperties()
+	{
+		return( this.props );
+	}
+	
 }

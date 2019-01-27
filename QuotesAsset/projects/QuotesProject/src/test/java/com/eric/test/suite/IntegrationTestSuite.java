@@ -8,7 +8,7 @@ import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.eric.command.FormatQuoteCommandTest;
+import com.eric.command.FormatQuoteCommand_UT;
 import com.eric.test.category.IntegrationTest;
 
 
@@ -16,7 +16,7 @@ import com.eric.test.category.IntegrationTest;
 @IncludeCategory(IntegrationTest.class)
 
 @Suite.SuiteClasses({
-						FormatQuoteCommandTest.class
+						FormatQuoteCommand_UT.class
 					})
 
 public class IntegrationTestSuite

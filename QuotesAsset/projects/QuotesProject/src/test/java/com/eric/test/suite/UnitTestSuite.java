@@ -8,14 +8,20 @@ import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.eric.command.FormatQuoteCommandTest;
+import com.eric.adapter.QuotesAdapter_UT;
+import com.eric.command.FormatQuoteCommand_UT;
+import com.eric.factory.QuoteFactory_UT;
 import com.eric.test.category.UnitTest;
+import com.eric.util.FileUtil_UT;
 
 @RunWith(Categories.class)
 @IncludeCategory(UnitTest.class)
 
 @Suite.SuiteClasses({
-						FormatQuoteCommandTest.class
+						QuotesAdapter_UT.class,
+						FileUtil_UT.class,
+						FormatQuoteCommand_UT.class,
+						QuoteFactory_UT.class
 					})
 
 public class UnitTestSuite

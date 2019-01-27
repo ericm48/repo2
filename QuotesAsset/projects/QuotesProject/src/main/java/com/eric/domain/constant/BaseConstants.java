@@ -24,7 +24,6 @@ public class BaseConstants
     public final static String INT_PROP_FILE			= "int.propfile";    
     
 	public final static String QUOTES_PROPS				= "/Quotes.properties";
-	//public final static String QUOTES_FILE         	= "/QUOTES.TXT";    
 	
 	public final static String QUOTES_EXT_FILE_KEY		= "ext.quotes.file";
 	public final static String QUOTES_INT_FILE_KEY		= "int.quotes.file";	

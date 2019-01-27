@@ -6,22 +6,22 @@ public class MathUtil
 {	
 	public static int getRandomNumber()
 	{
-		int iThisRand;
+		int returnValue = 0;
 	
 		// Get A Random Number
 		Random rRand = new Random();
 	
 		// Make it an Int
-		iThisRand = rRand.nextInt();
+		returnValue = rRand.nextInt();
 	
 		// Call The Main Constructor.
 	
-		if ( iThisRand < 0 )
+		if ( returnValue < 0 )
 		{
-		    iThisRand *= -1;
+			returnValue *= -1;
 		}
 
-		return(iThisRand);
+		return(returnValue);
 	}	
 
 }

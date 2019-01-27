@@ -6,6 +6,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
+import com.eric.domain.constant.BaseTestConstants;
+
 public class FormatQuoteCommand_UT
 {
 
@@ -16,8 +18,6 @@ public class FormatQuoteCommand_UT
 	 
 	 private static final Log methIDRunFormatQuoteTest471SUCCESS;
 	 private static final Log methIDRunFormatQuoteTest471UndoSUCCESS;	 
-	 private static final String badQuote;
-	 private static final String fixedQuote;
 
 	 static
 	 {
@@ -33,9 +33,6 @@ public class FormatQuoteCommand_UT
 		  methIDRunFormatQuoteTest471UndoSUCCESS = LogFactory
 				  	.getLog(FormatQuoteCommand_UT.class.getName()
 						+ ".runFormatQuoteTest471Undo()");
-		  
-		  badQuote = "More powerfull than all success slogans ever penned by humans                     is the realization for every man that he has but one boss.  That                  boss is the man--he--himself.";
-		  fixedQuote = "More powerfull than all success slogans ever penned by humans is the realization for every man that he has but one boss.   That boss is the man--he--himself.";
 
 	 }
 
@@ -80,9 +77,9 @@ public class FormatQuoteCommand_UT
 		  String s2 = null;
 		  boolean returnValue = false;
 
-		  fCmd = new FormatQuoteCommand(badQuote);
+		  fCmd = new FormatQuoteCommand(BaseTestConstants.BAD_QUOTE1);
 
-		  logger.info("String Before: " + badQuote);
+		  logger.info("String Before: " + BaseTestConstants.BAD_QUOTE1);
 
 		  returnValue = fCmd.execute();
 
@@ -94,7 +91,7 @@ public class FormatQuoteCommand_UT
 
 		  Assert.assertNotNull(s2);
 
-		  Assert.assertEquals(s2, fixedQuote);
+		  Assert.assertEquals(s2, BaseTestConstants.FIX_QUOTE1);
 
 		  logger.debug("Ends...");
 
@@ -114,9 +111,9 @@ public class FormatQuoteCommand_UT
 		  String s3				= null;
 		  boolean returnValue 	= false;
 
-		  fCmd = new FormatQuoteCommand(badQuote);
+		  fCmd = new FormatQuoteCommand(BaseTestConstants.BAD_QUOTE1);
 
-		  logger.info("String Before: " + badQuote);
+		  logger.info("String Before: " + BaseTestConstants.BAD_QUOTE1);
 
 		  returnValue = fCmd.execute();
 
@@ -127,7 +124,7 @@ public class FormatQuoteCommand_UT
 		  logger.info("String  After: " + s2);
 
 		  Assert.assertNotNull( s2 );
-		  Assert.assertEquals(s2, fixedQuote);
+		  Assert.assertEquals(s2, BaseTestConstants.FIX_QUOTE1);
 		  
 		  returnValue = fCmd.undo();
 		  Assert.assertEquals(true, returnValue);
@@ -137,7 +134,7 @@ public class FormatQuoteCommand_UT
 		  logger.info("String  After: " + s3);
 
 		  Assert.assertNotNull( s3 );
-		  Assert.assertEquals(s3, badQuote);
+		  Assert.assertEquals(s3, BaseTestConstants.BAD_QUOTE1);
 		  
 		  logger.debug("Ends...");
 
