@@ -16,8 +16,10 @@ public final class ErrorMessageConstants
     public final static String ERROR_QMGR_INIT 						= "*** Error QuoteManger Failed To Initialize";	
     public final static String ERROR_QFILE_MIA 						= "Error Unable To Open File: ";
     public final static String QUOTES_FILE_NAME_IS_NULL				= "Quotes FileName IS NULL!!!";
+    public final static String QUOTES_INPUT_FILE_TYPE_NOT_SET	    = "Quotes Input File Type Is NOT SET!!!";    
     public final static String BUFFERED_READER_IS_NULL				= "BufferedReader IS NULL!!!";
-	
+    public final static String FILE_READER_IS_NULL					= "FileReader IS NULL!!!";	
+    
     
 	// Hide This!
 	private ErrorMessageConstants()

@@ -34,9 +34,7 @@ public class QuotesAdapter
     	Log logger = methIDtoDialogListener;
     	
     	DialogListener dialogListener = null; 
-    	QuoteHolder quoteHolder = null;
-    	Quote quote = null;
-    	
+    	QuoteHolder quoteHolder = null;  	
     	Properties props = null;
     	String appVersion = null;
     	String JDKVersion = null;

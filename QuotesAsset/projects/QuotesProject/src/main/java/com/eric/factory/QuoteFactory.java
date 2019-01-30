@@ -1,7 +1,6 @@
 package com.eric.factory;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -9,12 +8,14 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.eric.domain.common.enumeration.QuoteInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.ui.component.progress.ProgressComponent;
 import com.eric.ui.holder.DialogHolder;
 import com.eric.ui.listener.DialogListener;
+import com.eric.util.FileUtil;
 import com.eric.util.MathUtil;
 
 public class QuoteFactory
@@ -40,7 +41,7 @@ public class QuoteFactory
     private FileReader fileReader = null;
 
     // Buffered Reader
-    private BufferedReader bufferedReader = null;
+    //private BufferedReader bufferedReader = null;
 
     private int maxQuotes = 0;
 
@@ -127,79 +128,79 @@ public class QuoteFactory
 
 // TODO: Rewire this to return the fileStream....
     
-  private int initQFile(Properties props)    
-  {
-  	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
-  	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
-  	// The holder can basically become the context???
-  	
-		Log logger 			= methIDinitQFile;
-		String fileName 	= null;
-		String lineIn 		= null;
-	
-		logger.debug(BaseConstants.BEGINS);
-	
-		if (( props != null ) && ( props.size() > 0))
-		{
-			
-			try
-			{	
-			    // Quotes File Name
-			    fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);
-		
-			    if ( fileName != null )
-			    {
-					logger.info("Attempting To Read: " + fileName);
-			
-					fileReader 	= new FileReader(fileName);
-			
-					bufferedReader 	= new BufferedReader(fileReader);
-			
-					// Read 1st Line & Trim It.
-					lineIn 	= bufferedReader.readLine();
-					lineIn 	= lineIn.trim();
-			
-					// Convert to int
-					this.setMaxQuotes(Integer.parseInt(lineIn));
-			
-					logger.info("Max Quotes Available: " + this.getMaxQuotes());
-		
-			    }
-			    else
-			    {
-					logger.error("*** ERROR *** Property for key: "
-						+ BaseConstants.QUOTES_EXT_FILE_KEY
-						+ " is NULL or DOES NOT EXIST in Property File: "
-						+ BaseConstants.QUOTES_PROPS + " !!");
-			    }
-			    
-		
-			}
-			catch ( FileNotFoundException fnfe )
-			{
-			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
-			    logger.error(fnfe.getMessage());
-			}
-			catch ( IOException ioex )
-			{
-			    logger.error(ioex.getMessage());
-			}	
-			catch ( Exception ex )
-			{
-			    logger.error("*** ERROR Exception Encountered!! Message: "
-				    + ex.getMessage());
-			}
-
-		}
-		else
-		{
-		    logger.error("Properties ARE NULL or EMPTY!!!");			
-		}
-		
-		logger.debug(BaseConstants.ENDS);
-	
-		return(this.getMaxQuotes());
-  }
+//  private int initQFile(Properties props)    
+//  {
+//  	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
+//  	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
+//  	// The holder can basically become the context???
+//  	
+//		Log logger 			= methIDinitQFile;
+//		String fileName 	= null;
+//		String lineIn 		= null;
+//	
+//		logger.debug(BaseConstants.BEGINS);
+//	
+//		if (( props != null ) && ( props.size() > 0))
+//		{
+//			
+//			try
+//			{	
+//			    // Quotes File Name
+//			    fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);
+//		
+//			    if ( fileName != null )
+//			    {
+//					logger.info("Attempting To Read: " + fileName);
+//			
+//					fileReader 	= new FileReader(fileName);
+//			
+//					bufferedReader 	= new BufferedReader(fileReader);
+//			
+//					// Read 1st Line & Trim It.
+//					lineIn 	= bufferedReader.readLine();
+//					lineIn 	= lineIn.trim();
+//			
+//					// Convert to int
+//					this.setMaxQuotes(Integer.parseInt(lineIn));
+//			
+//					logger.info("Max Quotes Available: " + this.getMaxQuotes());
+//		
+//			    }
+//			    else
+//			    {
+//					logger.error("*** ERROR *** Property for key: "
+//						+ BaseConstants.QUOTES_EXT_FILE_KEY
+//						+ " is NULL or DOES NOT EXIST in Property File: "
+//						+ BaseConstants.QUOTES_PROPS + " !!");
+//			    }
+//			    
+//		
+//			}
+//			catch ( FileNotFoundException fnfe )
+//			{
+//			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
+//			    logger.error(fnfe.getMessage());
+//			}
+//			catch ( IOException ioex )
+//			{
+//			    logger.error(ioex.getMessage());
+//			}	
+//			catch ( Exception ex )
+//			{
+//			    logger.error("*** ERROR Exception Encountered!! Message: "
+//				    + ex.getMessage());
+//			}
+//
+//		}
+//		else
+//		{
+//		    logger.error("Properties ARE NULL or EMPTY!!!");			
+//		}
+//		
+//		logger.debug(BaseConstants.ENDS);
+//	
+//		return(this.getMaxQuotes());
+//  }
     
     
     /**
@@ -266,12 +267,9 @@ public class QuoteFactory
 		    
 		    if ((props != null ) && (props.size() > 0))
 		    {
-
 		    	// HERE DUDE!!
-		    	this.initQFile(props);
-		    	
-			    maxQuotes = dialogHolder.getDialogListener().getQuoteHolder().getMaxQuotes();			    
-			    
+		    	//this.initQFile(props);		    	
+			    maxQuotes = dialogHolder.getDialogListener().getQuoteHolder().getMaxQuotes();
 		    }
 		    else
 		    {
@@ -435,115 +433,145 @@ public class QuoteFactory
     // -----------------------------------------------------------------
     private Quote loadQuote(int targetQuoteNumber, DialogHolder dialogHolder)
     {
-		Log logger 						= methIDloadQuote;
-		boolean returnValue 			= true;
-		boolean keepOnTruckin 			= true;	
-		int quoteIndex 					= 0;
+		Log logger 								= methIDloadQuote;
+		boolean returnValue 					= true;
+		boolean keepOnTruckin 					= true;	
+		int quoteIndex 							= 0;
+		Properties props						= null;
+		QuoteInputFileType quoteInputFileType 	= QuoteInputFileType.NOT_SET;
+		
+		String lineIn 							= "";
+		String quoteText 						= "";
+		FileReader fileReader					= null;		
+		BufferedReader bufferedReader			= null;
+		
+		Quote quote 							= null;
 	
-		String lineIn 					= "";
-		String quoteText 				= "";
-	
-		Quote quote 					= null;
-	
-		Thread thread 					= null;
-		ProgressComponent progressBar 	= null;
+		Thread thread 							= null;
+		ProgressComponent progressBar 			= null;
 	
 		logger.debug(BaseConstants.BEGINS);
 	
-		try
-		{
-		    lineIn = "";
+	    lineIn = "";
+	    
+	    if ( dialogHolder != null )
+	    {
+			if ( dialogHolder.getThread() != null )
+			{
+			    thread = dialogHolder.getThread();
+			}
 	
-		    if ( dialogHolder != null )
-		    {
-				if ( dialogHolder.getThread() != null )
-				{
-				    thread = dialogHolder.getThread();
-				}
-		
-				if ( dialogHolder.getProgressComponent() != null )
-				{
-				    progressBar = dialogHolder.getProgressComponent();
-				}
-		    }
-	
-		    logger.info("Locating Quote: " + targetQuoteNumber);
-	
-		    while ((keepOnTruckin) && (lineIn != null))
-		    {
-				try
-				{
-				    if ( thread != null )
-				    {
-				    	thread.sleep(1);
-				    }
-		
-				    lineIn = bufferedReader.readLine();
-		
-				    // Start of a Quote, Blank Line
-				    if ( lineIn.trim().length() == 0 )
-				    {		
-						if ( quoteIndex == targetQuoteNumber )
-						{
-						    keepOnTruckin = false;
-						    logger.info("Quote: " + targetQuoteNumber + " LOCATED!");
-						}
-						else
-						{
-		
-						    // If using a progress bar, calculate it's position.
-						    if ( progressBar != null )
-						    {
-						    	progressBar.setValue(quoteIndex);
-						    }
-		
-						    quoteText = "";
-						    quoteIndex++;
-						}
-		
-				    }
-				    else
-				    {
-				    	quoteText = quoteText + " " + lineIn;
-				    }
-		
-				}
-				catch ( InterruptedException iex )
-				{
-				    logger.error("*** Interrupted Exception Encountered.  Message: "
-						    + iex.getMessage());
-				    keepOnTruckin = false;
-				    break;
-				}
-	
-		    } // end while
-	
+			if ( dialogHolder.getProgressComponent() != null )
+			{
+			    progressBar = dialogHolder.getProgressComponent();
+			}
+	    }
+
+	    logger.info("Locating Quote: " + targetQuoteNumber);
+
+	    
+	    while ( keepOnTruckin )
+	    {
+		    props = dialogHolder.getDialogListener().getProperties();
 		    
-		    // TODO: Fix This!!!
-		    if ( returnValue )
-		    {	
-				quote = new Quote();
-				quote.setQuoteText(quoteText);
-				quote.setQuoteNumber(quoteIndex);
+			if ( props == null )
+			{
+				logger.error(ErrorMessageConstants.PROPS_ARE_NULL);				
+				keepOnTruckin = false;
+				break;				
+			}
+		    
+		    
+			// TODO: FIX ME!!
+		    fileReader = FileUtil.getFileReaderToQuotesFile(props, quoteInputFileType);
+		    
+		    bufferedReader = new BufferedReader(fileReader);
+		    
+		    
+		    try
+		    {
+			    
+			    
+			    while ((keepOnTruckin) && (lineIn != null))
+			    {
+					try
+					{
+					    if ( thread != null )
+					    {
+					    	thread.sleep(1);
+					    }
+			
+					    lineIn = bufferedReader.readLine();
+			
+					    // Start of a Quote, Blank Line
+					    if ( lineIn.trim().length() == 0 )
+					    {		
+							if ( quoteIndex == targetQuoteNumber )
+							{
+							    keepOnTruckin = false;
+							    logger.info("Quote: " + targetQuoteNumber + " LOCATED!");
+							}
+							else
+							{
+			
+							    // If using a progress bar, calculate it's position.
+							    if ( progressBar != null )
+							    {
+							    	progressBar.setValue(quoteIndex);
+							    }
+			
+							    quoteText = "";
+							    quoteIndex++;
+							}
+			
+					    }
+					    else
+					    {
+					    	quoteText = quoteText + " " + lineIn;
+					    }
+			
+					}
+					catch ( InterruptedException iex )
+					{
+					    logger.error("*** Interrupted Exception Encountered.  Message: "
+							    + iex.getMessage());
+					    keepOnTruckin = false;
+					    break;
+					}
 		
-				if ( dialogHolder != null )
-				{
-				    if ( dialogHolder.getDialogListener() != null )
-				    {
-				    	dialogHolder.getDialogListener().setQuote(quote);
-				    }
-				}
-	
-		    }
-	
-		} // end try
-	
-		catch ( IOException ioex )
-		{
-		    logger.error("*** ERROR Encountered.  Message: "
-			    + ioex.getMessage());
-		}
-	
+			    } // end while
+		
+			    
+			    // TODO: Fix This!!!
+			    if ( returnValue )
+			    {	
+					quote = new Quote();
+					quote.setQuoteText(quoteText);
+					quote.setQuoteNumber(quoteIndex);
+			
+					if ( dialogHolder != null )
+					{
+					    if ( dialogHolder.getDialogListener() != null )
+					    {
+					    	dialogHolder.getDialogListener().setQuote(quote);
+					    }
+					}
+		
+			    }
+		
+			} // end try
+		
+			catch ( IOException ioex )
+			{
+			    logger.error("*** ERROR Encountered.  Message: "
+				    + ioex.getMessage());
+			}
+
+		    // Safety Purposes
+		    keepOnTruckin = false;
+		    break;
+		    
+	    }
 		logger.debug(BaseConstants.ENDS);
 		
 		return(quote);

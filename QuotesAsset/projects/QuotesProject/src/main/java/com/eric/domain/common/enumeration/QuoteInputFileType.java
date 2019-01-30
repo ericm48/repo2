@@ -15,13 +15,13 @@ import com.eric.domain.constant.BaseConstants;
  * 
  * 
  */
-public enum QuoteInputFile 
+public enum QuoteInputFileType 
 {
 	INTERNAL(BaseConstants.INTERNAL),								// Internal aboard .jar file.
 	EXTERNAL(BaseConstants.EXTERNAL),								// External File.
 	NOT_SET(BaseConstants.NOT_SET); 								// Initializer.
 	
-	private QuoteInputFile(String newValue)
+	private QuoteInputFileType(String newValue)
 	{
 		this.value = newValue;
 	}
