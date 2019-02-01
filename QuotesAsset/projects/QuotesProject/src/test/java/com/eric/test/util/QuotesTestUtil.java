@@ -25,9 +25,7 @@ public class QuotesTestUtil
 
 	static
 	{
-		methIDloadPropFile = LogFactory
-			  	.getLog(QuotesTestUtil.class.getName()
-					+ ".loadPropFile()");
+		methIDloadPropFile = LogFactory.getLog(QuotesTestUtil.class.getName() + "loadPropFile()");
 	}
 	
 	public static DialogHolder toDialogHolder()
@@ -49,9 +47,7 @@ public class QuotesTestUtil
 	public static DialogListener toDialogListener()
 	{
 		DialogListener dialogListener 		= null;
-		Quote quote							= null;
-		
-		dialogListener = new DialogListener();
+		dialogListener 						= new DialogListener();
 		
 		dialogListener.setProperties(loadPropFile(null));
 		dialogListener.setQuoteHolder(toQuoteHolder());
@@ -90,7 +86,7 @@ public class QuotesTestUtil
 		return( quote );
 	}	
 	
-	private static Properties loadPropFile(String targetFileName)
+	public static Properties loadPropFile(String targetFileName)
 	{		
 
 		Log logger = methIDloadPropFile;
@@ -103,10 +99,10 @@ public class QuotesTestUtil
 
 		if ( targetFileName == null )
 		{
-			targetFileName = BaseTestConstants.QUOTES_GOOD_INTERNAL_QUOTES_FILENAME;
+			targetFileName = BaseTestConstants.QUOTES_GOOD_INTERNAL_ONLY_QUOTES_FILENAME;
 		}
 
-		logger.debug("Using Quotes File: " + targetFileName);
+		logger.debug("Using Properties File: " + targetFileName);
 		
 		try
 		{		
@@ -133,7 +129,6 @@ public class QuotesTestUtil
 		
 		return( props );
 	}
-	
 	
 	
 }

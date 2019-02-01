@@ -19,6 +19,8 @@ public final class ErrorMessageConstants
     public final static String QUOTES_INPUT_FILE_TYPE_NOT_SET	    = "Quotes Input File Type Is NOT SET!!!";    
     public final static String BUFFERED_READER_IS_NULL				= "BufferedReader IS NULL!!!";
     public final static String FILE_READER_IS_NULL					= "FileReader IS NULL!!!";	
+    public final static String QUOTES_FILE_PROPS_ARE_MISSING		= "Both property keys Internal, External For Quotes File are MISSING!";
+    public final static String MISSING_PROPERTY_KEY					= "Missing Property Key: %s";
     
     
 	// Hide This!

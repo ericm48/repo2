@@ -143,8 +143,9 @@ public class QuoteFactory_UT
 		QuoteHolder quoteHolder 			= null;
 		
 		// Here's the important Part!!
-		String targetKey = AppPropFileKey.EXTERNAL.toString();
-		String targetPropFileName = BaseTestConstants.QUOTES_GOOD_INTERNAL_QUOTES_FILENAME;
+		//String targetKey = AppPropFileKey.EXTERNAL.toString();
+		//String targetPropFileName = BaseTestConstants.QUOTES_GOOD_INTERNAL_QUOTES_FILENAME;
+		
 		String returnValue = null;
 
 		DialogHolder dialogHolder = null;
@@ -164,6 +165,9 @@ public class QuoteFactory_UT
 		dialogHolder = qf.getQuoteWithHolder(dialogHolder);
 		
 		Assert.assertNotNull(dialogHolder);		
+		
+		logger.debug("Received Quote #: " + dialogHolder.getDialogListener().getQuote().getQuoteNumber());
+		logger.debug("Received Quote #: " + dialogHolder.getDialogListener().getQuote().getQuoteText());		
 		
 		logger.debug(BaseTestConstants.ENDS);
 

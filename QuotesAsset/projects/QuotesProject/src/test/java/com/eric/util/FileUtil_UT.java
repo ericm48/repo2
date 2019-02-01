@@ -1,5 +1,7 @@
 package com.eric.util;
 
+import java.util.Properties;
+
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +14,7 @@ import org.junit.Test;
 import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.BaseTestConstants;
+import com.eric.test.util.QuotesTestUtil;
 
 public class FileUtil_UT
 {
@@ -19,6 +22,9 @@ public class FileUtil_UT
 	private static Log methIDrunTestGetPropFileNameExternalKeyPresentSUCCESS;
 	private static Log methIDrunTestGetPropFileNameInternalKeyPresentSUCCESS;
 	private static Log methIDrunTestGetPropFileNameNoKeyPresentFAIL;
+	private static Log methIDrunTestGetTargetQuotesFileNULLPropertiesFAIL;
+	private static Log methIDrunTestGetTargetQuotesFileEMPTYPropertiesFAIL;	
+	private static Log methIDrunTestGetTargetQuotesFileExternalSUCCESS;
 	 
 	static
 	{
@@ -34,7 +40,18 @@ public class FileUtil_UT
 		methIDrunTestGetPropFileNameNoKeyPresentFAIL = LogFactory
 				  	.getLog(FileUtil_UT.class.getName()
 						+ ".runTestGetPropFileNameNoKeyPresentSUCCESS()");
-		 
+		
+		methIDrunTestGetTargetQuotesFileNULLPropertiesFAIL = LogFactory
+			  		.getLog(FileUtil_UT.class.getName()
+			  				+ ".runTestGetTargetQuotesFileNULLPropertiesFAIL()");
+		
+		methIDrunTestGetTargetQuotesFileEMPTYPropertiesFAIL = LogFactory
+		  			.getLog(FileUtil_UT.class.getName()
+		  					+ ".runTestGetTargetQuotesFileEMPTYPropertiesFAIL()");
+		
+		methIDrunTestGetTargetQuotesFileExternalSUCCESS = LogFactory
+	  				.getLog(FileUtil_UT.class.getName()
+	  						+ ".runTestGetTargetQuotesFileExternalSUCCESS()");		 
 	}
 	 
 	@Before
@@ -125,6 +142,98 @@ public class FileUtil_UT
 
 		return;	
 	}	 
+	
+	@Test
+	public void runTestGetTargetQuotesFileNULLPropertiesFAIL()
+	{
+		Log logger = methIDrunTestGetTargetQuotesFileNULLPropertiesFAIL;
+	
+		// Here's the important Part!!
+		Properties props = null;
+		String returnValue = null;
+		
+		logger.debug(BaseTestConstants.BEGINS);
+		
+		Assert.assertNull(props);
+		
+		returnValue = FileUtil.getTargetQuotesFileName(props);
+
+		Assert.assertNull(returnValue);
+		
+		logger.debug(BaseTestConstants.ENDS);
+
+		return;	
+	}	 	
+	
+	@Test
+	public void runTestGetTargetQuotesFileEMPTYPropertiesFAIL()
+	{
+		Log logger = methIDrunTestGetTargetQuotesFileEMPTYPropertiesFAIL;
+	
+		// Here's the important Part!!
+		Properties props = new Properties();
+		String returnValue = null;
+		
+		logger.debug(BaseTestConstants.BEGINS);
+		
+		Assert.assertNotNull(props);
+		
+		returnValue = FileUtil.getTargetQuotesFileName(props);
+
+		Assert.assertNull(returnValue);
+		
+		logger.debug(BaseTestConstants.ENDS);
+
+		return;	
+	}	 	
+	
+	@Test
+	public void runTestGetTargetQuotesFileInternalSUCCESS()
+	{
+		Log logger = methIDrunTestGetTargetQuotesFileEMPTYPropertiesFAIL;
+	
+		Properties props = null;
+		String returnValue = null;
+		
+		logger.debug(BaseTestConstants.BEGINS);
+		
+		Assert.assertNull(props);
+		
+		// Here's the important Part!!		
+		props = QuotesTestUtil.loadPropFile(BaseTestConstants.QUOTES_GOOD_INTERNAL_ONLY_QUOTES_FILENAME);
+		
+		returnValue = FileUtil.getTargetQuotesFileName(props);
+
+		Assert.assertNotNull(returnValue);
+		
+		logger.debug(BaseTestConstants.ENDS);
+
+		return;	
+	}	 	
+	
+	@Test
+	public void runTestGetTargetQuotesFileExternalSUCCESS()
+	{
+		Log logger = methIDrunTestGetTargetQuotesFileExternalSUCCESS;
+	
+		Properties props = null;
+		String returnValue = null;
+		
+		logger.debug(BaseTestConstants.BEGINS);
+		
+		Assert.assertNull(props);
+		
+		// Here's the important Part!!		
+		props = QuotesTestUtil.loadPropFile(BaseTestConstants.QUOTES_BAD_EXTERNAL_QUOTES_FILENAME);
+		
+		returnValue = FileUtil.getTargetQuotesFileName(props);
+
+		Assert.assertNotNull(returnValue);
+		
+		logger.debug(BaseTestConstants.ENDS);
+
+		return;	
+	}	 	
 	
 	
 //	@Test

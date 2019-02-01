@@ -327,6 +327,8 @@ public class QuoteFactory
 				progressComp.setValue(pbMin);
 		    }
 	
+		    
+		    // TODO: Here Dude!
 		    quote = loadQuote(targetQuoteNumber, dialogHolder);
 	
 		    if ( quote == null )
@@ -480,7 +482,14 @@ public class QuoteFactory
 				keepOnTruckin = false;
 				break;				
 			}
-		    
+	
+			// TODO: YANK THIS, TESTING PURPOSES
+			
+			FileUtil.getMaxQuotes(props);
+			
+			// Here Dude!!!
+			quoteInputFileType = FileUtil.getTargetQuotesFileType(props);
+			
 		    
 			// TODO: FIX ME!!
 		    fileReader = FileUtil.getFileReaderToQuotesFile(props, quoteInputFileType);

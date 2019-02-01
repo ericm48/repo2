@@ -7,7 +7,8 @@ public class BaseTestConstants
 	public static String QUOTES_BAD_INTERNAL_AND_EXTERNAL_QUOTES_FILENAME 	= "/Quotes_BadInternalAndExternalQuotesFileName.properties";	
 	public static String QUOTES_BAD_EXTERNAL_QUOTES_FILENAME 				= "/Quotes_BadExternalQuotesFileName.properties";	
 	public static String QUOTES_BAD_INTERNAL_QUOTES_FILENAME 				= "/Quotes_BadInternalQuotesFileName.properties";	
-	
+
+	public static String QUOTES_GOOD_INTERNAL_ONLY_QUOTES_FILENAME			= "/Quotes.properties";
 	public static String QUOTES_GOOD_INTERNAL_QUOTES_FILENAME				= "/Quotes.txt";
 	
 	public static int MAX_QUOTES_INERNTAL									= 1265;

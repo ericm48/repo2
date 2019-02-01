@@ -2,7 +2,6 @@ package com.eric.adapter;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
@@ -10,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.eric.domain.common.enumeration.AppPropFileKey;
-import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.BaseTestConstants;
 import com.eric.ui.listener.DialogListener;
 

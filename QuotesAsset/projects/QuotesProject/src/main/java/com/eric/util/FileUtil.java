@@ -24,6 +24,8 @@ public class FileUtil
     private static final Log methIDinitFileSet;
     private static final Log methIDgetPropFileKeyType;
     private static final Log methIDgetPropFileName;
+    private static final Log methIDgetTargetQuotesFileName;
+    private static final Log methIDgetTargetQuotesFileType;    
     private static final Log methIDgetMaxQuotes;
     private static final Log methIDgetMaxQuotesFromFile;
     private static final Log methIDgetBufferedReaderToQuotesFile;
@@ -33,6 +35,8 @@ public class FileUtil
     	methIDinitFileSet 					= LogFactory.getLog(FileUtil.class.getName() + ".initFileSet()");  
     	methIDgetPropFileKeyType 			= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileKeyType()");
     	methIDgetPropFileName				= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileName()");
+    	methIDgetTargetQuotesFileName		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileName()");    	
+    	methIDgetTargetQuotesFileType		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileType()");    	
     	methIDgetMaxQuotes					= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotes()");     	
     	methIDgetMaxQuotesFromFile			= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotesFromFile()");    	
     	methIDgetBufferedReaderToQuotesFile	= LogFactory.getLog(FileUtil.class.getName() + ".getBufferedReaderToQuotesFile()");    	
@@ -211,6 +215,97 @@ public class FileUtil
  		return( returnValue );		
  	}
     
+    
+    public static String getTargetQuotesFileName(Properties props)
+  	{
+  		Log logger 					= methIDgetTargetQuotesFileName;
+  	
+  		String returnValue 			= null;
+  		
+		logger.debug(BaseConstants.BEGINS);
+		
+		if ( props != null )
+		{
+			// Search for an EXT prop first, if found return it.			
+			logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_EXT_FILE_KEY);
+			returnValue = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);	
+
+			// If EXT isn't present look for INT prop.
+			if ( returnValue == null )
+			{				
+				logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_FILE_KEY);				
+				returnValue = props.getProperty(BaseConstants.QUOTES_INT_FILE_KEY);
+			}
+		
+			if ( returnValue != null )
+			{
+				logger.debug("Value Located For Key: " + returnValue);
+			}
+			else
+			{
+				logger.error(ErrorMessageConstants.QUOTES_FILE_PROPS_ARE_MISSING);
+			}
+			
+		}
+		else
+		{
+			logger.error(ErrorMessageConstants.PROPS_ARE_NULL);				
+		}		
+  		
+		logger.debug(BaseConstants.ENDS);  		
+  		
+  		return (returnValue );  		
+  	}        
+
+    public static QuoteInputFileType getTargetQuotesFileType(Properties props)
+  	{
+  		Log logger 								= methIDgetTargetQuotesFileType;  	
+  		String keyValue 						= null;  				
+  		QuoteInputFileType quoteInputFileType 	= QuoteInputFileType.NOT_SET;
+  		String errorMsg							= null;
+  		
+		logger.debug(BaseConstants.BEGINS);
+		
+		if ( props != null )
+		{
+			// Search for the QuoteFileTypeKey			
+			logger.debug("Attempting To Locate Key: " + BaseConstants.TARGET_QUOTE_FILE_TYPE);
+			keyValue = props.getProperty(BaseConstants.TARGET_QUOTE_FILE_TYPE);	
+
+			// If EXT isn't present look for INT prop.
+			if ( keyValue != null )
+			{
+				
+				if ( keyValue.equals(QuoteInputFileType.INTERNAL.toString()) )
+				{
+					quoteInputFileType = QuoteInputFileType.INTERNAL;
+				}
+				
+				if ( keyValue.equals(QuoteInputFileType.EXTERNAL.toString()) )
+				{
+					quoteInputFileType = QuoteInputFileType.EXTERNAL;
+				}
+				
+			}
+			else
+			{
+				errorMsg = String.format(ErrorMessageConstants.MISSING_PROPERTY_KEY,BaseConstants.TARGET_QUOTE_FILE_TYPE);
+				logger.error(errorMsg);				
+			}		
+			
+		}
+		else
+		{
+			logger.error(ErrorMessageConstants.PROPS_ARE_NULL);				
+		}		
+  		
+		logger.debug(BaseConstants.ENDS);  		
+  		
+  		return ( quoteInputFileType );  		
+  	}    
+    
+    
+    //TODO: Refactor this back into the adapter!
     public static int getMaxQuotes(Properties props)
     {
 		Log logger = methIDgetMaxQuotes;
@@ -221,16 +316,28 @@ public class FileUtil
 		
 		returnValue = getMaxQuotesFromFile(props, QuoteInputFileType.EXTERNAL);
 		
+		// Make an entry to the props that indicates which quotes file type (INT or EXT)l, we're gonna use.		
+		
 		if ( returnValue <= 0 )
 		{
-			returnValue = getMaxQuotesFromFile(props, QuoteInputFileType.INTERNAL);			
-		}		
+			returnValue = getMaxQuotesFromFile(props, QuoteInputFileType.INTERNAL);
+			
+			if ( returnValue > 0)
+			{
+				props.setProperty(BaseConstants.TARGET_QUOTE_FILE_TYPE, QuoteInputFileType.INTERNAL.toString());				
+			}
+		}
+		else
+		{
+			props.setProperty(BaseConstants.TARGET_QUOTE_FILE_TYPE, QuoteInputFileType.EXTERNAL.toString());
+		}
 		
 		logger.debug(BaseConstants.ENDS);
 		
 		return( returnValue );    	
     }      
 
+    //TODO: Refactor this back into the adapter!
     public static int getMaxQuotesFromFile(Properties props, QuoteInputFileType quoteInputFileType)
     {
 		Log logger = methIDgetMaxQuotesFromFile;
@@ -339,8 +446,8 @@ public class FileUtil
     
     
    // public static BufferedReader getBufferedReaderToQuotesFile(Properties props, QuoteInputFile quoteInputFile)
-    public static FileReader getFileReaderToQuotesFile(Properties props, QuoteInputFileType quoteInputFileType)
     
+    public static FileReader getFileReaderToQuotesFile(Properties props, QuoteInputFileType quoteInputFileType)    
     {
 		Log logger = methIDgetBufferedReaderToQuotesFile;
     	
@@ -357,14 +464,16 @@ public class FileUtil
 		if ( props != null )
 		{
 		    // Quotes File Name			
-			if ( quoteInputFileType.equals(QuoteInputFileType.INTERNAL ))
-			{			
-				fileName = props.getProperty(BaseConstants.QUOTES_INT_FILE_KEY);
-			}
-			else if ( quoteInputFileType.equals(QuoteInputFileType.EXTERNAL ))
-			{
-				fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);				
-			}
+			fileName = FileUtil.getTargetQuotesFileName(props);
+			
+//			if ( quoteInputFileType.equals(QuoteInputFileType.INTERNAL ))
+//			{			
+//				fileName = props.getProperty(BaseConstants.QUOTES_INT_FILE_KEY);
+//			}
+//			else if ( quoteInputFileType.equals(QuoteInputFileType.EXTERNAL ))
+//			{
+//				fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);				
+//			}
 			
 		    if ( fileName != null )
 		    {
