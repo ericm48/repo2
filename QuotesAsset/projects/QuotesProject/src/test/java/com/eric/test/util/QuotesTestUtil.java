@@ -9,6 +9,7 @@ import javax.swing.JProgressBar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.BaseTestConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
@@ -87,8 +88,7 @@ public class QuotesTestUtil
 	}	
 	
 	public static Properties loadPropFile(String targetFileName)
-	{		
-
+	{	
 		Log logger = methIDloadPropFile;
 	
 		logger.debug(BaseTestConstants.BEGINS);		
@@ -100,6 +100,7 @@ public class QuotesTestUtil
 		if ( targetFileName == null )
 		{
 			targetFileName = BaseTestConstants.QUOTES_GOOD_INTERNAL_ONLY_QUOTES_FILENAME;
+			props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.INTERNAL.toString());			
 		}
 
 		logger.debug("Using Properties File: " + targetFileName);

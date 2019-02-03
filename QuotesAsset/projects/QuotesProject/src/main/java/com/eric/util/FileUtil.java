@@ -14,9 +14,10 @@ import org.apache.commons.logging.LogFactory;
 
 import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.common.enumeration.AppPropFileKey;
-import com.eric.domain.common.enumeration.QuoteInputFileType;
+import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
+import com.eric.factory.QuoteFactory;
 
 public class FileUtil 
 {
@@ -28,7 +29,8 @@ public class FileUtil
     private static final Log methIDgetTargetQuotesFileType;    
     private static final Log methIDgetMaxQuotes;
     private static final Log methIDgetMaxQuotesFromFile;
-    private static final Log methIDgetBufferedReaderToQuotesFile;
+    private static final Log methIDgetFileReaderToQuotesFile;
+    private static final Log methIDcloseFile;
     
     static
     {
@@ -39,7 +41,8 @@ public class FileUtil
     	methIDgetTargetQuotesFileType		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileType()");    	
     	methIDgetMaxQuotes					= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotes()");     	
     	methIDgetMaxQuotesFromFile			= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotesFromFile()");    	
-    	methIDgetBufferedReaderToQuotesFile	= LogFactory.getLog(FileUtil.class.getName() + ".getBufferedReaderToQuotesFile()");    	
+    	methIDgetFileReaderToQuotesFile		= LogFactory.getLog(FileUtil.class.getName() + ".getFileReaderToQuotesFile()");
+		methIDcloseFile 					= LogFactory.getLog(FileUtil.class.getName()+ ".closeFile()");	    	
     	
     }
     
@@ -83,24 +86,22 @@ public class FileUtil
 		    	
 			    props.load(QuotesAdapter.class
 				    .getResourceAsStream(propFileName));	    
-		    }  
-		    
+		    }  		    
 			    
 		}
 		catch ( FileNotFoundException fnfe )
 		{
 		    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + propFileName);
-		    logger.error(fnfe.getMessage());
+		    logger.error("*** ERROR Exception Encountered!! Message: " + fnfe.getMessage());		    
 		}
 		catch ( IOException ioex )
 		{
-		    logger.error(ioex.getMessage());
+		    logger.error("*** ERROR Exception Encountered!! Message: " + ioex.getMessage());
 		}
 	
 		catch ( Exception ex )
 		{
-		    logger.error("*** ERROR Exception Encountered!! Message: "
-			    + ex.getMessage());
+		    logger.error("*** ERROR Exception Encountered!! Message: " + ex.getMessage());
 		}
 	
 		logger.debug(BaseConstants.ENDS);
@@ -120,7 +121,7 @@ public class FileUtil
     	boolean keepOnTruckin = true;
     	AppPropFileKey returnValue = AppPropFileKey.NOT_SET;
     	String targetKey = null;
-    	String targetKeyValue = null;
+    	String targetValue = null;
     	
 		logger.debug(BaseConstants.BEGINS);
 
@@ -130,11 +131,11 @@ public class FileUtil
 			
 			logger.debug("FIRST Attempting To Retrieve -D Key (EXTERNAL): " + targetKey);
 			
-			targetKeyValue = System.getProperty(targetKey);
+			targetValue = System.getProperty(targetKey);
 			
-			if ( StringUtils.isNotEmpty( targetKeyValue ))
+			if ( StringUtils.isNotEmpty( targetValue ))
 			{
-				logger.debug(targetKey + " Key Received: " + targetKeyValue);				
+				logger.debug("Value Received: " + targetValue + " For Key: " + targetKey);				
 				returnValue = AppPropFileKey.EXTERNAL;				
 				break;
 			}
@@ -143,11 +144,12 @@ public class FileUtil
 			
 			logger.debug("SECOND Attempting To Retrieve -D Key (INTERNAL): " + targetKey);
 			
-			targetKeyValue = System.getProperty(targetKey);
+			targetValue = System.getProperty(targetKey);
 
-			if ( StringUtils.isNotEmpty( targetKeyValue ))
+			if ( StringUtils.isNotEmpty( targetValue ))
 			{
-				logger.debug(targetKey + " Key Received: " + targetKeyValue);				
+				logger.debug("Value Received: " + targetValue + " For Key: " + targetKey);
+				
 				returnValue = AppPropFileKey.INTERNAL;				
 				break;
 			}
@@ -218,32 +220,65 @@ public class FileUtil
     
     public static String getTargetQuotesFileName(Properties props)
   	{
-  		Log logger 					= methIDgetTargetQuotesFileName;
-  	
-  		String returnValue 			= null;
+  		Log logger 								= methIDgetTargetQuotesFileName;  	
+  		String returnValue 						= null;
+  		QuotesInputFileType quotesInputFileType = QuotesInputFileType.NOT_SET; 
   		
 		logger.debug(BaseConstants.BEGINS);
 		
 		if ( props != null )
 		{
-			// Search for an EXT prop first, if found return it.			
-			logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_EXT_FILE_KEY);
-			returnValue = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);	
+			// First, search to see if we've 'marked' an input file (Internal or External) with the presence of
+			// property:  
+			
+			quotesInputFileType = getTargetQuotesFileType(props);
 
-			// If EXT isn't present look for INT prop.
-			if ( returnValue == null )
-			{				
-				logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_FILE_KEY);				
-				returnValue = props.getProperty(BaseConstants.QUOTES_INT_FILE_KEY);
-			}
-		
-			if ( returnValue != null )
+			if (quotesInputFileType.equals(QuotesInputFileType.NOT_SET))
 			{
-				logger.debug("Value Located For Key: " + returnValue);
+				// Search for an EXT prop first, if found return it.				
+				logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_EXT_FILE_NAME_KEY);
+				returnValue = props.getProperty(BaseConstants.QUOTES_EXT_FILE_NAME_KEY);	
+				logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_EXT_FILE_NAME_KEY);
+				
+				// If EXT isn't present, then look for INT prop.
+				if ( returnValue != null )
+				{
+					props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.EXTERNAL.toString());					
+				}
+				else
+				{				
+					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);				
+					returnValue = props.getProperty(BaseConstants.QUOTES_INT_FILE_NAME_KEY);	
+					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);
+					
+					if ( returnValue != null )
+					{
+						props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.INTERNAL.toString());					
+					}
+					else
+					{
+						logger.error(ErrorMessageConstants.QUOTES_FILE_PROPS_ARE_MISSING);
+					}
+					
+				}
+				
 			}
 			else
 			{
-				logger.error(ErrorMessageConstants.QUOTES_FILE_PROPS_ARE_MISSING);
+				if (quotesInputFileType.equals(QuotesInputFileType.INTERNAL))
+				{
+					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);				
+					returnValue = props.getProperty(BaseConstants.QUOTES_INT_FILE_NAME_KEY);	
+					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);	
+				}
+				
+				if (quotesInputFileType.equals(QuotesInputFileType.EXTERNAL))
+				{
+					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_EXT_FILE_NAME_KEY);
+					returnValue = props.getProperty(BaseConstants.QUOTES_EXT_FILE_NAME_KEY);	
+					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_EXT_FILE_NAME_KEY);				
+				}
+				
 			}
 			
 		}
@@ -257,39 +292,41 @@ public class FileUtil
   		return (returnValue );  		
   	}        
 
-    public static QuoteInputFileType getTargetQuotesFileType(Properties props)
+    public static QuotesInputFileType getTargetQuotesFileType(Properties props)
   	{
   		Log logger 								= methIDgetTargetQuotesFileType;  	
   		String keyValue 						= null;  				
-  		QuoteInputFileType quoteInputFileType 	= QuoteInputFileType.NOT_SET;
+  		QuotesInputFileType quotesInputFileType 	= QuotesInputFileType.NOT_SET;
   		String errorMsg							= null;
   		
 		logger.debug(BaseConstants.BEGINS);
 		
 		if ( props != null )
 		{
-			// Search for the QuoteFileTypeKey			
-			logger.debug("Attempting To Locate Key: " + BaseConstants.TARGET_QUOTE_FILE_TYPE);
-			keyValue = props.getProperty(BaseConstants.TARGET_QUOTE_FILE_TYPE);	
+			// Search for the QuoteInputFileTypeKey			
+			logger.debug("Attempting To Locate Key: " + BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE);
+			keyValue = props.getProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE);	
 
 			// If EXT isn't present look for INT prop.
 			if ( keyValue != null )
 			{
 				
-				if ( keyValue.equals(QuoteInputFileType.INTERNAL.toString()) )
+				logger.debug ("Received Value: " + keyValue + " For Key: " + BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE);
+				
+				if ( keyValue.equals(QuotesInputFileType.INTERNAL.toString()) )
 				{
-					quoteInputFileType = QuoteInputFileType.INTERNAL;
+					quotesInputFileType = QuotesInputFileType.INTERNAL;
 				}
 				
-				if ( keyValue.equals(QuoteInputFileType.EXTERNAL.toString()) )
+				if ( keyValue.equals(QuotesInputFileType.EXTERNAL.toString()) )
 				{
-					quoteInputFileType = QuoteInputFileType.EXTERNAL;
+					quotesInputFileType = QuotesInputFileType.EXTERNAL;
 				}
 				
 			}
 			else
 			{
-				errorMsg = String.format(ErrorMessageConstants.MISSING_PROPERTY_KEY,BaseConstants.TARGET_QUOTE_FILE_TYPE);
+				errorMsg = String.format(ErrorMessageConstants.MISSING_PROPERTY_KEY,BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE);
 				logger.error(errorMsg);				
 			}		
 			
@@ -301,7 +338,7 @@ public class FileUtil
   		
 		logger.debug(BaseConstants.ENDS);  		
   		
-  		return ( quoteInputFileType );  		
+  		return ( quotesInputFileType );  		
   	}    
     
     
@@ -310,35 +347,47 @@ public class FileUtil
     {
 		Log logger = methIDgetMaxQuotes;
 		
+		QuotesInputFileType quotesInputFileType = QuotesInputFileType.NOT_SET;
 		int returnValue = 0;
 		
 		logger.debug(BaseConstants.BEGINS);
 		
-		returnValue = getMaxQuotesFromFile(props, QuoteInputFileType.EXTERNAL);
-		
-		// Make an entry to the props that indicates which quotes file type (INT or EXT)l, we're gonna use.		
-		
-		if ( returnValue <= 0 )
+		quotesInputFileType = getTargetQuotesFileType(props);
+
+		// If its not set, then make 2 checks.  External first, then internal, and set the prop off of what we learn.
+		if ( quotesInputFileType.equals(QuotesInputFileType.NOT_SET) )
 		{
-			returnValue = getMaxQuotesFromFile(props, QuoteInputFileType.INTERNAL);
+			returnValue = getMaxQuotesFromFile(props, QuotesInputFileType.EXTERNAL);
 			
-			if ( returnValue > 0)
+			// Make an entry to the props that indicates which quotes file type (INT or EXT)l, we're gonna use.		
+			
+			if ( returnValue <= 0 )
 			{
-				props.setProperty(BaseConstants.TARGET_QUOTE_FILE_TYPE, QuoteInputFileType.INTERNAL.toString());				
+				returnValue = getMaxQuotesFromFile(props, QuotesInputFileType.INTERNAL);
+				
+				if ( returnValue > 0)
+				{
+					props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.INTERNAL.toString());				
+				}
 			}
+			else
+			{
+				props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.EXTERNAL.toString());
+			}
+			
 		}
-		else
+		else  
 		{
-			props.setProperty(BaseConstants.TARGET_QUOTE_FILE_TYPE, QuoteInputFileType.EXTERNAL.toString());
+			returnValue = getMaxQuotesFromFile(props, quotesInputFileType);			
 		}
-		
+	
 		logger.debug(BaseConstants.ENDS);
 		
 		return( returnValue );    	
     }      
 
     //TODO: Refactor this back into the adapter!
-    public static int getMaxQuotesFromFile(Properties props, QuoteInputFileType quoteInputFileType)
+    public static int getMaxQuotesFromFile(Properties props, QuotesInputFileType quotesInputFileType)
     {
 		Log logger = methIDgetMaxQuotesFromFile;
     	
@@ -363,19 +412,29 @@ public class FileUtil
 				break;				
 			}
 			
-			if ( quoteInputFileType.equals(QuoteInputFileType.NOT_SET) )
+			if ( quotesInputFileType.equals(QuotesInputFileType.NOT_SET) )
 			{
-				logger.error(ErrorMessageConstants.QUOTES_FILE_NAME_IS_NULL);				
+				logger.error(ErrorMessageConstants.QUOTES_INPUT_FILE_TYPE_NOT_SET);				
 				keepOnTruckin = false;
 				break;				
 			}
 			
-			fileReader = FileUtil.getFileReaderToQuotesFile(props, quoteInputFileType);
+			fileReader = FileUtil.getFileReaderToQuotesFile(props, quotesInputFileType);
 			
 			if ( fileReader == null )
 			{
 				logger.error(ErrorMessageConstants.FILE_READER_IS_NULL);				
 				keepOnTruckin = false;
+				// Now, if this fails (which it just did), we need to indicate the OPPOSITE (most likely, we tried an external file,
+				// and it didn't exist, or there was a problem), SOOO set the quotesInputFileType prop to INTERNAL, so we stop
+				// looking EXTERNAL!				
+
+				if ( quotesInputFileType.equals(QuotesInputFileType.EXTERNAL))
+				{				
+					logger.warn("Setting QuotesInputFileType To: " + QuotesInputFileType.INTERNAL.toString());
+					props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.INTERNAL.toString());				
+				}
+				
 				break;
 			}
 				
@@ -388,7 +447,7 @@ public class FileUtil
 //				break;
 //			}
 			
-			logger.info("Attempting To Read: " + quoteInputFileType);
+			logger.info("Input File Type: " + quotesInputFileType);
 		
 			try
 			{				
@@ -407,9 +466,7 @@ public class FileUtil
 				bufferedReader.close();
 				bufferedReader = null;
 
-				// TODO: FIX ME!!!!
-				fileReader.close();
-				fileReader = null;
+				closeFile(fileReader);
 			
 			}
 			catch ( FileNotFoundException fnfe )
@@ -447,9 +504,9 @@ public class FileUtil
     
    // public static BufferedReader getBufferedReaderToQuotesFile(Properties props, QuoteInputFile quoteInputFile)
     
-    public static FileReader getFileReaderToQuotesFile(Properties props, QuoteInputFileType quoteInputFileType)    
+    public static FileReader getFileReaderToQuotesFile(Properties props, QuotesInputFileType quotesInputFileType)    
     {
-		Log logger = methIDgetBufferedReaderToQuotesFile;
+		Log logger = methIDgetFileReaderToQuotesFile;
     	
 	    FileReader fileReader = null;
 
@@ -468,29 +525,28 @@ public class FileUtil
 			
 //			if ( quoteInputFileType.equals(QuoteInputFileType.INTERNAL ))
 //			{			
-//				fileName = props.getProperty(BaseConstants.QUOTES_INT_FILE_KEY);
+//				fileName = props.getProperty(BaseConstants.QUOTES_INT_FILE_NAME_KEY);
 //			}
 //			else if ( quoteInputFileType.equals(QuoteInputFileType.EXTERNAL ))
 //			{
-//				fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);				
+//				fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_NAME_KEY);				
 //			}
 			
 		    if ( fileName != null )
-		    {
-		    	
-				logger.info("Attempting To Read: " + fileName);
+		    {		    	
+				logger.info("Attempting To Read File: " + fileName);
 		
 				try
 				{				
 
-					if ( quoteInputFileType.equals(QuoteInputFileType.INTERNAL ))
+					if ( quotesInputFileType.equals(QuotesInputFileType.INTERNAL ))
 					{					
 						// Internal file get from resources folder with classloader.
 						classLoader 	= QuotesAdapter.class.getClassLoader();
 						file 			= new File(classLoader.getResource(fileName).getFile());					
 						fileReader 		= new FileReader(file);					
 					}
-					else if ( quoteInputFileType.equals(QuoteInputFileType.EXTERNAL ))
+					else if ( quotesInputFileType.equals(QuotesInputFileType.EXTERNAL ))
 					{
 						// External file, just read it.
 						fileReader 		= new FileReader(fileName);						
@@ -520,7 +576,7 @@ public class FileUtil
 		    else
 		    {
 				logger.error("*** ERROR *** Property for key: "
-					+ BaseConstants.QUOTES_EXT_FILE_KEY
+					+ BaseConstants.QUOTES_EXT_FILE_NAME_KEY
 					+ " is NULL or DOES NOT EXIST in Property File: "
 					+ BaseConstants.QUOTES_PROPS + " !!");
 		    }
@@ -535,4 +591,29 @@ public class FileUtil
 	    return( fileReader );
     }
 
+    public static boolean closeFile(FileReader fileReader)
+    {
+		boolean returnValue = true;
+		Log logger 			= methIDcloseFile;
+		
+		logger.debug(BaseConstants.BEGINS);
+		
+		try
+		{
+		    if ( fileReader != null )
+		    {
+		    	fileReader.close();
+		    }
+		    
+		}
+		catch ( IOException ioex )
+		{
+		    logger.error("*** ERROR Encountered.  Message: " + ioex.getMessage());
+		}
+
+		logger.debug(BaseConstants.ENDS);
+		
+		return(returnValue);
+
+    }    
 }

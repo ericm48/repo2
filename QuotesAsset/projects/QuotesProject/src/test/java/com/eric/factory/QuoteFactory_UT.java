@@ -132,8 +132,7 @@ public class QuoteFactory_UT
 		logger.debug(BaseTestConstants.ENDS);
 
 		return;		
-	}	 
-	
+	}	 	
 	
 	@Test
 	public void runTestGetQuoteWithHolderSUCCESS()
@@ -143,9 +142,6 @@ public class QuoteFactory_UT
 		QuoteHolder quoteHolder 			= null;
 		
 		// Here's the important Part!!
-		//String targetKey = AppPropFileKey.EXTERNAL.toString();
-		//String targetPropFileName = BaseTestConstants.QUOTES_GOOD_INTERNAL_QUOTES_FILENAME;
-		
 		String returnValue = null;
 
 		DialogHolder dialogHolder = null;
@@ -166,8 +162,8 @@ public class QuoteFactory_UT
 		
 		Assert.assertNotNull(dialogHolder);		
 		
-		logger.debug("Received Quote #: " + dialogHolder.getDialogListener().getQuote().getQuoteNumber());
-		logger.debug("Received Quote #: " + dialogHolder.getDialogListener().getQuote().getQuoteText());		
+		logger.debug("   Received Quote #: " + dialogHolder.getDialogListener().getQuote().getQuoteNumber());
+		logger.debug("Received Quote Text: " + dialogHolder.getDialogListener().getQuote().getQuoteText());		
 		
 		logger.debug(BaseTestConstants.ENDS);
 

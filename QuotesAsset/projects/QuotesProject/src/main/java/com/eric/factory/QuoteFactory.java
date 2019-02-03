@@ -8,7 +8,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.eric.domain.common.enumeration.QuoteInputFileType;
+import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
@@ -25,7 +25,8 @@ public class QuoteFactory
     private static final Log methIDinitQFile;
     private static final Log methIDloadQuote;
     private static final Log methIDgetQuoteWithHolder;
-
+    private static final Log methIDcloseFile;
+    
     static
     {
 		methIDgetQuote = LogFactory.getLog(QuoteFactory.class.getName()
@@ -36,17 +37,18 @@ public class QuoteFactory
 			+ ".LoadQuote()");
 		methIDgetQuoteWithHolder = LogFactory.getLog(QuoteFactory.class.getName()
 			+ ".getQuoteWithHolder()");
+		methIDcloseFile = LogFactory.getLog(QuoteFactory.class.getName()
+				+ ".closeFile()");		
 	    }
     // Declare file reader and writer streams
-    private FileReader fileReader = null;
+//    private FileReader fileReader = null;
 
     // Buffered Reader
     //private BufferedReader bufferedReader = null;
 
-    private int maxQuotes = 0;
-
-    private int pbMax = 0;
-    private final int pbMin = 0;
+//    private int maxQuotes = 0;
+//    private int pbMax = 0;
+//    private final int pbMin = 0;
 
     // -----------------------------------------------------------------
     // -----------------------------------------------------------------
@@ -213,19 +215,20 @@ public class QuoteFactory
      */
     public DialogHolder getQuoteWithHolder(DialogHolder dialogHolder)
     {
-		Log logger = methIDgetQuoteWithHolder;
+		Log logger 						= methIDgetQuoteWithHolder;	
+		boolean keepOnTruckin 			= true;
+		boolean returnValue 			= true;	
+		Quote quote 					= null;
+		DialogListener dialogListener 	= null;	
+		ProgressComponent progressComp 	= null;
+		Properties props 				= null;		
+		int targetQuoteNumber 			= 0;
+		int pbMax						= 0;
+		int pbMin						= 0;
+		int maxQuotes					= 0;			
+
 		logger.debug(BaseConstants.BEGINS);
-	
-		boolean keepOnTruckin = true;
-		boolean returnValue = true;
-	
-		Quote quote = null;
-		DialogListener dialogListener = null;	
-		ProgressComponent progressComp = null;
-		Properties props = null;		
-		
-		int targetQuoteNumber = 0;
-	
+
 		while (keepOnTruckin)
 		{
 	
@@ -265,19 +268,23 @@ public class QuoteFactory
 		    
 		    props = dialogHolder.getDialogListener().getProperties(); 
 		    
-		    if ((props != null ) && (props.size() > 0))
-		    {
-		    	// HERE DUDE!!
-		    	//this.initQFile(props);		    	
-			    maxQuotes = dialogHolder.getDialogListener().getQuoteHolder().getMaxQuotes();
-		    }
-		    else
+//		    if ((props != null ) && (props.size() > 0))
+//		    {
+//		    	// HERE DUDE!!
+//		    	//this.initQFile(props);		    	
+//			    maxQuotes = dialogHolder.getDialogListener().getQuoteHolder().getMaxQuotes();
+//		    }
+//		    else
+		    
+			if ((props == null ) || (props.size() <= 0))		    	
 		    {
 				logger.error("Properties are NULL or EMPTY!!!");
 				keepOnTruckin = false;
 				break;
 		    }
-	
+
+		    maxQuotes = dialogHolder.getDialogListener().getQuoteHolder().getMaxQuotes();
+			
 		    if ( maxQuotes > 0 )
 		    {
 		    	dialogHolder.getDialogListener().setMaxQuotes(maxQuotes);
@@ -307,9 +314,9 @@ public class QuoteFactory
 				// Generate a Random, less than the max.
 				targetQuoteNumber = MathUtil.getRandomNumber();
 		
-				if ( targetQuoteNumber > this.getMaxQuotes() )
+				if ( targetQuoteNumber > maxQuotes )
 				{
-				    targetQuoteNumber = targetQuoteNumber % this.getMaxQuotes();
+				    targetQuoteNumber = targetQuoteNumber % maxQuotes;
 				}
 		
 				logger.info("Random Number Generated: " + targetQuoteNumber);
@@ -337,8 +344,6 @@ public class QuoteFactory
 				keepOnTruckin = false;
 				break;
 		    }
-	
-		    returnValue = closeQFile();
 	
 		    keepOnTruckin = false;
 		}
@@ -440,7 +445,7 @@ public class QuoteFactory
 		boolean keepOnTruckin 					= true;	
 		int quoteIndex 							= 0;
 		Properties props						= null;
-		QuoteInputFileType quoteInputFileType 	= QuoteInputFileType.NOT_SET;
+		QuotesInputFileType quotesInputFileType 	= QuotesInputFileType.NOT_SET;
 		
 		String lineIn 							= "";
 		String quoteText 						= "";
@@ -488,19 +493,16 @@ public class QuoteFactory
 			FileUtil.getMaxQuotes(props);
 			
 			// Here Dude!!!
-			quoteInputFileType = FileUtil.getTargetQuotesFileType(props);
+			quotesInputFileType = FileUtil.getTargetQuotesFileType(props);
 			
 		    
 			// TODO: FIX ME!!
-		    fileReader = FileUtil.getFileReaderToQuotesFile(props, quoteInputFileType);
+		    fileReader = FileUtil.getFileReaderToQuotesFile(props, quotesInputFileType);
 		    
-		    bufferedReader = new BufferedReader(fileReader);
-		    
+		    bufferedReader = new BufferedReader(fileReader);		    
 		    
 		    try
-		    {
-			    
-			    
+		    {			    
 			    while ((keepOnTruckin) && (lineIn != null))
 			    {
 					try
@@ -519,10 +521,22 @@ public class QuoteFactory
 							{
 							    keepOnTruckin = false;
 							    logger.info("Quote: " + targetQuoteNumber + " LOCATED!");
+							    
+								quote = new Quote();
+								quote.setQuoteText(quoteText);
+								quote.setQuoteNumber(quoteIndex);
+						
+								if ( dialogHolder != null )
+								{
+								    if ( dialogHolder.getDialogListener() != null )
+								    {
+								    	dialogHolder.getDialogListener().setQuote(quote);
+								    }
+								}				    
+							    
 							}
 							else
-							{
-			
+							{			
 							    // If using a progress bar, calculate it's position.
 							    if ( progressBar != null )
 							    {
@@ -550,23 +564,9 @@ public class QuoteFactory
 		
 			    } // end while
 		
+			    bufferedReader.close();
 			    
-			    // TODO: Fix This!!!
-			    if ( returnValue )
-			    {	
-					quote = new Quote();
-					quote.setQuoteText(quoteText);
-					quote.setQuoteNumber(quoteIndex);
-			
-					if ( dialogHolder != null )
-					{
-					    if ( dialogHolder.getDialogListener() != null )
-					    {
-					    	dialogHolder.getDialogListener().setQuote(quote);
-					    }
-					}
-		
-			    }
+			    FileUtil.closeFile(fileReader);
 		
 			} // end try
 		
@@ -589,33 +589,39 @@ public class QuoteFactory
  
     // -----------------------------------------------------------------
     // -----------------------------------------------------------------
-    private boolean closeQFile()
-    {
-		boolean returnValue = true;
-	
-		try
-		{
-		    if ( fileReader != null )
-		    {
-		    	fileReader.close();
-		    }
-		}
-		catch ( IOException ex )
-		{
-		    System.out.println(ex);
-		}
+//    private boolean closeFile(FileReader fileReader)
+//    {
+//		boolean returnValue = true;
+//		Log logger 			= methIDcloseFile;
+//		
+//		logger.debug(BaseConstants.BEGINS);
+//		
+//		try
+//		{
+//		    if ( fileReader != null )
+//		    {
+//		    	fileReader.close();
+//		    }
+//		    
+//		}
+//		catch ( IOException ex )
+//		{
+//		    System.out.println(ex);
+//		}
+//
+//		logger.debug(BaseConstants.ENDS);
+//		
+//		return(returnValue);
+//
+//    }
 
-		return(returnValue);
-
-    }
-
-    public int getMaxQuotes()
-    {
-    	return maxQuotes;
-    }
-
-    public void setMaxQuotes(int maxQuotes)
-    {
-    	this.maxQuotes = maxQuotes;
-    }
+//    public int getMaxQuotes()
+//    {
+//    	return maxQuotes;
+//    }
+//
+//    public void setMaxQuotes(int maxQuotes)
+//    {
+//    	this.maxQuotes = maxQuotes;
+//    }
 }
