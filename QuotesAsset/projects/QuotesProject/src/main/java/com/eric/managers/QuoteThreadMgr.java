@@ -234,7 +234,7 @@ public class QuoteThreadMgr implements Runnable
 						  break;
 					 }
 
-					 dialogHolder = qf.getQuoteWithHolder(dialogHolder);
+					 dialogHolder = qf.getQuoteWithDialogHolder(dialogHolder);
 
 					 qc = new FormatQuoteCommand(dialogHolder.getDialogListener()
 								.getQuote().getQuoteText());

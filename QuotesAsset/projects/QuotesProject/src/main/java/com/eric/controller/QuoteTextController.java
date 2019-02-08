@@ -1,12 +1,24 @@
 
 package com.eric.controller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.factory.QuoteFactory;
 
 public class QuoteTextController implements QuoteController
 {
+	
+	private static Log methIDshowQuote;
+	
+	   static
+	    {
+		   methIDshowQuote 				= LogFactory.getLog(QuoteTextController.class.getName() + ".showQuote()");
+	    }	
+	
     private int       maxQuotes;
    
     //-----------------------------------------------------------------
@@ -29,48 +41,48 @@ public class QuoteTextController implements QuoteController
     public void showQuote(int targetQuoteNumber)
     {    	
     	boolean control 		= true;
+    	Log logger				= methIDshowQuote;
     	
     	QuoteFactory qFactory	= null;
     	Quote quote				= null;    	
     	
     	String lineOut			= null;
     	
+		logger.debug(BaseConstants.BEGINS);    	
+    	
     	while( control )
     	{ 
+    		
+    		// TODO:  Require This to call the adapter, get a quoteHolder (has JDK, Version, MaxQuotes, internal/external)?
+    		// or same method with dialogHolder, just null for dialog props?
+    		// TODO:  Next call appropo method on factory...could pass it with dialogHolder, just make sure
+    		// we got null checks for UI controls, and do nothing if they are null...
+    		
     		qFactory = new QuoteFactory();
 
-        	if ( qFactory == null )
-        	{
-        		System.out.println("** ERROR:  Unable To Create Factory!! ");
-        		control = false;
-        		break;
-        	}
-        	
-        	// TODO: FIX THIS!!!
+        	// TODO: FIX THIS!!!  Text Mode.
         	//quote = qFactory.getQuote( targetQuoteNumber );
         	
         	if ( quote == null )
         	{
-           		System.out.println("*** ERROR:  Quote Number: " + 
-           						   targetQuoteNumber + " Returned From Factory is Null!");
-           				
+           		logger.error("*** ERROR:  Quote Number: " + targetQuoteNumber + " Returned From Factory is Null!");           				
         		control = false;
         		break;        		
         	}
      	
         	lineOut = this.getQuoteHeader( quote );
 
-	    	System.out.println();   	
-	    	System.out.println( lineOut );
-	    	
-	    	System.out.println(quote.getQuoteText());
-	    	
-	    	System.out.println();
-	    	System.out.println();    	
+        	logger.info("");
+	    	logger.info( lineOut );	    	
+	    	logger.info(quote.getQuoteText());	    	
+        	logger.info("");
+        	logger.info("");        	
         	
         	control = false;    		
     	}
 
+		logger.debug(BaseConstants.ENDS);    	
+    	
     	System.exit(0);
     	
     }

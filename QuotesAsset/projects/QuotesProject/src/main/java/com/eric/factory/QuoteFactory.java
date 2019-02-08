@@ -12,6 +12,7 @@ import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
+import com.eric.domain.quote.QuoteHolder;
 import com.eric.ui.component.progress.ProgressComponent;
 import com.eric.ui.holder.DialogHolder;
 import com.eric.ui.listener.DialogListener;
@@ -21,189 +22,22 @@ import com.eric.util.MathUtil;
 public class QuoteFactory
 {
 
-    private static final Log methIDgetQuote;
-    private static final Log methIDinitQFile;
+//    private static final Log methIDgetQuote;
+//    private static final Log methIDinitQFile;
     private static final Log methIDloadQuote;
-    private static final Log methIDgetQuoteWithHolder;
-    private static final Log methIDcloseFile;
+    private static final Log methIDgetQuoteWithDialogHolder;
+    private static final Log methIDgetQuoteWithQuoteHolder;
+//    private static final Log methIDcloseFile;
     
     static
     {
-		methIDgetQuote = LogFactory.getLog(QuoteFactory.class.getName()
-			+ ".getQuote()");
-		methIDinitQFile = LogFactory.getLog(QuoteFactory.class.getName()
-			+ ".initQFile()");
-		methIDloadQuote = LogFactory.getLog(QuoteFactory.class.getName()
-			+ ".LoadQuote()");
-		methIDgetQuoteWithHolder = LogFactory.getLog(QuoteFactory.class.getName()
-			+ ".getQuoteWithHolder()");
-		methIDcloseFile = LogFactory.getLog(QuoteFactory.class.getName()
-				+ ".closeFile()");		
-	    }
-    // Declare file reader and writer streams
-//    private FileReader fileReader = null;
-
-    // Buffered Reader
-    //private BufferedReader bufferedReader = null;
-
-//    private int maxQuotes = 0;
-//    private int pbMax = 0;
-//    private final int pbMin = 0;
-
-    // -----------------------------------------------------------------
-    // -----------------------------------------------------------------
-
-    //private int initQFile()
-//    private int initQFile(Properties props)    
-//    {
-//    	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
-//    	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
-//    	// The holder can basically become the context???
-//    	
-//		Log logger 			= methIDinitQFile;
-//		String fileName 	= null;
-//		String lineIn 		= null;
-//	
-//		logger.debug(BaseConstants.BEGINS);
-//	
-//		if (( props != null ) && ( props.size() > 0))
-//		{
-//			
-//			try
-//			{	
-//			    // Quotes File Name
-//			    fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);
-//		
-//			    if ( fileName != null )
-//			    {
-//					logger.info("Attempting To Read: " + fileName);
-//			
-//					fileReader 	= new FileReader(fileName);
-//			
-//					bufferedReader 	= new BufferedReader(fileReader);
-//			
-//					// Read 1st Line & Trim It.
-//					lineIn 	= bufferedReader.readLine();
-//					lineIn 	= lineIn.trim();
-//			
-//					// Convert to int
-//					this.setMaxQuotes(Integer.parseInt(lineIn));
-//			
-//					logger.info("Max Quotes Available: " + this.getMaxQuotes());
-//		
-//			    }
-//			    else
-//			    {
-//					logger.error("*** ERROR *** Property for key: "
-//						+ BaseConstants.QUOTES_EXT_FILE_KEY
-//						+ " is NULL or DOES NOT EXIST in Property File: "
-//						+ BaseConstants.QUOTES_PROPS + " !!");
-//			    }
-//			    
-//		
-//			}
-//			catch ( FileNotFoundException fnfe )
-//			{
-//			    logger.error(BaseConstants.ERROR_QFILE_MIA + fileName);
-//			    logger.error(fnfe.getMessage());
-//			}
-//			catch ( IOException ioex )
-//			{
-//			    logger.error(ioex.getMessage());
-//			}	
-//			catch ( Exception ex )
-//			{
-//			    logger.error("*** ERROR Exception Encountered!! Message: "
-//				    + ex.getMessage());
-//			}
-//
-//		}
-//		else
-//		{
-//		    logger.error("Properties ARE NULL or EMPTY!!!");			
-//		}
-//		
-//		logger.debug(BaseConstants.ENDS);
-//	
-//		return(this.getMaxQuotes());
-//    }
-
-// TODO: Rewire this to return the fileStream....
-    
-//  private int initQFile(Properties props)    
-//  {
-//  	// TODO:  Rewire factory to get target quote.txt file from what adapter processes...Maybe we need
-//  	// a context?  Factory already has KT of UI dialogs so it can update/maintain the progress bar....Hmmm...
-//  	// The holder can basically become the context???
-//  	
-//		Log logger 			= methIDinitQFile;
-//		String fileName 	= null;
-//		String lineIn 		= null;
-//	
-//		logger.debug(BaseConstants.BEGINS);
-//	
-//		if (( props != null ) && ( props.size() > 0))
-//		{
-//			
-//			try
-//			{	
-//			    // Quotes File Name
-//			    fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_KEY);
-//		
-//			    if ( fileName != null )
-//			    {
-//					logger.info("Attempting To Read: " + fileName);
-//			
-//					fileReader 	= new FileReader(fileName);
-//			
-//					bufferedReader 	= new BufferedReader(fileReader);
-//			
-//					// Read 1st Line & Trim It.
-//					lineIn 	= bufferedReader.readLine();
-//					lineIn 	= lineIn.trim();
-//			
-//					// Convert to int
-//					this.setMaxQuotes(Integer.parseInt(lineIn));
-//			
-//					logger.info("Max Quotes Available: " + this.getMaxQuotes());
-//		
-//			    }
-//			    else
-//			    {
-//					logger.error("*** ERROR *** Property for key: "
-//						+ BaseConstants.QUOTES_EXT_FILE_KEY
-//						+ " is NULL or DOES NOT EXIST in Property File: "
-//						+ BaseConstants.QUOTES_PROPS + " !!");
-//			    }
-//			    
-//		
-//			}
-//			catch ( FileNotFoundException fnfe )
-//			{
-//			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
-//			    logger.error(fnfe.getMessage());
-//			}
-//			catch ( IOException ioex )
-//			{
-//			    logger.error(ioex.getMessage());
-//			}	
-//			catch ( Exception ex )
-//			{
-//			    logger.error("*** ERROR Exception Encountered!! Message: "
-//				    + ex.getMessage());
-//			}
-//
-//		}
-//		else
-//		{
-//		    logger.error("Properties ARE NULL or EMPTY!!!");			
-//		}
-//		
-//		logger.debug(BaseConstants.ENDS);
-//	
-//		return(this.getMaxQuotes());
-//  }
-    
+//		methIDgetQuote  = LogFactory.getLog(QuoteFactory.class.getName() + ".getQuote()");
+//		methIDinitQFile = LogFactory.getLog(QuoteFactory.class.getName() + ".initQFile()");
+		methIDloadQuote = LogFactory.getLog(QuoteFactory.class.getName() + ".LoadQuote()");
+		methIDgetQuoteWithDialogHolder = LogFactory.getLog(QuoteFactory.class.getName() + ".getQuoteWithDialogHolder()");
+		methIDgetQuoteWithQuoteHolder = LogFactory.getLog(QuoteFactory.class.getName() + ".getQuoteWithQuoteHolder()");		
+//		methIDcloseFile = LogFactory.getLog(QuoteFactory.class.getName() + ".closeFile()");		
+	}
     
     /**
      * 
@@ -213,9 +47,9 @@ public class QuoteFactory
      *            -Listener Object To Process & Return.
      * 
      */
-    public DialogHolder getQuoteWithHolder(DialogHolder dialogHolder)
+    public DialogHolder getQuoteWithDialogHolder(DialogHolder dialogHolder)
     {
-		Log logger 						= methIDgetQuoteWithHolder;	
+		Log logger 						= methIDgetQuoteWithDialogHolder;	
 		boolean keepOnTruckin 			= true;
 		boolean returnValue 			= true;	
 		Quote quote 					= null;
@@ -234,7 +68,7 @@ public class QuoteFactory
 	
 		    if ( dialogHolder == null )
 		    {
-				logger.error("DialogHolder is NULL!!!");
+				logger.error(ErrorMessageConstants.DIALOGHOLDER_IS_NULL);
 				keepOnTruckin = false;
 				break;
 		    }
@@ -253,8 +87,7 @@ public class QuoteFactory
 	
 		    if ( dialogHolder.getProgressComponent() != null )
 		    {
-				progressComp = dialogHolder.getProgressComponent();
-		
+				progressComp = dialogHolder.getProgressComponent();		
 				progressComp.setMinValue(pbMin);
 				progressComp.setMaxValue(pbMax);		
 				progressComp.setValue(pbMin);	
@@ -266,16 +99,8 @@ public class QuoteFactory
 				break;
 		    }
 		    
-		    props = dialogHolder.getDialogListener().getProperties(); 
-		    
-//		    if ((props != null ) && (props.size() > 0))
-//		    {
-//		    	// HERE DUDE!!
-//		    	//this.initQFile(props);		    	
-//			    maxQuotes = dialogHolder.getDialogListener().getQuoteHolder().getMaxQuotes();
-//		    }
-//		    else
-		    
+		    props = dialogHolder.getDialogListener().getQuoteHolder().getProperties(); 
+    
 			if ((props == null ) || (props.size() <= 0))		    	
 		    {
 				logger.error("Properties are NULL or EMPTY!!!");
@@ -334,8 +159,6 @@ public class QuoteFactory
 				progressComp.setValue(pbMin);
 		    }
 	
-		    
-		    // TODO: Here Dude!
 		    quote = loadQuote(targetQuoteNumber, dialogHolder);
 	
 		    if ( quote == null )
@@ -354,6 +177,81 @@ public class QuoteFactory
     }
 
     /**
+	 * 
+	 * Returns a Simple Quote for a specific Quote Number
+	 * 
+	 * @param quoteListener
+	 *            -Listener Object To Process & Return.
+	 * 
+	 */
+	public QuoteHolder getQuoteWithQuoteHolder(QuoteHolder quoteHolder)
+	{
+		Log logger 						= methIDgetQuoteWithQuoteHolder;	
+		boolean keepOnTruckin 			= true;
+		boolean returnValue 			= true;	
+		Quote quote 					= null;
+		Properties props 				= null;		
+		int targetQuoteNumber 			= 0;
+		int maxQuotes					= 0;			
+	
+		logger.debug(BaseConstants.BEGINS);
+	
+		while (keepOnTruckin)
+		{
+	
+		    if ( quoteHolder == null )
+		    {
+				logger.error(ErrorMessageConstants.QUOTEHOLDER_IS_NULL);
+				keepOnTruckin = false;
+				break;
+		    }
+		    
+		    props = quoteHolder.getProperties(); 
+	
+			if ((props == null ) || (props.size() <= 0))		    	
+		    {
+				logger.error("Properties are NULL or EMPTY!!!");
+				keepOnTruckin = false;
+				break;
+		    }
+	
+		    maxQuotes = quoteHolder.getMaxQuotes();
+
+		    if ( targetQuoteNumber == 0 )
+		    {
+				// Generate a Random, less than the max.
+				targetQuoteNumber = MathUtil.getRandomNumber();
+		
+				if ( targetQuoteNumber > maxQuotes )
+				{
+				    targetQuoteNumber = targetQuoteNumber % maxQuotes;
+				}
+		
+				logger.info("Random Number Generated: " + targetQuoteNumber);
+		
+				quoteHolder.setTargetQuoteNumber(targetQuoteNumber);
+	
+		    }
+
+		    // TODO: HERE DUDE, FIX ME!!!
+		    //quote = loadQuote(targetQuoteNumber, dialogHolder);
+	
+		    if ( quote == null )
+		    {
+				logger.error("Quote Returned IS NULL!!!");
+				keepOnTruckin = false;
+				break;
+		    }
+	
+		    keepOnTruckin = false;
+		}
+	
+		logger.debug(BaseConstants.ENDS);
+	
+		return(quoteHolder);
+	}
+    
+    /**
      * 
      * Returns a Simple Quote for a specific Quote Number
      * 
@@ -362,7 +260,8 @@ public class QuoteFactory
      * 
      */
     
-    	// TODO: FIX THIS!!!
+//// TODO: FIX THIS!!!  Text Mode
+////
 //    public Quote getQuote(int targetQuoteNumber)
 //    {
 //		Log logger = methIDgetQuote;
@@ -386,7 +285,7 @@ public class QuoteFactory
 //		    }
 //	
 //		    // HERE DUDE!!
-//		    maxQuotes = this.initQFile();
+//		    //maxQuotes = this.initQFile();
 // 			    
 //		    if ( maxQuotes <= 0 )
 //		    {
@@ -426,7 +325,7 @@ public class QuoteFactory
 //				break;
 //		    }
 //	
-//		    returnValue = closeQFile();
+//		    returnValue = FileUtil.closeFile(fileReader)();
 //	
 //		    keepOnTruckin = false;
 //		}
@@ -445,7 +344,7 @@ public class QuoteFactory
 		boolean keepOnTruckin 					= true;	
 		int quoteIndex 							= 0;
 		Properties props						= null;
-		QuotesInputFileType quotesInputFileType 	= QuotesInputFileType.NOT_SET;
+		QuotesInputFileType quotesInputFileType = QuotesInputFileType.NOT_SET;
 		
 		String lineIn 							= "";
 		String quoteText 						= "";
@@ -479,7 +378,7 @@ public class QuoteFactory
 	    
 	    while ( keepOnTruckin )
 	    {
-		    props = dialogHolder.getDialogListener().getProperties();
+		    props = dialogHolder.getDialogListener().getQuoteHolder().getProperties();
 		    
 			if ( props == null )
 			{
@@ -487,20 +386,27 @@ public class QuoteFactory
 				keepOnTruckin = false;
 				break;				
 			}
-	
-			// TODO: YANK THIS, TESTING PURPOSES
-			
-			FileUtil.getMaxQuotes(props);
-			
-			// Here Dude!!!
+		
 			quotesInputFileType = FileUtil.getTargetQuotesFileType(props);
 			
+			if (quotesInputFileType.equals(QuotesInputFileType.NOT_SET))
+			{
+				logger.error(ErrorMessageConstants.QUOTES_INPUT_FILE_TYPE_NOT_SET);				
+				keepOnTruckin = false;
+				break;
+			}
 		    
-			// TODO: FIX ME!!
 		    fileReader = FileUtil.getFileReaderToQuotesFile(props, quotesInputFileType);
 		    
-		    bufferedReader = new BufferedReader(fileReader);		    
+		    if (fileReader == null)
+		    {
+				logger.error(ErrorMessageConstants.FILE_READER_IS_NULL);				
+				keepOnTruckin = false;
+				break;		    	
+		    }		    
 		    
+		    bufferedReader = new BufferedReader(fileReader);		    
+	    
 		    try
 		    {			    
 			    while ((keepOnTruckin) && (lineIn != null))
@@ -586,42 +492,5 @@ public class QuoteFactory
 		return(quote);
 
     }
- 
-    // -----------------------------------------------------------------
-    // -----------------------------------------------------------------
-//    private boolean closeFile(FileReader fileReader)
-//    {
-//		boolean returnValue = true;
-//		Log logger 			= methIDcloseFile;
-//		
-//		logger.debug(BaseConstants.BEGINS);
-//		
-//		try
-//		{
-//		    if ( fileReader != null )
-//		    {
-//		    	fileReader.close();
-//		    }
-//		    
-//		}
-//		catch ( IOException ex )
-//		{
-//		    System.out.println(ex);
-//		}
-//
-//		logger.debug(BaseConstants.ENDS);
-//		
-//		return(returnValue);
-//
-//    }
 
-//    public int getMaxQuotes()
-//    {
-//    	return maxQuotes;
-//    }
-//
-//    public void setMaxQuotes(int maxQuotes)
-//    {
-//    	this.maxQuotes = maxQuotes;
-//    }
 }

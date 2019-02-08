@@ -1,10 +1,15 @@
 package com.eric.adapter;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
@@ -31,14 +36,13 @@ public class QuotesAdapter
     
     public static DialogListener toDialogListener()
     {
-    	Log logger = methIDtoDialogListener;
-    	
-    	DialogListener dialogListener = null; 
-    	QuoteHolder quoteHolder = null;  	
-    	Properties props = null;
-    	String appVersion = null;
-    	String JDKVersion = null;
-    	int maxQuotes = 0;
+    	Log logger 						= methIDtoDialogListener;    	
+    	DialogListener dialogListener 	= null; 
+    	QuoteHolder quoteHolder 		= null;  	
+    	Properties props 				= null;
+    	String appVersion 				= null;
+    	String JDKVersion 				= null;
+    	int maxQuotes 					= 0;
     	
     	boolean keepOnTruckin = true;
     	
@@ -72,7 +76,7 @@ public class QuotesAdapter
 	    		break;	    		
 	    	}
 	    		    	
-	    	maxQuotes = FileUtil.getMaxQuotes(props);
+	    	maxQuotes = getMaxQuotes(props);
 	    	
 	    	logger.debug("Max Quotes Loaded: " + maxQuotes);
 	    	
@@ -95,18 +99,14 @@ public class QuotesAdapter
 	    	dialogListener = new DialogListener();
 
 	    	quoteHolder = new QuoteHolder();	    	
+	    	quoteHolder.setProperties(props);
+	    	quoteHolder.setQuotesAppVersion(appVersion);
+	    	quoteHolder.setMaxQuotes(maxQuotes);
+	    	quoteHolder.setCurrentJDK(JDKVersion);
+	    	
 	    	dialogListener.setQuoteHolder(quoteHolder);
-	    	
-	    	dialogListener.setQuotesAppVersion(appVersion);
-	    	dialogListener.setMaxQuotes(maxQuotes);
-	    	dialogListener.setCurrentJDK(JDKVersion);
-	    	dialogListener.setProperties(props);
-	    	
-	    	// TODO: Do we Need This?
-	    	//quote = new Quote();	    	
-	    	//dialogListener.getQuoteHolder().setQuote(quote);
-	    	
-			// Safety Purposes
+
+	    	// Safety Purposes
 			keepOnTruckin = false;
 			break;
 			
@@ -156,4 +156,152 @@ public class QuotesAdapter
        	return( returnValue );
     }
 
+    public static int getMaxQuotes(Properties props)
+    {
+		Log logger = methIDgetMaxQuotes;
+		
+		QuotesInputFileType quotesInputFileType = QuotesInputFileType.NOT_SET;
+		int returnValue = 0;
+		
+		logger.debug(BaseConstants.BEGINS);
+		
+		quotesInputFileType = FileUtil.getTargetQuotesFileType(props);
+
+		// If its not set, then make 2 checks.  External first, then internal, and set the prop off of what we learn.
+		if ( quotesInputFileType.equals(QuotesInputFileType.NOT_SET) )
+		{
+			returnValue = getMaxQuotesFromFile(props, QuotesInputFileType.EXTERNAL);
+			
+			// Make an entry to the props that indicates which quotes file type (INT or EXT)l, we're gonna use.		
+			
+			if ( returnValue <= 0 )
+			{
+				returnValue = getMaxQuotesFromFile(props, QuotesInputFileType.INTERNAL);
+				
+				if ( returnValue > 0)
+				{
+					props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.INTERNAL.toString());				
+				}
+			}
+			else
+			{
+				props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.EXTERNAL.toString());
+			}
+			
+		}
+		else  
+		{
+			returnValue = getMaxQuotesFromFile(props, quotesInputFileType);			
+		}
+	
+		logger.debug(BaseConstants.ENDS);
+		
+		return( returnValue );    	
+    }      
+
+    public static int getMaxQuotesFromFile(Properties props, QuotesInputFileType quotesInputFileType)
+    {
+		Log logger = methIDgetMaxQuotesFromFile;
+    	
+		int returnValue = 0;
+	    FileReader fileReader = null;
+
+	    // Buffered Reader
+	    BufferedReader bufferedReader = null;
+		String fileName = null;
+		String lineIn = null;
+		boolean keepOnTruckin = true;
+				
+		logger.debug(BaseConstants.BEGINS);
+		
+		while ( keepOnTruckin )
+		{
+
+			if ( props == null )
+			{
+				logger.error(ErrorMessageConstants.PROPS_ARE_NULL);				
+				keepOnTruckin = false;
+				break;				
+			}
+			
+			if ( quotesInputFileType.equals(QuotesInputFileType.NOT_SET) )
+			{
+				logger.error(ErrorMessageConstants.QUOTES_INPUT_FILE_TYPE_NOT_SET);				
+				keepOnTruckin = false;
+				break;				
+			}
+			
+			fileReader = FileUtil.getFileReaderToQuotesFile(props, quotesInputFileType);
+			
+			if ( fileReader == null )
+			{
+				logger.error(ErrorMessageConstants.FILE_READER_IS_NULL);				
+				keepOnTruckin = false;
+				// Now, if this fails (which it just did), we need to indicate the OPPOSITE (most likely, we tried an external file,
+				// and it didn't exist, or there was a problem), SOOO set the quotesInputFileType prop to INTERNAL, so we stop
+				// looking EXTERNAL!				
+
+				if ( quotesInputFileType.equals(QuotesInputFileType.EXTERNAL))
+				{				
+					logger.warn("Setting QuotesInputFileType To: " + QuotesInputFileType.INTERNAL.toString());
+					props.setProperty(BaseConstants.TARGET_QUOTE_INPUT_FILE_TYPE, QuotesInputFileType.INTERNAL.toString());				
+				}
+				
+				break;
+			}
+				
+			bufferedReader = new BufferedReader(fileReader);
+
+			logger.info("Input File Type: " + quotesInputFileType);
+		
+			try
+			{				
+				
+				// Read 1st Line & Trim It.
+				lineIn 	= bufferedReader.readLine();
+				lineIn 	= lineIn.trim();
+		
+				if ( lineIn != null )
+				{					
+					// Convert to int
+					returnValue = Integer.parseInt(lineIn);
+					logger.info("Max Quotes Available: " + lineIn);
+				}
+				
+				bufferedReader.close();
+				bufferedReader = null;
+
+				FileUtil.closeFile(fileReader);
+			
+			}
+			catch ( FileNotFoundException fnfe )
+			{
+			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
+			    logger.error(fnfe.getMessage());
+			}
+			catch ( IOException ioex )
+			{
+			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);					
+			    logger.error(ioex.getMessage());
+			}
+		
+			catch ( Exception ex )
+			{
+			    logger.error("*** ERROR Exception Encountered!! Message: "
+				    + ex.getMessage());
+			}
+				
+			// Safety Purposes
+			keepOnTruckin = false;
+			break;			
+		
+				
+		}	// End-While
+		
+		logger.debug(BaseConstants.ENDS);
+		
+		return( returnValue );		
+    }
+    
+    
 }

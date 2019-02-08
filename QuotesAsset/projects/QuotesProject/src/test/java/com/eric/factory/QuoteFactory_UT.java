@@ -91,7 +91,7 @@ public class QuoteFactory_UT
 		qf = new QuoteFactory();
 		Assert.assertNotNull(qf);
 		
-		dialogHolder = qf.getQuoteWithHolder(dialogHolder);
+		dialogHolder = qf.getQuoteWithDialogHolder(dialogHolder);
 		
 		Assert.assertNull(dialogHolder);
 		
@@ -124,7 +124,7 @@ public class QuoteFactory_UT
 		// Here's the important Part!!
 		dialogHolder.setQuoteListener(null);
 		
-		dialogHolder = qf.getQuoteWithHolder(dialogHolder);
+		dialogHolder = qf.getQuoteWithDialogHolder(dialogHolder);
 		
 		Assert.assertNotNull(dialogHolder);
 		Assert.assertNull(dialogHolder.getDialogListener());
@@ -158,7 +158,7 @@ public class QuoteFactory_UT
 		
 		Assert.assertNotNull(dialogHolder);		
 		
-		dialogHolder = qf.getQuoteWithHolder(dialogHolder);
+		dialogHolder = qf.getQuoteWithDialogHolder(dialogHolder);
 		
 		Assert.assertNotNull(dialogHolder);		
 		
@@ -169,8 +169,6 @@ public class QuoteFactory_UT
 
 		return;		
 	}	 
-
-	
 	 
 	@After
 	public void cleanUp()

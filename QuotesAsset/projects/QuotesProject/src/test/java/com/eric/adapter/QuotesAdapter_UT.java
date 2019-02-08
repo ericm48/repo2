@@ -263,7 +263,7 @@ public class QuotesAdapter_UT
 
 		return;
 	}
-	 
+	
 	@After
 	public void cleanUp()
 	{

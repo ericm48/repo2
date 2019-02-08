@@ -1,5 +1,7 @@
 package com.eric.domain.quote;
 
+import java.util.Properties;
+
 public class QuoteHolder 
 {
 	private Quote quote							= null;	
@@ -7,6 +9,7 @@ public class QuoteHolder
     private int maxQuotes						= 0;	
     private String currentJDK					= null;
     private String quotesAppVersion				= null;
+    private Properties props					= null;    
     
 	public Quote getQuote() 
 	{
@@ -49,4 +52,14 @@ public class QuoteHolder
 		this.quotesAppVersion = quotesAppVersion;
 	}
 
+	public void setProperties(Properties newProps)
+	{
+		this.props = newProps;
+	}
+
+	public Properties getProperties()
+	{
+		return( this.props );
+	}
+	
 }

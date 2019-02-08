@@ -225,15 +225,10 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         this.theChangeListener   	= null;
 
         dialogHolder				= new DialogHolder();
-
-        // Here Dude!        
-       	// Load up Properties, Max Quotes.... 	
-        //quoteListener       = new QuoteListener();
-
-        dialogListener = QuotesAdapter.toDialogListener();
+        dialogListener 				= QuotesAdapter.toDialogListener();
     	
         // Create the listener for the Quote Object.
-        theChangeListener   = new QuoteMonitor();
+        theChangeListener   		= new QuoteMonitor();
 
         // Set to our quote reference.
         
@@ -519,11 +514,11 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
            	iTemp     = null;
            	sMaxQ     = null;
            
-           	sJDK = dialogHolder.getDialogListener().getCurrentJDK();       	
+           	sJDK = dialogHolder.getDialogListener().getQuoteHolder().getCurrentJDK();       	
            	jlbJDK.setText(BaseConstants.JDK + sJDK);
            	jlbJDK.repaint();           
            
-        	sAppVersion = dialogHolder.getDialogListener().getQuotesAppVersion();
+        	sAppVersion = dialogHolder.getDialogListener().getQuoteHolder().getQuotesAppVersion();
         	jlbQuotesAppVer.setText(BaseConstants.VERSION + sAppVersion);
         	jlbQuotesAppVer.repaint();
 

@@ -42,21 +42,18 @@ public class QuotesTestUtil
 		dialogHolder.setProgressComponent(ComponentWrapperFactory.getInstance().create( progressBar ));
 		
 		return( dialogHolder );
-	}
-	
+	}	
 	
 	public static DialogListener toDialogListener()
 	{
 		DialogListener dialogListener 		= null;
 		dialogListener 						= new DialogListener();
-		
-		dialogListener.setProperties(loadPropFile(null));
-		dialogListener.setQuoteHolder(toQuoteHolder());
+		dialogListener.setQuoteHolder(toQuoteHolder(loadPropFile(null)));
 		
 		return( dialogListener );
 	}
 	
-	public static QuoteHolder toQuoteHolder()
+	public static QuoteHolder toQuoteHolder(Properties props)
 	{
 		QuoteHolder quoteHolder				= null;
 		String jdkVersion					= null;
@@ -64,6 +61,12 @@ public class QuotesTestUtil
 		jdkVersion  = System.getProperty(BaseConstants.JAVA_VERSION);       	
 		
 		quoteHolder = new QuoteHolder();
+		
+		if ( props != null )
+		{
+			quoteHolder.setProperties(props);
+		}
+		
 		quoteHolder.setQuote(toQuote( 0 ));
 		quoteHolder.setCurrentJDK(jdkVersion);		
 		quoteHolder.setMaxQuotes(BaseTestConstants.MAX_QUOTES_INERNTAL);
