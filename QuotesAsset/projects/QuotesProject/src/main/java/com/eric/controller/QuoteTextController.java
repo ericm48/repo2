@@ -5,19 +5,25 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.eric.adapter.QuotesAdapter;
+import com.eric.command.Command;
+import com.eric.command.FormatQuoteCommand;
 import com.eric.domain.constant.BaseConstants;
+import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.quote.Quote;
+import com.eric.domain.quote.QuoteHolder;
 import com.eric.factory.QuoteFactory;
+import com.eric.ui.holder.DialogHolder;
+import com.eric.ui.listener.DialogListener;
 
 public class QuoteTextController implements QuoteController
 {
 	
 	private static Log methIDshowQuote;
 	
-	   static
-	    {
+	static
+	{
 		   methIDshowQuote 				= LogFactory.getLog(QuoteTextController.class.getName() + ".showQuote()");
-	    }	
+	}	
 	
     private int       maxQuotes;
    
@@ -40,37 +46,62 @@ public class QuoteTextController implements QuoteController
     //-----------------------------------------------------------------
     public void showQuote(int targetQuoteNumber)
     {    	
-    	boolean control 		= true;
-    	Log logger				= methIDshowQuote;
-    	
-    	QuoteFactory qFactory	= null;
-    	Quote quote				= null;    	
-    	
-    	String lineOut			= null;
+    	boolean keepOnTruckin 			= true;
+    	Log logger						= methIDshowQuote;
+    	DialogListener dialogListener 	= null;
+    	DialogHolder dialogHolder		= null;
+    	QuoteFactory quoteFactory		= null;
+    	Command quoteCommand 			= null;
+    	QuoteHolder quoteHolder			= null;
+    	Quote quote						= null;    	
+    	String lineOut					= null;
     	
 		logger.debug(BaseConstants.BEGINS);    	
     	
-    	while( control )
-    	{ 
+    	while( keepOnTruckin )
+    	{
     		
     		// TODO:  Require This to call the adapter, get a quoteHolder (has JDK, Version, MaxQuotes, internal/external)?
     		// or same method with dialogHolder, just null for dialog props?
-    		// TODO:  Next call appropo method on factory...could pass it with dialogHolder, just make sure
-    		// we got null checks for UI controls, and do nothing if they are null...
-    		
-    		qFactory = new QuoteFactory();
+            dialogListener 				= QuotesAdapter.toDialogListener();
+            
+            if ( dialogListener != null )
+            {
+                dialogHolder = new DialogHolder();
+                dialogHolder.setDialogListener(dialogListener);            	
+            	dialogListener.setTargetQuoteNumber( targetQuoteNumber );
+            }
+            else
+            {
+            	logger.error(ErrorMessageConstants.DIALOGLISTENER_IS_NULL);
+            	keepOnTruckin = false;
+            	break;
+            }
+            
+            quoteFactory = new QuoteFactory();
+            
+		    dialogHolder = quoteFactory.getQuoteWithDialogHolder(dialogHolder);
 
-        	// TODO: FIX THIS!!!  Text Mode.
-        	//quote = qFactory.getQuote( targetQuoteNumber );
-        	
-        	if ( quote == null )
+		    if ( dialogHolder == null )
         	{
-           		logger.error("*** ERROR:  Quote Number: " + targetQuoteNumber + " Returned From Factory is Null!");           				
-        		control = false;
+           		logger.error(ErrorMessageConstants.DIALOGHOLDER_IS_NULL);           				
+        		keepOnTruckin = false;
         		break;        		
         	}
+		    
+		    quoteCommand = new FormatQuoteCommand(dialogHolder.getDialogListener().getQuote().getQuoteText());
+	    
+		    keepOnTruckin = quoteCommand.execute();
+
+		    if ( keepOnTruckin )
+		    {
+			   dialogHolder.getDialogListener().getQuote().setQuoteText(quoteCommand.getResult().toString());
+			}
+
+		    quoteHolder = dialogHolder.getDialogListener().getQuoteHolder();
+  		    quote = quoteHolder.getQuote();     		   
      	
-        	lineOut = this.getQuoteHeader( quote );
+        	lineOut = this.getQuoteHeader( quoteHolder );
 
         	logger.info("");
 	    	logger.info( lineOut );	    	
@@ -78,7 +109,7 @@ public class QuoteTextController implements QuoteController
         	logger.info("");
         	logger.info("");        	
         	
-        	control = false;    		
+        	keepOnTruckin = false;    		
     	}
 
 		logger.debug(BaseConstants.ENDS);    	
@@ -88,7 +119,7 @@ public class QuoteTextController implements QuoteController
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    private String getQuoteHeader(Quote quote)
+    private String getQuoteHeader(QuoteHolder quoteHolder)
     {
     	
     	String sReturnValue = null;    	
@@ -96,8 +127,12 @@ public class QuoteTextController implements QuoteController
     	sReturnValue = BaseConstants.CARRIAGE_RETURN + 
     				   BaseConstants.APP_TITLE + 
     				   BaseConstants.CARRIAGE_RETURN +
+    				   BaseConstants.JDK + quoteHolder.getCurrentJDK() +  
+    				   BaseConstants.CARRIAGE_RETURN +    				   
+    				   BaseConstants.VERSION + quoteHolder.getQuotesAppVersion() +
+    				   BaseConstants.CARRIAGE_RETURN +    				   
     				   BaseConstants.QUOTE_NUMBER + 
-    				   quote.getQuoteNumber();
+    				   quoteHolder.getQuote().getQuoteNumber();
     	    	    	    	
         return( sReturnValue );
     }   

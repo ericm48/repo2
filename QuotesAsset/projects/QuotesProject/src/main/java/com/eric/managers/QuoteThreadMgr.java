@@ -229,9 +229,9 @@ public class QuoteThreadMgr implements Runnable
 
 					 if ( qf == null )
 					 {
-						  methIDRun.error("***ERROR Quote Factory is Null!!");
-						  control = false;
-						  break;
+						logger.error("***ERROR Quote Factory is Null!!");
+						control = false;
+						break;
 					 }
 
 					 dialogHolder = qf.getQuoteWithDialogHolder(dialogHolder);

@@ -18,7 +18,7 @@ public class DialogHolder
 	{
 		return dialogListener;
 	}
-	public void setQuoteListener(DialogListener newValue) 
+	public void setDialogListener(DialogListener newValue) 
 	{
 		this.dialogListener = newValue;
 	}

@@ -37,7 +37,7 @@ public class QuotesTestUtil
 		dialogHolder = new DialogHolder();
 		progressBar = new JProgressBar();	
 				
-		dialogHolder.setQuoteListener(toDialogListener());
+		dialogHolder.setDialogListener(toDialogListener());
 		
 		dialogHolder.setProgressComponent(ComponentWrapperFactory.getInstance().create( progressBar ));
 		

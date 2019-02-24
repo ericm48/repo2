@@ -20,6 +20,7 @@ public final class ErrorMessageConstants
     public final static String BUFFERED_READER_IS_NULL				= "BufferedReader IS NULL!!!";
     public final static String FILE_READER_IS_NULL					= "FileReader IS NULL!!!";	
     public final static String DIALOGHOLDER_IS_NULL					= "DialogHolder is NULL!!!";
+    public final static String DIALOGLISTENER_IS_NULL				= "DialogListener is NULL!!!";    
     public final static String QUOTEHOLDER_IS_NULL					= "QuoteHolder is NULL!!!";    
     public final static String QUOTES_FILE_PROPS_ARE_MISSING		= "Both property keys Internal, External For Quotes File are MISSING!";
     public final static String MISSING_PROPERTY_KEY					= "Missing Property Key: %s";

@@ -355,16 +355,7 @@ public class FileUtil
 		{
 		    // Quotes File Name			
 			fileName = FileUtil.getTargetQuotesFileName(props);
-			
-//			if ( quoteInputFileType.equals(QuoteInputFileType.INTERNAL ))
-//			{			
-//				fileName = props.getProperty(BaseConstants.QUOTES_INT_FILE_NAME_KEY);
-//			}
-//			else if ( quoteInputFileType.equals(QuoteInputFileType.EXTERNAL ))
-//			{
-//				fileName = props.getProperty(BaseConstants.QUOTES_EXT_FILE_NAME_KEY);				
-//			}
-			
+		
 		    if ( fileName != null )
 		    {		    	
 				logger.info("Attempting To Read File: " + fileName);

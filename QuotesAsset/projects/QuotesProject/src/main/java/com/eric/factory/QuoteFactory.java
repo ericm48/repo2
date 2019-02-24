@@ -80,7 +80,7 @@ public class QuoteFactory
 		    }
 		    else
 		    {
-				logger.error("DialogListener IS NULL!!!");
+				logger.error(ErrorMessageConstants.DIALOGLISTENER_IS_NULL);
 				keepOnTruckin = false;
 				break;
 		    }
@@ -92,12 +92,14 @@ public class QuoteFactory
 				progressComp.setMaxValue(pbMax);		
 				progressComp.setValue(pbMin);	
 		    }
-		    else
-		    {
-				logger.error("ProgressComponent is NULL!!!");
-				keepOnTruckin = false;
-				break;
-		    }
+
+	    	// Disabling this for when we are in text mode...		    
+//		    else
+//		    {
+//				logger.error("ProgressComponent is NULL!!!");
+//				keepOnTruckin = false;
+//				break;
+//		    }
 		    
 		    props = dialogHolder.getDialogListener().getQuoteHolder().getProperties(); 
     
@@ -374,7 +376,6 @@ public class QuoteFactory
 	    }
 
 	    logger.info("Locating Quote: " + targetQuoteNumber);
-
 	    
 	    while ( keepOnTruckin )
 	    {

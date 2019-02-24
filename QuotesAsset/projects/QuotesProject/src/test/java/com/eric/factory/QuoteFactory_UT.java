@@ -122,7 +122,7 @@ public class QuoteFactory_UT
 		dialogHolder = QuotesTestUtil.toDialogHolder();
 		
 		// Here's the important Part!!
-		dialogHolder.setQuoteListener(null);
+		dialogHolder.setDialogListener(null);
 		
 		dialogHolder = qf.getQuoteWithDialogHolder(dialogHolder);
 		

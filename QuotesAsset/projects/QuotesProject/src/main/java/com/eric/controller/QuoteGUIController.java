@@ -170,14 +170,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         		dialogHolder.getDialogListener().setTargetQuoteNumber( targetQuoteNumber );
         	}
 
-//       		sJDK = System.getProperty(BaseConstants.JAVA_VERSION);       	
-//           	logger.debug("JDK Detected: " + sJDK);
-//
-//        	if ( quoteTO != null )
-//        	{
-//        		quoteTO.getQuoteListener().setCurrentJDK(sJDK);
-//        	}
-        	
+       	
            	if ( !bReturnValue )
            	{
            		break;
@@ -234,7 +227,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         
         if ( dialogListener != null )
         {
-        	dialogHolder.setQuoteListener( dialogListener );
+        	dialogHolder.setDialogListener( dialogListener );
         	dialogListener.setTargetQuoteNumber( targetQuoteNumber );
         }
 

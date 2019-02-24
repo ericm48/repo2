@@ -16,7 +16,6 @@ import com.eric.domain.quote.QuoteHolder;
 public class DialogListener 
 {	
 	private QuoteHolder quoteHolder				= null;	
-//    private Properties props					= null;
 	protected ChangeListener changeListener     = null; 
     protected EventListenerList listenerList    = new EventListenerList();
     protected transient ChangeEvent changeEvent = null;
