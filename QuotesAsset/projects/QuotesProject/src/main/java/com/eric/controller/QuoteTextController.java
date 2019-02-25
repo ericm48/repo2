@@ -101,12 +101,10 @@ public class QuoteTextController implements QuoteController
 		    quoteHolder = dialogHolder.getDialogListener().getQuoteHolder();
   		    quote = quoteHolder.getQuote();     		   
      	
-        	lineOut = this.getQuoteHeader( quoteHolder );
+        	lineOut = this.getQuoteTextOutput(quoteHolder);
 
         	logger.info("");
 	    	logger.info( lineOut );	    	
-	    	logger.info(quote.getQuoteText());	    	
-        	logger.info("");
         	logger.info("");        	
         	
         	keepOnTruckin = false;    		
@@ -119,20 +117,28 @@ public class QuoteTextController implements QuoteController
     }
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
-    private String getQuoteHeader(QuoteHolder quoteHolder)
+    private String getQuoteTextOutput(QuoteHolder quoteHolder)
     {
     	
     	String sReturnValue = null;    	
     	
-    	sReturnValue = BaseConstants.CARRIAGE_RETURN + 
+    	sReturnValue = BaseConstants.CARRIAGE_RETURN +
+				   	   BaseConstants.CARRIAGE_RETURN +
+    				   BaseConstants.CARRIAGE_RETURN +				   	   
     				   BaseConstants.APP_TITLE + 
-    				   BaseConstants.CARRIAGE_RETURN +
-    				   BaseConstants.JDK + quoteHolder.getCurrentJDK() +  
     				   BaseConstants.CARRIAGE_RETURN +    				   
     				   BaseConstants.VERSION + quoteHolder.getQuotesAppVersion() +
     				   BaseConstants.CARRIAGE_RETURN +    				   
+    				   BaseConstants.JDK.substring(3) + quoteHolder.getCurrentJDK() +  
+    				   BaseConstants.CARRIAGE_RETURN +    				   
+    				   BaseConstants.CARRIAGE_RETURN +    				   
     				   BaseConstants.QUOTE_NUMBER + 
-    				   quoteHolder.getQuote().getQuoteNumber();
+    				   quoteHolder.getQuote().getQuoteNumber() +
+    				   BaseConstants.CARRIAGE_RETURN +    				   
+    				   quoteHolder.getQuote().getQuoteText() +
+    				   BaseConstants.CARRIAGE_RETURN +
+    				   BaseConstants.CARRIAGE_RETURN +
+    				   BaseConstants.CARRIAGE_RETURN;
     	    	    	    	
         return( sReturnValue );
     }   
