@@ -73,7 +73,9 @@ public class DialogListener
                 {
                     changeEvent = new ChangeEvent(this);
                 }
+                
                 ((ChangeListener)listeners[i+1]).stateChanged(changeEvent);
+                
             }
         }
 
@@ -126,35 +128,5 @@ public class DialogListener
 		this.quoteHolder.setMaxQuotes(maxQuotes);
 		this.fireStateChanged();		
 	}
-	
-//	public void setCurrentJDK(String newString)
-//	{
-//		this.quoteHolder.setCurrentJDK(newString);
-//	}
-//	
-//	public String getCurrentJDK()
-//	{
-//		return( quoteHolder.getCurrentJDK() );
-//	}
-	
-//	public void setQuotesAppVersion(String newString)
-//	{
-//		this.quoteHolder.setQuotesAppVersion(newString);
-//	}
-//	
-//	public String getQuotesAppVersion()
-//	{
-//		return( this.quoteHolder.getQuotesAppVersion());
-//	}	
-	
-//	public void setProperties(Properties newProps)
-//	{
-//		this.props = newProps;
-//	}
-//
-//	public Properties getProperties()
-//	{
-//		return( this.props );
-//	}
-	
+
 }

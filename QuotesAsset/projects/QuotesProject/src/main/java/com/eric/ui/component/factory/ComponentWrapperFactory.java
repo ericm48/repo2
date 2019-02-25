@@ -28,9 +28,6 @@ public class ComponentWrapperFactory extends BaseComponentFactory
 	{
 		JProgressBarImpl returnValue = null;
 		
-		
-		//super.create((JComponent)newValue);
-		
 		if ( newValue != null )
 		{
 				returnValue = new JProgressBarImpl( newValue );

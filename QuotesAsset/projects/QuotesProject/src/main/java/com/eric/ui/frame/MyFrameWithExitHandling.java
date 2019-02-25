@@ -13,21 +13,6 @@ import javax.swing.JFrame;
 public class MyFrameWithExitHandling extends JFrame implements WindowListener
 {
 
-      // Main
-      //-----------------------------------------------------------
-      /* public static void main(String[] args)
-      {
-
-         MyFrameWithExitHandling frame = new MyFrameWithExitHandling("Test Frame2");
-
-         frame.setSize(200,200);
-         frame.center();
-         frame.setVisible(true);
-
-         return;
-      }
-      */
-
       // Default Constructor
       //-----------------------------------------------------------
       public MyFrameWithExitHandling()

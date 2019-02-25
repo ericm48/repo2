@@ -61,8 +61,6 @@ public class QuoteTextController implements QuoteController
     	while( keepOnTruckin )
     	{
     		
-    		// TODO:  Require This to call the adapter, get a quoteHolder (has JDK, Version, MaxQuotes, internal/external)?
-    		// or same method with dialogHolder, just null for dialog props?
             dialogListener 				= QuotesAdapter.toDialogListener();
             
             if ( dialogListener != null )
@@ -115,7 +113,6 @@ public class QuoteTextController implements QuoteController
     	System.exit(0);
     	
     }
-    //-----------------------------------------------------------------
     //-----------------------------------------------------------------
     private String getQuoteTextOutput(QuoteHolder quoteHolder)
     {

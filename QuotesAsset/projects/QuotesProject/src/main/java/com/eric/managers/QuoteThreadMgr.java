@@ -126,12 +126,6 @@ public class QuoteThreadMgr implements Runnable
 					 break;
 				}
 
-				// Init the Thread & Set the Thread Instance Back into the TO for
-				// the
-				// factory to get.
-
-				// this.initThread();
-
 				break;
 
 		  }

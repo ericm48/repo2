@@ -421,7 +421,6 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
               this.targetQuoteNumber 	= 0;
               this.dialogHolder			= null;              
               
-              // FIX ME
               bReturnValue = this.setControlFields();
 
               if ( !bReturnValue )

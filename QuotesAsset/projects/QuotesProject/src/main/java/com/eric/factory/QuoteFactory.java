@@ -22,21 +22,15 @@ import com.eric.util.MathUtil;
 public class QuoteFactory
 {
 
-//    private static final Log methIDgetQuote;
-//    private static final Log methIDinitQFile;
     private static final Log methIDloadQuote;
     private static final Log methIDgetQuoteWithDialogHolder;
     private static final Log methIDgetQuoteWithQuoteHolder;
-//    private static final Log methIDcloseFile;
     
     static
     {
-//		methIDgetQuote  = LogFactory.getLog(QuoteFactory.class.getName() + ".getQuote()");
-//		methIDinitQFile = LogFactory.getLog(QuoteFactory.class.getName() + ".initQFile()");
 		methIDloadQuote = LogFactory.getLog(QuoteFactory.class.getName() + ".LoadQuote()");
 		methIDgetQuoteWithDialogHolder = LogFactory.getLog(QuoteFactory.class.getName() + ".getQuoteWithDialogHolder()");
 		methIDgetQuoteWithQuoteHolder = LogFactory.getLog(QuoteFactory.class.getName() + ".getQuoteWithQuoteHolder()");		
-//		methIDcloseFile = LogFactory.getLog(QuoteFactory.class.getName() + ".closeFile()");		
 	}
     
     /**
@@ -92,15 +86,7 @@ public class QuoteFactory
 				progressComp.setMaxValue(pbMax);		
 				progressComp.setValue(pbMin);	
 		    }
-
-	    	// Disabling this for when we are in text mode...		    
-//		    else
-//		    {
-//				logger.error("ProgressComponent is NULL!!!");
-//				keepOnTruckin = false;
-//				break;
-//		    }
-		    
+	    
 		    props = dialogHolder.getDialogListener().getQuoteHolder().getProperties(); 
     
 			if ((props == null ) || (props.size() <= 0))		    	
@@ -235,9 +221,6 @@ public class QuoteFactory
 	
 		    }
 
-		    // TODO: HERE DUDE, FIX ME!!!
-		    //quote = loadQuote(targetQuoteNumber, dialogHolder);
-	
 		    if ( quote == null )
 		    {
 				logger.error("Quote Returned IS NULL!!!");
@@ -262,82 +245,6 @@ public class QuoteFactory
      * 
      */
     
-//// TODO: FIX THIS!!!  Text Mode
-////
-//    public Quote getQuote(int targetQuoteNumber)
-//    {
-//		Log logger = methIDgetQuote;
-//		logger.debug(BaseConstants.BEGINS);
-//	
-//		boolean keepOnTruckin = true;
-//		boolean returnValue = true;
-//	
-//		int maxQuotes = 0;
-//	
-//		Quote quote = null;
-//	
-//		while (keepOnTruckin)
-//		{
-//	
-//		    if ( (quote != null) && quote.getQuoteNumber() == targetQuoteNumber )
-//		    {
-//				// Already Loaded!
-//				keepOnTruckin = false;
-//				break;
-//		    }
-//	
-//		    // HERE DUDE!!
-//		    //maxQuotes = this.initQFile();
-// 			    
-//		    if ( maxQuotes <= 0 )
-//		    {
-//				logger.error("*** ERROR:  Unable To Init Quotes File!!");
-//				keepOnTruckin = false;
-//				break;
-//		    }
-//	
-//		    if ( targetQuoteNumber > maxQuotes )
-//		    {
-//				logger.error("*** ERROR: Target Quote # is too high!  Only: "
-//					+ maxQuotes + " available. ");
-//		
-//				keepOnTruckin = false;
-//				break;
-//		    }
-//	
-//		    if ( targetQuoteNumber == 0 )
-//		    {
-//				// Generate a Random, less than the max.
-//				targetQuoteNumber = MathUtil.getRandomNumber();
-//		
-//				if ( targetQuoteNumber > this.getMaxQuotes() )
-//				{
-//				    targetQuoteNumber = targetQuoteNumber % this.getMaxQuotes();
-//				}
-//	
-//				logger.info("Random Number Generated: " + targetQuoteNumber);
-//	
-//		    }
-//	
-//		    quote = loadQuote(targetQuoteNumber, null);
-//	
-//		    if ( !returnValue )
-//		    {
-//				keepOnTruckin = false;
-//				break;
-//		    }
-//	
-//		    returnValue = FileUtil.closeFile(fileReader)();
-//	
-//		    keepOnTruckin = false;
-//		}
-//	
-//		logger.debug(BaseConstants.ENDS);
-//	
-//		return(quote);
-//    }
-
-    // -----------------------------------------------------------------
     // -----------------------------------------------------------------
     private Quote loadQuote(int targetQuoteNumber, DialogHolder dialogHolder)
     {

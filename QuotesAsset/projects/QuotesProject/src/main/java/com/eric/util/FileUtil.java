@@ -1,6 +1,5 @@
 package com.eric.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,7 +16,6 @@ import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
-import com.eric.factory.QuoteFactory;
 
 public class FileUtil 
 {
@@ -342,9 +340,6 @@ public class FileUtil
 		Log logger = methIDgetFileReaderToQuotesFile;
     	
 	    FileReader fileReader = null;
-
-	    // Buffered Reader
-	    //BufferedReader bufferedReader = null;
 		String fileName = null;
 		ClassLoader classLoader = null;		
 		File file = null;
@@ -375,9 +370,7 @@ public class FileUtil
 						// External file, just read it.
 						fileReader 		= new FileReader(fileName);						
 					}										
-					
-					//bufferedReader 	= new BufferedReader(fileReader);
-					
+				
 				}
 				catch ( FileNotFoundException fnfe )
 				{
