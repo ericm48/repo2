@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Progress Component Interface.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.ui.component.progress;
 
 public interface ProgressComponent 

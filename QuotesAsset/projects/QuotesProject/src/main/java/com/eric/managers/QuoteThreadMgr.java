@@ -1,4 +1,12 @@
-// QuoteMgr.java: Handles Quote File I/O, will also generate a Random Number
+/**
+ * 
+ * Description:  Thread Manager to handle spinning up a thread for factory search, as well as maintaining updating
+ * 				 the progress component.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 
 package com.eric.managers;
 
@@ -13,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import com.eric.command.Command;
 import com.eric.command.FormatQuoteCommand;
 import com.eric.domain.constant.BaseConstants;
+import com.eric.domain.message.ExMessages;
 import com.eric.domain.quote.Quote;
 import com.eric.factory.QuoteFactory;
 import com.eric.ui.component.progress.ProgressComponent;
@@ -77,14 +86,14 @@ public class QuoteThreadMgr implements Runnable
 	 {
 		  super();
 
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
-		  while (bReturnValue)
+		  while (returnValue)
 		  {
 
 				this.dialogHolder = newValue;
 
-				bReturnValue = this.loadFromTO(dialogHolder);
+				returnValue = this.loadFromTO(dialogHolder);
 
 				break;
 
@@ -99,7 +108,7 @@ public class QuoteThreadMgr implements Runnable
 	 private boolean loadFromTO(DialogHolder quoteTO)
 	 {
 
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
 		  while (quoteTO != null)
 		  {
@@ -122,7 +131,7 @@ public class QuoteThreadMgr implements Runnable
 				}
 				else
 				{
-					 bReturnValue = false;
+					 returnValue = false;
 					 break;
 				}
 
@@ -130,7 +139,7 @@ public class QuoteThreadMgr implements Runnable
 
 		  }
 
-		  return(bReturnValue);
+		  return(returnValue);
 	 }
 
 	 // -----------------------------------------------------------------
@@ -138,7 +147,7 @@ public class QuoteThreadMgr implements Runnable
 	 // -----------------------------------------------------------------
 	 public boolean setProgressBar(ProgressComponent progressBarNew)
 	 {
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
 		  if ( progressBarNew != null )
 		  {
@@ -149,10 +158,10 @@ public class QuoteThreadMgr implements Runnable
 		  }
 		  else
 		  {
-				bReturnValue = false;
+				returnValue = false;
 		  }
 
-		  return(bReturnValue);
+		  return(returnValue);
 	 }
 
 	 // -----------------------------------------------------------------
@@ -160,11 +169,11 @@ public class QuoteThreadMgr implements Runnable
 	 // -----------------------------------------------------------------
 	 public boolean setQuoteTO(DialogHolder quoteTO)
 	 {
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
 		  this.loadFromTO(quoteTO);
 
-		  return(bReturnValue);
+		  return(returnValue);
 	 }
 
 	 // -------------------------------------------------------------------------
@@ -172,7 +181,7 @@ public class QuoteThreadMgr implements Runnable
 	 // -------------------------------------------------------------------------
 	 public boolean getQuote()
 	 {
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
 		  if ( this.ourThread == null )
 		  {
@@ -188,7 +197,7 @@ public class QuoteThreadMgr implements Runnable
 
 		  }
 
-		  return(bReturnValue);
+		  return(returnValue);
 	 }
 
 	 /**
@@ -264,7 +273,7 @@ public class QuoteThreadMgr implements Runnable
 	 // -----------------------------------------------------------------
 	 private boolean initThread()
 	 {
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
 		  // Create the thread
 		  ourThread = new Thread(this);
@@ -275,10 +284,10 @@ public class QuoteThreadMgr implements Runnable
 		  }
 		  else
 		  {
-				bReturnValue = false;
+				returnValue = false;
 		  }
 
-		  return(bReturnValue);
+		  return(returnValue);
 	 }
 
 	 // -----------------------------------------------------------------
@@ -289,7 +298,7 @@ public class QuoteThreadMgr implements Runnable
 
 		  logger.debug(BaseConstants.BEGINS);
 
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 		  boolean bLoop = true;
 
 		  double dTemp = 0.00;
@@ -373,10 +382,16 @@ public class QuoteThreadMgr implements Runnable
 						  }
 
 					 } // end try for Thread
-					 catch ( InterruptedException e )
+					 catch ( InterruptedException iex )
 					 {
-						  logger.error("Caught in Interrupted Ex: " + e.getMessage());
-						  bReturnValue = false;
+						String lineOut = null;
+							
+						lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+												InterruptedException.class.getName(), 
+												iex.getMessage());
+		
+						logger.error(lineOut);
+						returnValue = false;
 					 }
 
 				} // end while
@@ -385,25 +400,32 @@ public class QuoteThreadMgr implements Runnable
 
 		  catch ( IOException ex )
 		  {
-			    logger.error(ex.getMessage());
-				bReturnValue = false;
+				String lineOut = null;
+				
+				lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+										IOException.class.getName(), 
+										ex.getMessage());
+				
+				logger.error(lineOut);
+			  
+				returnValue = false;
 		  }
 
-		  if ( bReturnValue )
+		  if ( returnValue )
 		  {
 				dialogListener.getQuote().setQuoteText(strBuffer.toString());
 		  }
 
 		  logger.debug(BaseConstants.ENDS);
 
-		  return(bReturnValue);
+		  return(returnValue);
 
 	 }
 
 	 // -------------------------------------------------------------------------
 	 private boolean initProgressComp()
 	 {
-		  boolean bReturnValue = true;
+		  boolean returnValue = true;
 
 		  iPBCount = iPBMin;
 
@@ -414,34 +436,7 @@ public class QuoteThreadMgr implements Runnable
 			  dialogHolder.getProgressComponent().setValue(iPBMin);
 		  }
 
-		  return(bReturnValue);
-	 }
-
-	 // -----------------------------------------------------------------
-	 private synchronized boolean closeQFile()
-	 {
-		  boolean bReturnValue = true;
-
-		  try
-		  {
-				// if ( fileReader != null )
-				if ( raFile != null )
-				{
-					 // fileReader.close();
-					 raFile.close();
-
-					 // fileReader = null;
-					 raFile = null;
-					 bufferedReader = null;
-				}
-		  }
-		  catch ( IOException ex )
-		  {
-				System.out.println(ex);
-		  }
-
-		  return(bReturnValue);
-
+		  return(returnValue);
 	 }
 
 	 // -----------------------------------------------------------------

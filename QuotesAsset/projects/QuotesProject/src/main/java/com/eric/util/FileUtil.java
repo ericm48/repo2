@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Utility Class for handling File IO.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.util;
 
 import java.io.File;
@@ -16,6 +24,7 @@ import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
+import com.eric.domain.message.ExMessages;
 
 public class FileUtil 
 {
@@ -25,8 +34,6 @@ public class FileUtil
     private static final Log methIDgetPropFileName;
     private static final Log methIDgetTargetQuotesFileName;
     private static final Log methIDgetTargetQuotesFileType;    
-    private static final Log methIDgetMaxQuotes;
-    private static final Log methIDgetMaxQuotesFromFile;
     private static final Log methIDgetFileReaderToQuotesFile;
     private static final Log methIDcloseFile;
     
@@ -37,8 +44,6 @@ public class FileUtil
     	methIDgetPropFileName				= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileName()");
     	methIDgetTargetQuotesFileName		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileName()");    	
     	methIDgetTargetQuotesFileType		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileType()");    	
-    	methIDgetMaxQuotes					= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotes()");     	
-    	methIDgetMaxQuotesFromFile			= LogFactory.getLog(FileUtil.class.getName() + ".getMaxQuotesFromFile()");    	
     	methIDgetFileReaderToQuotesFile		= LogFactory.getLog(FileUtil.class.getName() + ".getFileReaderToQuotesFile()");
 		methIDcloseFile 					= LogFactory.getLog(FileUtil.class.getName()+ ".closeFile()");	    	
     	
@@ -90,16 +95,36 @@ public class FileUtil
 		catch ( FileNotFoundException fnfe )
 		{
 		    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + propFileName);
-		    logger.error("*** ERROR Exception Encountered!! Message: " + fnfe.getMessage());		    
+		    
+			String lineOut = null;
+			
+			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+									FileNotFoundException.class.getName(), 
+									fnfe.getMessage());
+
+			logger.error(lineOut);
 		}
 		catch ( IOException ioex )
-		{
-		    logger.error("*** ERROR Exception Encountered!! Message: " + ioex.getMessage());
+		{			
+			String lineOut = null;
+			
+			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+									IOException.class.getName(), 
+									ioex.getMessage());
+
+			logger.error(lineOut);
+
 		}
 	
 		catch ( Exception ex )
-		{
-		    logger.error("*** ERROR Exception Encountered!! Message: " + ex.getMessage());
+		{			
+			String lineOut = null;
+			
+			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+									Exception.class.getName(), 
+									ex.getMessage());
+
+			logger.error(lineOut);	
 		}
 	
 		logger.debug(BaseConstants.ENDS);
@@ -374,19 +399,39 @@ public class FileUtil
 				}
 				catch ( FileNotFoundException fnfe )
 				{
+					String lineOut = null;
+
 				    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
-				    logger.error(fnfe.getMessage());
+					
+					lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+											FileNotFoundException.class.getName(), 
+											fnfe.getMessage());
+
+					logger.error(lineOut);
 				}
 				catch ( IOException ioex )
 				{
 				    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);					
-				    logger.error(ioex.getMessage());
+			
+					String lineOut = null;
+
+				    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
+					
+					lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+											IOException.class.getName(), 
+											ioex.getMessage());
+				    
 				}
 			
 				catch ( Exception ex )
 				{
-				    logger.error("*** ERROR Exception Encountered!! Message: "
-					    + ex.getMessage());
+					String lineOut = null;
+					
+					lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+											Exception.class.getName(), 
+											ex.getMessage());
+
+					logger.error(lineOut);			
 				}		
 				
 		    }
@@ -425,7 +470,13 @@ public class FileUtil
 		}
 		catch ( IOException ioex )
 		{
-		    logger.error("*** ERROR Encountered.  Message: " + ioex.getMessage());
+			String lineOut = null;
+			
+			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+									IOException.class.getName(), 
+									ioex.getMessage());
+
+			logger.error(lineOut);	
 		}
 
 		logger.debug(BaseConstants.ENDS);

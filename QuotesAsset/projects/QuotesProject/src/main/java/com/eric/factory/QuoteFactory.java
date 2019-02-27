@@ -1,3 +1,12 @@
+/**
+ * 
+ * Description:  Factory for creating the Quote Domain Object, is optionally aware of a progress
+ * 				 component, which it will update as it searches for the target quote.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.factory;
 
 import java.io.BufferedReader;
@@ -11,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
+import com.eric.domain.message.ExMessages;
 import com.eric.domain.quote.Quote;
 import com.eric.domain.quote.QuoteHolder;
 import com.eric.ui.component.progress.ProgressComponent;
@@ -370,8 +380,14 @@ public class QuoteFactory
 					}
 					catch ( InterruptedException iex )
 					{
-					    logger.error("*** Interrupted Exception Encountered.  Message: "
-							    + iex.getMessage());
+						String lineOut = null;
+						
+						lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+												InterruptedException.class.getName(), 
+												iex.getMessage());
+	
+						logger.error(lineOut);
+						
 					    keepOnTruckin = false;
 					    break;
 					}
@@ -386,8 +402,14 @@ public class QuoteFactory
 		
 			catch ( IOException ioex )
 			{
-			    logger.error("*** ERROR Encountered.  Message: "
-				    + ioex.getMessage());
+				String lineOut = null;
+				
+				lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+										IOException.class.getName(), 
+										ioex.getMessage());
+
+				logger.error(lineOut);
+				
 			}
 
 		    // Safety Purposes

@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Component Factory Interface.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.ui.component.factory;
 
 import javax.swing.JProgressBar;

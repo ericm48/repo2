@@ -1,6 +1,10 @@
-/*  
- * QuoteTransfer Object Class.       -Holds the Quote as well as the progress bar
- *                                   that is updated as the Factory locates the quote.
+/**
+ * 
+ * Description:  High Level holder class for the Progress Component and DialogListener.
+ * 
+ * @author Eric
+ * 
+ * 
  */
 package com.eric.ui.holder;
 

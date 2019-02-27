@@ -1,7 +1,10 @@
 /**
  * 
- * @author eric 
- *
+ * Description:  Exception Message Handling.
+ * 
+ * @author Eric
+ * 
+ * 
  */
 package com.eric.domain.message;
 

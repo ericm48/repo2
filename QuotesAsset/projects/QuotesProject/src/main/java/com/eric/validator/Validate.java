@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Validate Interface.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.validator;
 
 import java.util.Collection;

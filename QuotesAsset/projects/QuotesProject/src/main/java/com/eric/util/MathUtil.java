@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Utility Class for handling getting a random number.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.util;
 
 import java.util.Random;

@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Command Interface.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.command;
 
 public interface Command 

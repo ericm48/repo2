@@ -1,5 +1,11 @@
 /**
+ * 
+ * Description:  These are the keys that are required to be present in the CONTEXT as they
+ * relate to Application Property  File (Internal or External).
+ * 
  * @author Eric
+ * 
+ * 
  */
 package com.eric.domain.common.enumeration;
 
@@ -9,7 +15,7 @@ import com.eric.domain.constant.BaseConstants;
 /**
  * 
  * Description:  These are the keys that are required to be present in the CONTEXT as they
- * relate to CryptoCommand.
+ * relate to QuotesInputFile Type (Internal or External).
  * 
  * @author Eric
  * 

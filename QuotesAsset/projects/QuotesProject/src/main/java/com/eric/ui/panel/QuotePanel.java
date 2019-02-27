@@ -1,5 +1,11 @@
-
-
+/**
+ * 
+ * Description:  Base Panel Implementation Class.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.ui.panel;
 import java.awt.BorderLayout;
 import java.awt.Panel;

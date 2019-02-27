@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  BaseConstants for the app.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.domain.constant;
 
 public class BaseConstants 

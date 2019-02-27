@@ -1,4 +1,11 @@
-
+/**
+ * 
+ * Description:  Main Controller for Display Panel for Text Screen.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.controller;
 
 import org.apache.commons.logging.Log;

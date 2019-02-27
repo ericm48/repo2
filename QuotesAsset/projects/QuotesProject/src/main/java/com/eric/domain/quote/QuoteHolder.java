@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  QuoteHolder Domain Object.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.domain.quote;
 
 import java.util.Properties;

@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Adapter pattern to handle the property files
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.adapter;
 
 import java.io.BufferedReader;
@@ -12,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
+import com.eric.domain.message.ExMessages;
 import com.eric.domain.quote.Quote;
 import com.eric.domain.quote.QuoteHolder;
 import com.eric.ui.listener.DialogListener;
@@ -276,19 +285,36 @@ public class QuotesAdapter
 			}
 			catch ( FileNotFoundException fnfe )
 			{
+				String lineOut = null;				
 			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
-			    logger.error(fnfe.getMessage());
+				lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+										FileNotFoundException.class.getName(), 
+										fnfe.getMessage());
+				
+			    logger.error(lineOut);				
+
 			}
 			catch ( IOException ioex )
 			{
-			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);					
-			    logger.error(ioex.getMessage());
+				String lineOut = null;				
+
+			    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + fileName);
+			    
+				lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+										IOException.class.getName(), 
+										ioex.getMessage());
+
+				logger.error(lineOut);			
 			}
 		
 			catch ( Exception ex )
 			{
-			    logger.error("*** ERROR Exception Encountered!! Message: "
-				    + ex.getMessage());
+				String lineOut = null;				
+				lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+										Exception.class.getName(), 
+										ex.getMessage());
+
+				logger.error(lineOut);				
 			}
 				
 			// Safety Purposes

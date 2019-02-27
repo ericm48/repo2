@@ -1,5 +1,12 @@
 
-// Frame 2 w/Exit Handling
+/**
+ * 
+ * Description:  Frame2 with exit handling.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 
 package com.eric.ui.frame;
 

@@ -1,4 +1,10 @@
 /**
+ * 
+ * Description:  ErrorMessage Constants for the App.
+ * 
+ * @author Eric
+ * 
+ * 
  */
 package com.eric.domain.constant;
 

@@ -1,10 +1,12 @@
 /**
  * 
- * Main Command Line Controller Class to invoke BOTH Text & GUI Versions of
+ * Description:  Main Command Line Controller Class to invoke BOTH Text & GUI Versions of
  * Quotes App.
- *  
+ * 
+ * @author Eric
+ * 
+ * 
  */
-
 package com.eric.controller;
 
 import org.apache.commons.logging.Log;

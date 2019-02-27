@@ -1,20 +1,17 @@
 /**
+ * 
+ * Description:  These are the keys that are required to be present in the CONTEXT as they
+ * relate to Application Property  File (Internal or External).
+ * 
  * @author Eric
+ * 
+ * 
  */
 package com.eric.domain.common.enumeration;
 
 import com.eric.domain.constant.BaseConstants;
 
 
-/**
- * 
- * Description:  These are the keys that are required to be present in the CONTEXT as they
- * relate to CryptoCommand.
- * 
- * @author Eric
- * 
- * 
- */
 public enum AppPropFileKey 
 {
 	EXTERNAL(BaseConstants.EXT_PROP_FILE),								// External File.

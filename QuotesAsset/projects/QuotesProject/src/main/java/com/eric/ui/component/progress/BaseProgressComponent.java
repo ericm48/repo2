@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Base Implementation for a progress component.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.ui.component.progress;
 
 public abstract class BaseProgressComponent implements ProgressComponent 

@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Base Implementation of Factory for Swing Components
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.ui.component.factory;
 
 import javax.swing.JComponent;

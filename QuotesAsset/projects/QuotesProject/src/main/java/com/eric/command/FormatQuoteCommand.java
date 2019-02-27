@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Command Implementation for reformatting quotes.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.command;
 
 import org.apache.commons.logging.Log;
@@ -39,9 +47,9 @@ public class FormatQuoteCommand extends BaseCommand
 	 }
 
 	 public boolean execute()
-    {
+     {
 		  
-		  Log logger = methIDExecute;
+	    Log logger = methIDExecute;
     
         boolean returnValue = true;
         boolean control = true;

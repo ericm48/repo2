@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  Quote Domain Object.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.domain.quote;
 
 public class Quote 

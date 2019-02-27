@@ -1,11 +1,18 @@
-// QuotesJ.java:  Display Main Panel For Quotes App
-
+/**
+ * 
+ * Description:  Main Controller for Display Panel for GUI Screen.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.controller;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -23,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
+import com.eric.domain.message.ExMessages;
 import com.eric.managers.QuoteThreadMgr;
 import com.eric.ui.component.factory.ComponentWrapperFactory;
 import com.eric.ui.frame.MyFrameWithExitHandling;
@@ -196,7 +204,6 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
            	break;
         }
 
-        // FIX ME!!!!
         bReturnValue = this.updateGUI();
 
        	logger.debug(BaseConstants.ENDS);
@@ -256,7 +263,7 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
     private boolean initQuoteMgr()
     {
     	boolean returnValue = true;
-    	
+    	String lineOut = null;
     	Log logger = methIDinitQuoteMgr;
        	logger.debug(BaseConstants.BEGINS);        
     	
@@ -276,7 +283,11 @@ public class QuoteGUIController extends JApplet implements ActionListener, Quote
         }
         catch (Exception ex)
         {
-		    logger.error(ex.getMessage());
+			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
+									Exception.class.getName(), 
+									ex.getMessage());
+		
+			logger.error(lineOut);				
         }
      
        	logger.debug(BaseConstants.ENDS);        

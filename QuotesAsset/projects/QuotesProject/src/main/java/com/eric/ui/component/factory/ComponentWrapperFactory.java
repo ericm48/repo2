@@ -1,3 +1,12 @@
+/**
+ * 
+ * Description:  FactoryWrapper Implementation.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
+
 package com.eric.ui.component.factory;
 
 import javax.swing.JProgressBar;
@@ -30,7 +39,7 @@ public class ComponentWrapperFactory extends BaseComponentFactory
 		
 		if ( newValue != null )
 		{
-				returnValue = new JProgressBarImpl( newValue );
+			returnValue = new JProgressBarImpl( newValue );
 		}
 		else
 		{

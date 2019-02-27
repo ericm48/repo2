@@ -1,3 +1,11 @@
+/**
+ * 
+ * Description:  ProgressBar Implementation.
+ * 
+ * @author Eric
+ * 
+ * 
+ */
 package com.eric.ui.component.progress;
 
 import javax.swing.JProgressBar;

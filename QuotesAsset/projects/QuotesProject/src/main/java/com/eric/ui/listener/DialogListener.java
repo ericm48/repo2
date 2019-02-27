@@ -1,5 +1,10 @@
 /**
- * DialogListener Class includes domain quote class, plus listener items.
+ * 
+ * Description:  DialogListener Implementation for multithreading, to fire progess component, and UI Updates.
+ * 
+ * @author Eric
+ * 
+ * 
  */
 package com.eric.ui.listener;
 
