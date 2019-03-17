@@ -5,7 +5,7 @@
   <groupId>com.eric</groupId>
   <artifactId>quotes</artifactId>
   <packaging>jar</packaging>
-  <version>3.1.0.0-SNAPSHOT</version>
+  <version>3.1.0.0-RELEASE</version>
   <name>quotes</name>
   <url>http://maven.apache.org</url>
   

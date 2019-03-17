@@ -14,11 +14,8 @@ set CP_LIB=
 set CP_BASE=.
 set CP_LIB=.
 
-
-
-
 set CP=%CP_BASE%
-set CP=%CP%;%CP_BASE%\quotes-3.1.0.0-SNAPSHOT.jar
+set CP=%CP%;%CP_BASE%\quotes-3.1.0.0-RELEASE.jar
 REM set CP=%CP%;%CP_BASE%\Quotes.jar
 set CP=%CP%;%CP_BASE%\commons-logging-1.1.1.jar
 set CP=%CP%;%CP_BASE%\commons-lang3-3.7.jar
@@ -32,12 +29,10 @@ set CP
       goto SPECIFIC
 
 :SPECIFIC
-	REM Start java -Xmx1536m -classpath %CP% com/eric/controller/CommandLineController "-g" "%1"
 	Start java -classpath %CP% com/eric/controller/CommandLineController "-g" "%1"	
 	goto END
 
 :RANDOM
-	REM Start java -Xmx1536m -classpath %CP% com/eric/controller/CommandLineController "-g"
 	Start java -classpath %CP% com/eric/controller/CommandLineController "-g"	
 	goto END
 

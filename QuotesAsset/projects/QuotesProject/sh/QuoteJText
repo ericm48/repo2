@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# QuoteJGUI Command
+# QuoteJText Command
 #
 
 #	  set -x
@@ -29,7 +29,6 @@ usage(){
 	VARS="ext.propfile=/apps/java/QuotesApp/Quotes.properties"
 
 		
-#	CP="$CP:$CP_BASE/quotes.jar"
 	CP="$CP:$CP_BASE/quotes-3.1.0.0-RELEASE.jar"
 	CP="$CP:$CP_BASE/commons-lang3-3.7.jar"	
 	CP="$CP:$CP_BASE/commons-logging-1.1.1.jar"
@@ -37,11 +36,11 @@ usage(){
 	  
   if [ $# -lt 1 ] 
   	then
-			java -classpath "$CP" com.eric.controller.CommandLineController -g
+			java -classpath "$CP" com.eric.controller.CommandLineController -t
 
     else
     
-			java -classpath "$CP" -D"$VARS" com.eric.controller.CommandLineController -g "$1"	
+			java -classpath "$CP" -D"$VARS" com.eric.controller.CommandLineController -t "$1"	
     
   fi
    
