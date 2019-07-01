@@ -7,12 +7,11 @@
   <packaging>jar</packaging>
   <version>3.2.0.0-SNAPSHOT</version>
   <name>quotes</name>
-  <url>http://maven.apache.org</url>
   
   <properties>
 			<default.java.version>1.8</default.java.version>
 			<default.java.home>${java.1.8.home}</default.java.home>
-			<java.1.8.home>/apps/java/jdk1.8.0_60</java.1.8.home>
+			<java.1.8.home>/apps/java/jdk1.8.0_201</java.1.8.home>
 			<mavenConflictResolvers>newest</mavenConflictResolvers>
 			<jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>			
   </properties>
@@ -121,7 +120,7 @@
 	  <dependency>
 	  	<groupId>junit</groupId>
 	    <artifactId>junit</artifactId>
-	    <version>4.8</version>
+	    <version>4.12</version>
 	  </dependency>
 	   
 	  <dependency>

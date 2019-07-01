@@ -15,6 +15,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
+import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.quote.Quote;
 import com.eric.domain.quote.QuoteHolder;
 
@@ -133,5 +134,40 @@ public class DialogListener
 		this.quoteHolder.setMaxQuotes(maxQuotes);
 		this.fireStateChanged();		
 	}
+	
+	public String toString()
+	{
+		String returnValue				= null;
+		StringBuilder sb				= null;
+		
+		String quoteHolderString		= null;	
+		String changeListenerString     = null; 
+	    String listenerListString       = null;
+	    String changeEventString		= null;
+
+	    quoteHolderString = 	( this.getQuoteHolder() != null ) ? this.getQuoteHolder().toString() : BaseConstants.NULL_DELIMITED;
+	    changeListenerString = 	( this.changeListener != null ) ? this.changeListener.toString() : BaseConstants.NULL;
+	    listenerListString = 	( this.listenerList != null ) ? this.listenerList.toString() : BaseConstants.NULL;
+	    changeEventString = 	( this.changeEvent != null ) ? this.listenerList.toString() : BaseConstants.NULL;
+	    
+		sb = new StringBuilder();
+		
+		sb.append("[ DialogListener: "); 
+
+		sb.append( 		
+ 						    "|, quoteHolder = |" + quoteHolderString + "| " +      	                
+                           " changeListener = |" + changeListenerString + "| " +
+                             " listenerList = |" + listenerListString + "| " +
+                              " changeEvent = |" + changeEventString + "| "                           
+				  );
+			
+		sb.append(" ] ");
+		
+		returnValue = sb.toString();
+		
+		return( returnValue );
+			
+	}	
+	
 
 }

@@ -2,19 +2,40 @@
 # VersionInfo.txt:
 #
 
-ToDo:
-	1.  Refactor p1 plannel to have have 2 inner panels.
-	2.  Add functionality to handle quotes.txt in local dir, as well as in .jar.
-	
 
 Version:
-3.0.0.0-SNAPSHOT	-Added versionInfo.txt
-					-Refactored UI to have 
-						-JDK
-						-Version
-					-Added functionality to handle local quotes.txt, as well as .jar.
+3.2.0.0-SNAPSHOT	
+							
+							
+						-Add Looping (loopInterval in prop file, 10 seconds, infinite or maxIterations?).
+						-Add parent pom.xml.
+						-Add Junit-4.12.
+
+3.1.0.0-RELEASE		-Released.
+
+3.1.0.0-SNAPSHOT	-ToDo:
+						-Added versionInfo.txt
+						-Refactored UI to have 
+							-JDK
+							-Version
+						-Added functionality to handle local quotes.txt, as well as .jar.
 						
 
-
+-BackLog:
+	-Add MaxQuotes In Text Outout.
+	-Add HOSTNAME In GUI & Text UI.
+	-Add sleepInterval, maxLoop (Text).
+	-Initial ERROR's as WARNINGs?
+	-Add toString() for quote & quoteHolder
+	-Add QuoteFileID to GUI & Text UI (from prop file), 
+	-Add -D in, include quoteIDField:
+		-Shakespeare
+		-CS Lewis
+		-Einstein
+		-Confucious
+		-Fulton Sheen
+		-Beer
+	-Fix Formatting:
+		 Quotes #1860, 1827, 2133, 2583, 1757, 1771 for formatting special chars.	
 
 

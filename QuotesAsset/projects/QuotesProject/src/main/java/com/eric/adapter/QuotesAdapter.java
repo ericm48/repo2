@@ -85,8 +85,7 @@ public class QuotesAdapter
 	    		break;	    		
 	    	}
 	    		    	
-	    	maxQuotes = getMaxQuotes(props);
-	    	
+	    	maxQuotes = getMaxQuotes(props);	    	
 	    	logger.debug("Max Quotes Loaded: " + maxQuotes);
 	    	
 	    	if ( maxQuotes <= 0 )
@@ -103,6 +102,16 @@ public class QuotesAdapter
 	    		keepOnTruckin = false;
 	    		break;	    			    		
 	    	}
+	    	
+	    	// TODO: Here Dude!!  Add quotesFileID, hostName, sleepInternval, loopMax
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
 	    	
 	    	// Build the Object Structure
 	    	dialogListener = new DialogListener();

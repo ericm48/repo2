@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.constant.BaseTestConstants;
+import com.eric.test.util.QuotesTestUtil;
 import com.eric.ui.listener.DialogListener;
 
 public class QuotesAdapter_UT
@@ -203,7 +204,7 @@ public class QuotesAdapter_UT
 	public void runTestToDialogListenerInternalQuotesFileSUCCESS()
 	{
 		Log logger = methIDrunTestToDialogListenerInternalQuotesFileSUCCESS;
-		DialogListener ql = null;
+		DialogListener dialogListener = null;
 		int maxQuotes = 0;
 
 		// Here's the important Part!!		 
@@ -215,16 +216,20 @@ public class QuotesAdapter_UT
 		System.setProperty(targetKey, targetPropFileName);
 		logger.info("Using PropertyFile: " + targetPropFileName);
 		  
-		Assert.assertNull(ql);
+		Assert.assertNull(dialogListener);
 		Assert.assertEquals(maxQuotes, 0);
 		  
-		ql = QuotesAdapter.toDialogListener();
+		dialogListener = QuotesAdapter.toDialogListener();
 
 		System.clearProperty(targetKey);		  
 		
-		Assert.assertNotNull(ql);
+		Assert.assertNotNull(dialogListener);
 
-		maxQuotes = ql.getMaxQuotes();		  
+		dialogListener.setQuote(QuotesTestUtil.toQuote(0));
+		
+		logger.debug("DialogListener: " + dialogListener.toString());
+		
+		maxQuotes = dialogListener.getMaxQuotes();		  
 		Assert.assertEquals(maxQuotes, BaseTestConstants.MAX_QUOTES_INERNTAL);		  
 		  
 		logger.debug(BaseTestConstants.ENDS);
@@ -236,7 +241,7 @@ public class QuotesAdapter_UT
 	public void runTestToDialogListenerExternalQuotesFileSUCCESS()
 	{
 		Log logger = methIDrunTestToDialogListenerExternalQuotesFileSUCCESS;
-		DialogListener ql = null;
+		DialogListener dialogListener = null;
 		int maxQuotes = 0;
 		  
 		// Here's the important Part!!	
@@ -248,15 +253,15 @@ public class QuotesAdapter_UT
 		System.setProperty(targetKey, targetPropFileName);
 		logger.info("Using PropertyFile: " + targetPropFileName);
 		
-		Assert.assertNull(ql);
+		Assert.assertNull(dialogListener);
 		Assert.assertEquals(maxQuotes, 0);
 		  
-		ql = QuotesAdapter.toDialogListener();
+		dialogListener = QuotesAdapter.toDialogListener();
 
 		System.clearProperty(targetKey);		  
 		  
-		Assert.assertNotNull(ql);
-		maxQuotes = ql.getMaxQuotes();		  
+		Assert.assertNotNull(dialogListener);
+		maxQuotes = dialogListener.getMaxQuotes();		  
 		Assert.assertTrue((maxQuotes > 0) && (maxQuotes > BaseTestConstants.MAX_QUOTES_INERNTAL));		  
 		  
 		logger.debug(BaseTestConstants.ENDS);

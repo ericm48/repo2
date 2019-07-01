@@ -75,7 +75,7 @@ public class QuotesTestUtil
 		return( quoteHolder );		
 	}
 	
-	private static Quote toQuote(int targetQuoteNumber)
+	public static Quote toQuote(int targetQuoteNumber)
 	{
 		Quote quote = null;
 		

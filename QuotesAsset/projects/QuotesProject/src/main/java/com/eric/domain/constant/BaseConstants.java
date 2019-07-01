@@ -39,7 +39,9 @@ public class BaseConstants
 	public final static String JAVA_VERSION						= "java.version";
 	public final static String CARRIAGE_RETURN	    			= "\n";
 	public final static String LINE_FEED	    				= "\r";	
-	
+	public final static String FIVE_SPACES						= "     ";
+	public static final String NULL_DELIMITED					= "|null| ";	
+	public static final String NULL								= "null";
 	
 	public final static String DASH_G							= "-G";
 	public final static String DASH_T							= "-T";

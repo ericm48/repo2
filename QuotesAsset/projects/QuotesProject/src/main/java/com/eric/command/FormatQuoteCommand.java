@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import com.eric.domain.constant.BaseConstants;
 
 
-// TODO: Add Quotes #1860, 1827, 2133, 2583 for formatting special chars.
+// TODO: Fix Formatting Quotes #1860, 1827, 2133, 2583, 1757 for formatting special chars.
 
 public class FormatQuoteCommand extends BaseCommand
 {
