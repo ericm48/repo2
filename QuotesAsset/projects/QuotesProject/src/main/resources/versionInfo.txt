@@ -4,10 +4,22 @@
 
 
 Version:
-3.2.0.0-SNAPSHOT	
-							
-							
+3.2.0.0-SNAPSHOT	-ToDo:
+						-Rewire Logging (log4j.xml) to use an enviro-variable for directory location of
+						 log file, not hardcoded in .xml file.
 						-Add Looping (loopInterval in prop file, 10 seconds, infinite or maxIterations?).
+						-Add functionalty with prop file(s), so-as to configure a different quotes file
+					 	 for that instance.  Quotes file of only:
+					 	 x-Fulton Sheen
+					 	 x-CS Lewis
+					 	 -Matthew Kelley
+					 	 -Confucious
+					 	 -Einstein
+					 	 x-Shakespear
+					 	 -Saints:
+					 	 	-Thomas Acquinas
+					 	 	-Terese of Avila
+					 	 						 	  
 						-Add parent pom.xml.
 						-Add Junit-4.12.
 
