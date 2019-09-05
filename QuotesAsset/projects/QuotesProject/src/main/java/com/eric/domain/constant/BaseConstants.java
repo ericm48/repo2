@@ -47,6 +47,6 @@ public class BaseConstants
 	public final static String DASH_T							= "-T";
 	public final static String BEGINS							= "Begins...";
 	public final static String ENDS								= "Ends...";
-	
+	public final static String KEY_VALUE_OUT					= "Key: |%s|, Value: |%s|";
 	
 }

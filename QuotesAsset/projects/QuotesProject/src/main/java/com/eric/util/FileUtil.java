@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +32,7 @@ public class FileUtil
 	
     private static final Log methIDinitFileSet;
     private static final Log methIDgetPropFileKeyType;
+    private static final Log methIDgetPropFileName_AppPropFileKey;
     private static final Log methIDgetPropFileName;
     private static final Log methIDgetTargetQuotesFileName;
     private static final Log methIDgetTargetQuotesFileType;    
@@ -39,14 +41,14 @@ public class FileUtil
     
     static
     {
-    	methIDinitFileSet 					= LogFactory.getLog(FileUtil.class.getName() + ".initFileSet()");  
-    	methIDgetPropFileKeyType 			= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileKeyType()");
-    	methIDgetPropFileName				= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileName()");
-    	methIDgetTargetQuotesFileName		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileName()");    	
-    	methIDgetTargetQuotesFileType		= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileType()");    	
-    	methIDgetFileReaderToQuotesFile		= LogFactory.getLog(FileUtil.class.getName() + ".getFileReaderToQuotesFile()");
-		methIDcloseFile 					= LogFactory.getLog(FileUtil.class.getName()+ ".closeFile()");	    	
-    	
+    	methIDinitFileSet 						= LogFactory.getLog(FileUtil.class.getName() + ".initFileSet()");  
+    	methIDgetPropFileKeyType 				= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileKeyType()");
+    	methIDgetPropFileName_AppPropFileKey	= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileKeyType(AppPropFileKey)");
+    	methIDgetPropFileName					= LogFactory.getLog(FileUtil.class.getName() + ".getPropFileName()");
+    	methIDgetTargetQuotesFileName			= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileName()");    	
+    	methIDgetTargetQuotesFileType			= LogFactory.getLog(FileUtil.class.getName() + ".getTargetQuotesFileType()");    	
+    	methIDgetFileReaderToQuotesFile			= LogFactory.getLog(FileUtil.class.getName() + ".getFileReaderToQuotesFile()");
+		methIDcloseFile 						= LogFactory.getLog(FileUtil.class.getName()+ ".closeFile()");
     }
     
     
@@ -56,6 +58,10 @@ public class FileUtil
 		String propFileName = null;
 		Properties props = null;
 		FileInputStream fis = null;
+		Enumeration<String> propEnums = null;				
+		String key = null;
+		String value = null;
+		String lineOut = null;
 		
 		AppPropFileKey propFileKeyType = AppPropFileKey.NOT_SET;
 		
@@ -70,7 +76,7 @@ public class FileUtil
 		{			
 			propFileKeyType = getPropFileKeyType();
 			
-			propFileName = getPropFileName();
+			propFileName = getPropFileName(propFileKeyType);
 		
 		    if ( propFileKeyType.equals(AppPropFileKey.EXTERNAL))
 		    {
@@ -80,6 +86,8 @@ public class FileUtil
 			    fis = new FileInputStream(propFileName);
 			    
 			    props.load(fis);			    
+			    
+			    logger.info("EXTERNAL PropertyFile: " + propFileName + " loaded SUCCESSFULL!");			    
 		    }
 		    
 		    if ( propFileKeyType.equals(AppPropFileKey.INTERNAL))
@@ -87,17 +95,33 @@ public class FileUtil
 			    // Loads Internal
 		    	logger.info("Attempting To Load INTERNAL PropertyFile: " + propFileName);
 		    	
-			    props.load(QuotesAdapter.class
-				    .getResourceAsStream(propFileName));	    
+			    props.load(QuotesAdapter.class.getResourceAsStream(propFileName));
+			    
+			    logger.info("INTERNAL PropertyFile: " + propFileName + " loaded SUCCESSFULL!");			    
 		    }  		    
+		    
+		    if ( logger.isDebugEnabled() )
+		    {
+		    	propEnums = (Enumeration<String>) props.propertyNames();
+	
+			    while (propEnums.hasMoreElements()) 
+			    {			      
+			    	key = propEnums.nextElement();		      
+			    	value = props.getProperty(key);
+			      
+			    	lineOut = String.format(BaseConstants.KEY_VALUE_OUT, key, value);
+			    	logger.debug(lineOut);			    	
+			    }
+			    
+		    }
+		    
 			    
 		}
 		catch ( FileNotFoundException fnfe )
 		{
 		    logger.error(ErrorMessageConstants.ERROR_QFILE_MIA + propFileName);
 		    
-			String lineOut = null;
-			
+			lineOut = null;			
 			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
 									FileNotFoundException.class.getName(), 
 									fnfe.getMessage());
@@ -106,20 +130,17 @@ public class FileUtil
 		}
 		catch ( IOException ioex )
 		{			
-			String lineOut = null;
-			
+			lineOut = null;			
 			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
 									IOException.class.getName(), 
 									ioex.getMessage());
 
 			logger.error(lineOut);
-
 		}
 	
 		catch ( Exception ex )
 		{			
-			String lineOut = null;
-			
+			lineOut = null;			
 			lineOut = String.format(ExMessages.GENEXCEPTION_ENCOUNTERED, 
 									Exception.class.getName(), 
 									ex.getMessage());
@@ -131,8 +152,9 @@ public class FileUtil
 	
 		return(props);
     }
-	// Determines if the property file to use is internal, or external (set via -d variable).
 	
+	
+	// Determines if the property file to use is internal, or external (set via -d variable).
     public static AppPropFileKey getPropFileKeyType()
     { 
 		Log logger = methIDgetPropFileKeyType;
@@ -141,6 +163,7 @@ public class FileUtil
     	AppPropFileKey returnValue = AppPropFileKey.NOT_SET;
     	String targetKey = null;
     	String targetValue = null;
+    	String lineOut = null;
     	
 		logger.debug(BaseConstants.BEGINS);
 
@@ -154,8 +177,12 @@ public class FileUtil
 			
 			if ( StringUtils.isNotEmpty( targetValue ))
 			{
-				logger.debug("Value Received: " + targetValue + " For Key: " + targetKey);				
-				returnValue = AppPropFileKey.EXTERNAL;				
+				lineOut = String.format(BaseConstants.KEY_VALUE_OUT,  targetKey, targetValue);				
+				logger.debug(lineOut);				
+				returnValue = AppPropFileKey.EXTERNAL;
+				
+				// TODO: Now that we found it, ADD IT!
+				
 				break;
 			}
 			
@@ -167,9 +194,12 @@ public class FileUtil
 
 			if ( StringUtils.isNotEmpty( targetValue ))
 			{
-				logger.debug("Value Received: " + targetValue + " For Key: " + targetKey);
+				lineOut = String.format(BaseConstants.KEY_VALUE_OUT,  targetKey, targetValue);				
+				logger.debug(lineOut);				
+				returnValue = AppPropFileKey.INTERNAL;
+
+				// TODO: Now that we found it, ADD IT!
 				
-				returnValue = AppPropFileKey.INTERNAL;				
 				break;
 			}
 			else
@@ -236,6 +266,49 @@ public class FileUtil
  		return( returnValue );		
  	}
     
+    public static String getPropFileName(AppPropFileKey targetKeyType)
+ 	{
+ 		Log logger = methIDgetPropFileName_AppPropFileKey;
+ 	
+ 		String returnValue = null;
+ 		String targetKey = null;
+	
+ 		logger.debug(BaseConstants.BEGINS);
+ 		
+ 		if (targetKeyType.equals(AppPropFileKey.EXTERNAL))
+ 		{
+ 			targetKey = BaseConstants.EXT_PROP_FILE;
+ 			
+ 			logger.debug("Attempting To Retrieve Property Key: " + targetKey);
+ 			
+ 			returnValue = System.getProperty(targetKey);
+ 			
+ 			logger.debug("Retrieved PropFile Name: " + returnValue);			
+ 		}
+ 		
+ 		if (targetKeyType.equals(AppPropFileKey.INTERNAL))
+ 		{
+ 			targetKey = BaseConstants.INT_PROP_FILE;
+ 			
+ 			logger.debug("Attempting To Retrieve INTERNAL Key: " + targetKey);
+ 			
+ 			returnValue = System.getProperty(targetKey);
+ 			
+ 			logger.debug("Retrieved PropFile Name: " + returnValue);			
+ 		}
+
+ 		if (StringUtils.isEmpty(returnValue))
+ 		{
+ 			returnValue = BaseConstants.QUOTES_PROPS;			
+ 			logger.debug("No PropertyFileKey Set, Defaulting To: " + returnValue);	
+ 		}
+ 		
+ 		logger.info("Using PropFile Name: " + returnValue);
+ 		
+ 		logger.debug(BaseConstants.ENDS);
+ 		
+ 		return( returnValue );		
+ 	}
     
     public static String getTargetQuotesFileName(Properties props)
   	{

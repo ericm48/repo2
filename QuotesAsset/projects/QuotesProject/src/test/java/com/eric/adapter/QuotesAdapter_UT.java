@@ -262,7 +262,7 @@ public class QuotesAdapter_UT
 		  
 		Assert.assertNotNull(dialogListener);
 		maxQuotes = dialogListener.getMaxQuotes();		  
-		Assert.assertTrue((maxQuotes > 0) && (maxQuotes > BaseTestConstants.MAX_QUOTES_INERNTAL));		  
+		Assert.assertTrue((maxQuotes > 0) && (maxQuotes >= BaseTestConstants.MAX_QUOTES_INERNTAL));		  
 		  
 		logger.debug(BaseTestConstants.ENDS);
 
