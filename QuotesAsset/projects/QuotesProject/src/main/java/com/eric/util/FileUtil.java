@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.common.enumeration.AppPropFileKey;
+import com.eric.domain.common.enumeration.PropKeyType;
 import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
@@ -52,6 +53,7 @@ public class FileUtil
     }
     
     
+	@SuppressWarnings("unchecked")
 	public static Properties initFileSet()
     {
 		Log logger = methIDinitFileSet;
@@ -60,6 +62,7 @@ public class FileUtil
 		FileInputStream fis = null;
 		Enumeration<String> propEnums = null;				
 		String key = null;
+		String keyType = null;
 		String value = null;
 		String lineOut = null;
 		
@@ -87,7 +90,9 @@ public class FileUtil
 			    
 			    props.load(fis);			    
 			    
-			    logger.info("EXTERNAL PropertyFile: " + propFileName + " loaded SUCCESSFULL!");			    
+			    logger.info("EXTERNAL PropertyFile: " + propFileName + " loaded SUCCESSFULL!");
+
+			    props.put(AppPropFileKey.EXTERNAL.toString(), propFileName);			    
 		    }
 		    
 		    if ( propFileKeyType.equals(AppPropFileKey.INTERNAL))
@@ -97,9 +102,11 @@ public class FileUtil
 		    	
 			    props.load(QuotesAdapter.class.getResourceAsStream(propFileName));
 			    
-			    logger.info("INTERNAL PropertyFile: " + propFileName + " loaded SUCCESSFULL!");			    
+			    logger.info("INTERNAL PropertyFile: " + propFileName + " loaded SUCCESSFULL!");
+
+			    props.put(AppPropFileKey.INTERNAL.toString(), propFileName);			    
 		    }  		    
-		    
+		
 		    if ( logger.isDebugEnabled() )
 		    {
 		    	propEnums = (Enumeration<String>) props.propertyNames();
@@ -109,7 +116,16 @@ public class FileUtil
 			    	key = propEnums.nextElement();		      
 			    	value = props.getProperty(key);
 			      
-			    	lineOut = String.format(BaseConstants.KEY_VALUE_OUT, key, value);
+			    	keyType = BaseConstants.INT_PREFIX;
+			    	
+			    	if (key.contains(BaseConstants.EXT_PREFIX))
+			    	{
+			    		keyType = BaseConstants.EXT_PREFIX;
+			    	}
+			    	
+			    	lineOut = String.format(BaseConstants.KEY_VALUE_OUT, keyType, key, value);
+			    	
+			    	
 			    	logger.debug(lineOut);			    	
 			    }
 			    
@@ -171,35 +187,29 @@ public class FileUtil
 		{
 			targetKey = AppPropFileKey.EXTERNAL.toString();
 			
-			logger.debug("FIRST Attempting To Retrieve -D Key (EXTERNAL): " + targetKey);
+			logger.debug("FIRST Attempting To Retrieve -D External-Key for an EXTERNAL reference: " + targetKey);
 			
 			targetValue = System.getProperty(targetKey);
 			
 			if ( StringUtils.isNotEmpty( targetValue ))
 			{
-				lineOut = String.format(BaseConstants.KEY_VALUE_OUT,  targetKey, targetValue);				
+				lineOut = String.format(BaseConstants.KEY_VALUE_OUT, BaseConstants.EXTERNAL, targetKey, targetValue);				
 				logger.debug(lineOut);				
 				returnValue = AppPropFileKey.EXTERNAL;
-				
-				// TODO: Now that we found it, ADD IT!
-				
 				break;
 			}
 			
 			targetKey = AppPropFileKey.INTERNAL.toString();
 			
-			logger.debug("SECOND Attempting To Retrieve -D Key (INTERNAL): " + targetKey);
+			logger.debug("SECOND Attempting To Retrieve -D External-Key for an INTERNAL reference: " + targetKey);
 			
 			targetValue = System.getProperty(targetKey);
 
 			if ( StringUtils.isNotEmpty( targetValue ))
 			{
-				lineOut = String.format(BaseConstants.KEY_VALUE_OUT,  targetKey, targetValue);				
+				lineOut = String.format(BaseConstants.KEY_VALUE_OUT,  BaseConstants.INTERNAL, targetKey, targetValue);				
 				logger.debug(lineOut);				
 				returnValue = AppPropFileKey.INTERNAL;
-
-				// TODO: Now that we found it, ADD IT!
-				
 				break;
 			}
 			else
@@ -386,10 +396,10 @@ public class FileUtil
 
     public static QuotesInputFileType getTargetQuotesFileType(Properties props)
   	{
-  		Log logger 								= methIDgetTargetQuotesFileType;  	
-  		String keyValue 						= null;  				
+  		Log logger 									= methIDgetTargetQuotesFileType;  	
+  		String keyValue 							= null;  				
   		QuotesInputFileType quotesInputFileType 	= QuotesInputFileType.NOT_SET;
-  		String errorMsg							= null;
+  		String errorMsg								= null;
   		
 		logger.debug(BaseConstants.BEGINS);
 		

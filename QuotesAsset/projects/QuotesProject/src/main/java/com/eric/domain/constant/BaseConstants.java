@@ -21,14 +21,17 @@ public class BaseConstants
     public final static String STATUS          					= "Status: ";
     public final static String LOADING_QUOTE   					= "Loading Quote #";
     public final static String INITIALIZING    					= "Initializing";
-    public final static String PERIODS         					= ".......";
+    public final static String PERIOD							= ".";
+    public final static String PERIODS         					= ".......";    
     public final static String BLANK           					= " ";
     public final static String DONE            					= "Done";
     public final static String INTERNAL							= "INTERNAL";
     public final static String EXTERNAL							= "EXTERNAL";    
     public final static String NOT_SET							= "NOT_SET";
-    public final static String EXT_PROP_FILE					= "ext.propfile";
-    public final static String INT_PROP_FILE					= "int.propfile";    
+    public final static String EXT_PREFIX						= "ext";
+    public final static String INT_PREFIX						= "int";    
+    public final static String EXT_PROP_FILE					= EXT_PREFIX + PERIOD + "propfile";
+    public final static String INT_PROP_FILE					= INT_PREFIX + PERIOD + "propfile";    
     public final static String TARGET_PROP_INPUT_FILE_TYPE		= "target.prop.input.file.type";    
     
 	public final static String QUOTES_PROPS						= "/Quotes.properties";
@@ -47,6 +50,6 @@ public class BaseConstants
 	public final static String DASH_T							= "-T";
 	public final static String BEGINS							= "Begins...";
 	public final static String ENDS								= "Ends...";
-	public final static String KEY_VALUE_OUT					= "Key: |%s|, Value: |%s|";
+	public final static String KEY_VALUE_OUT					= "KeyType: |%s|, Key: |%s|, Value: |%s|";
 	
 }
