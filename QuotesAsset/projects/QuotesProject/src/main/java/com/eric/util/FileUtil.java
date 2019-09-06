@@ -116,11 +116,11 @@ public class FileUtil
 			    	key = propEnums.nextElement();		      
 			    	value = props.getProperty(key);
 			      
-			    	keyType = BaseConstants.INT_PREFIX;
+			    	keyType = BaseConstants.INTERNAL;
 			    	
 			    	if (key.contains(BaseConstants.EXT_PREFIX))
 			    	{
-			    		keyType = BaseConstants.EXT_PREFIX;
+			    		keyType = BaseConstants.EXTERNAL;
 			    	}
 			    	
 			    	lineOut = String.format(BaseConstants.KEY_VALUE_OUT, keyType, key, value);
