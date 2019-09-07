@@ -349,9 +349,9 @@ public class FileUtil
 				}
 				else
 				{				
-					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);				
-					returnValue = props.getProperty(BaseConstants.QUOTES_INT_FILE_NAME_KEY);	
-					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);
+					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_DEFAULT_FILE_NAME_KEY);				
+					returnValue = props.getProperty(BaseConstants.QUOTES_INT_DEFAULT_FILE_NAME_KEY);	
+					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_INT_DEFAULT_FILE_NAME_KEY);
 					
 					if ( returnValue != null )
 					{
@@ -369,9 +369,9 @@ public class FileUtil
 			{
 				if (quotesInputFileType.equals(QuotesInputFileType.INTERNAL))
 				{
-					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);				
-					returnValue = props.getProperty(BaseConstants.QUOTES_INT_FILE_NAME_KEY);	
-					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_INT_FILE_NAME_KEY);	
+					logger.debug("Attempting To Locate Key: " + BaseConstants.QUOTES_INT_DEFAULT_FILE_NAME_KEY);				
+					returnValue = props.getProperty(BaseConstants.QUOTES_INT_DEFAULT_FILE_NAME_KEY);	
+					logger.debug ("Received Value: " + returnValue + " For Key: " + BaseConstants.QUOTES_INT_DEFAULT_FILE_NAME_KEY);	
 				}
 				
 				if (quotesInputFileType.equals(QuotesInputFileType.EXTERNAL))
