@@ -16,7 +16,7 @@ set CP_BASE=.
 set CP_LIB=.
 
 set CP=%CP_BASE%
-set CP=%CP%;%CP_BASE%\quotes-3.1.0.0-RELEASE.jar
+set CP=%CP%;%CP_BASE%\quotes-3.2.0.0-RELEASE.jar
 REM set CP=%CP%;%CP_BASE%\Quotes.jar
 set CP=%CP%;%CP_BASE%\commons-logging-1.1.1.jar
 set CP=%CP%;%CP_BASE%\commons-lang3-3.7.jar
