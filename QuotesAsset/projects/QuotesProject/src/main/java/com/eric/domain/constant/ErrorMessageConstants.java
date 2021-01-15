@@ -15,6 +15,7 @@ public final class ErrorMessageConstants
 	public static final String PROPS_ARE_EMPTY						= "Properties ARE EMPTY!!!";	
 	public static final String APP_VERSION_IS_NULL					= "Application Version IS NULL!!!";
 	public static final String JDK_VERSION_IS_NULL					= "JDK Version IS NULL!!!";	
+	public static final String HOSTNAME_IS_NULL						= "HostName IS NULL!!";
 	public static final String MAX_QUOTES_IS_ZERO					= "Max Quotes IS ZERO!!!";
 	
 	public static final String PROPERTY_FILE_NOT_FOUND				= "%s Property File Not Found!!!";	

@@ -37,7 +37,7 @@ public class BaseConstants
 	public final static String QUOTES_PROPS						= "/Quotes.properties";
 	public final static String TARGET_QUOTE_INPUT_FILE_TYPE		= "target.quote.input.file.type";
 	public final static String QUOTES_EXT_FILE_NAME_KEY			= "ext.quotes.file.name";
-	public final static String QUOTES_INT_DEFAULT_FILE_NAME_KEY	= "int.quotes.file.default.name";	
+	public final static String QUOTES_INT_DEFAULT_FILE_NAME_KEY	= "int.quotes.default.file.name";	
 	public final static String QUOTES_APP_VERSION_KEY			= "quotes.app.version";
 	public final static String JAVA_VERSION						= "java.version";
 	public final static String CARRIAGE_RETURN	    			= "\n";

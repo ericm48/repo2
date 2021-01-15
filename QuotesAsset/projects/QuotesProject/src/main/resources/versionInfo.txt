@@ -2,9 +2,11 @@
 # VersionInfo.txt:
 #
 
-
 Version:
 3.2.0.0-SNAPSHOT	-ToDo:
+						-Add a 'LAST' & 'MAX' command line options:
+							-LAST shows last quote in file...
+							-MAX shows quote that is listed as MAX (not necessarily last, but should be).
 						-Rewire Logging (log4j.xml) to use an enviro-variable for directory location of
 						 log file, not hardcoded in .xml file.
 						-Add Looping (loopInterval in prop file, 10 seconds, infinite or maxIterations?).
@@ -13,12 +15,14 @@ Version:
 					 	 x-Fulton Sheen
 					 	 x-CS Lewis
 					 	 -Matthew Kelley
+					 	 -Saints:
+					 	 	-Mother Teresa
+					 	 	-Thomas Acquinas
+					 	 	-Terese of Avila
+					 	 
 					 	 -Confucious
 					 	 -Einstein
 					 	 x-Shakespear
-					 	 -Saints:
-					 	 	-Thomas Acquinas
-					 	 	-Terese of Avila
 					 	 						 	  
 						-Add parent pom.xml.
 						-Add Junit-4.12.

@@ -12,7 +12,7 @@
     </appender>    
  
     <appender name="file.info" class="org.apache.log4j.RollingFileAppender"> 
-        <param name="File" value="/dev2/logs/quotesapp.log"/>
+        <param name="File" value="./logs/quotesapp.log"/>
 	<param name="MaxFileSize" value="10000KB"/>
     	
    	<!-- Keep nine backup files -->
@@ -25,7 +25,7 @@
     </appender>
    
     <appender name="file.perf" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="/dev2/logs//quotesapp_perf.log"/>
+        <param name="File" value="./logs//quotesapp_perf.log"/>
 	<param name="MaxFileSize" value="10000KB"/>    	
     	
     	<!-- Keep nine backup files -->
