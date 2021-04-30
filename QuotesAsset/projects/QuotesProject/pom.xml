@@ -11,7 +11,13 @@
   <properties>
 			<default.java.version>1.8</default.java.version>
 			<default.java.home>${java.1.8.home}</default.java.home>
+
+			<!--			
 			<java.1.8.home>/apps/java/jdk1.8.0_201</java.1.8.home>
+			-->
+			
+			<java.1.8.home>/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home</java.1.8.home>
+			
 			<mavenConflictResolvers>newest</mavenConflictResolvers>
 			<jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>			
   </properties>

@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# QuoteJGUI Command
+#
+
+#set -x
+	 
+usage(){
+   		echo " "
+   		echo " "
+   		echo " "
+			echo "Usage:   $0 [quoteNumber]"
+   		echo " "
+   		echo " "
+   		echo " "
+   		exit 1
+}   
+  
+  CP=
+	CP_BASE=
+	CP_LIB=
+
+	CP_BASE="."
+	CP_LIB="."
+
+	CP="$CP_BASE"
+	
+	VARS=
+	VARS="ext.propfile=/apps/java/QuotesApp/Quotes.properties"
+
+		
+#	CP="$CP:$CP_BASE/quotes.jar"
+	CP="$CP:$CP_BASE/quotes-3.2.0.0-RELEASE.jar"
+	CP="$CP:$CP_BASE/commons-lang3-3.7.jar"	
+	CP="$CP:$CP_BASE/commons-logging-1.1.1.jar"
+	CP="$CP:$CP_BASE/log4j-1.2.14.jar"
+	  
+	#echo "ArgBe: $1" 
+	  
+  if [ $# -eq 1 ] 
+  	then
+			java -classpath "$CP" com.eric.controller.CommandLineController -g
+
+    else
+    
+			java -classpath "$CP" -D"$VARS" com.eric.controller.CommandLineController -g "$1"	
+    
+  fi
+   
+  exit 0
