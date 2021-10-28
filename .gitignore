@@ -17,6 +17,11 @@ jdk-8u91-linux-x64.rpm
 *.logs
 *.logs.*
 
+**/log
+**/log.*
+**/logs/*
+**/logs./*
+
 
 #################
 ## Maven
@@ -324,4 +329,4 @@ pip-log.txt
 ##############
 # VSCode
 ##############
-.vscode/*
+*/.vscode/*
