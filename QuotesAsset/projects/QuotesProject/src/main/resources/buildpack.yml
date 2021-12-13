@@ -1,0 +1,8 @@
+---
+gcr.io/paketo-buildpacks/amazon-corretto:
+  version: 7.0.1  
+
+#tanzu-buildpacks/new-relic:
+#  version: 3.15.0
+#nodejs:
+#  version: 12.12.0  
