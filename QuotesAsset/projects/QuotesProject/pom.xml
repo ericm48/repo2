@@ -149,6 +149,42 @@
 		  <version>1.2.17</version>
 		</dependency>	    
 	      
+		<!-- Zabbix Begin -->
+		
+		<dependency>
+		    <groupId>io.github.hengyunabc</groupId>
+		    <artifactId>zabbix-api</artifactId>
+		    <version>0.0.2</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>io.github.hengyunabc</groupId>
+		    <artifactId>zabbix-sender</artifactId>
+		    <version>0.0.5</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>io.github.hengyunabc</groupId>
+		    <artifactId>metrics-zabbix</artifactId>
+		    <version>0.0.5</version>
+		</dependency>
+
+
+		<!-- Zabbix End -->
+
+
+		<!-- NewRelic Begin -->
+		
+		<dependency>
+		    <groupId>com.newrelic.agent.java</groupId>
+		    <artifactId>newrelic-agent</artifactId>
+		    <version>7.4.0</version>
+		</dependency>
+		
+		<!-- NewRelic End -->
+	      
+	      
+	      
   </dependencies>  
 
   <distributionManagement>
