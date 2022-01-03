@@ -5,7 +5,7 @@
   <groupId>com.eric</groupId>
   <artifactId>quotes</artifactId>
   <packaging>jar</packaging>
-  <version>3.2.0.0-RELEASE</version>
+  <version>3.3.0.0-RELEASE</version>
   <name>quotes</name>
   
   <properties>
@@ -142,15 +142,7 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.7</version>
 		</dependency>	   
-	   
-	  <!--
-	  <dependency>
-	  	<groupId>log4j</groupId>  
-	    <artifactId>log4j</artifactId>
-	    <version>1.2.14</version> 
-	  </dependency>
-	  -->
-	    
+    
 		<dependency>
 		  <groupId>log4j</groupId>
 		  <artifactId>log4j</artifactId>
