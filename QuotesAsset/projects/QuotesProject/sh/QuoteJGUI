@@ -30,10 +30,10 @@ usage(){
 
 		
 #	CP="$CP:$CP_BASE/quotes.jar"
-	CP="$CP:$CP_BASE/quotes-3.2.0.0-RELEASE.jar"
+	CP="$CP:$CP_BASE/quotes-3.3.0.0-RELEASE.jar"
 	CP="$CP:$CP_BASE/commons-lang3-3.7.jar"	
 	CP="$CP:$CP_BASE/commons-logging-1.1.1.jar"
-	CP="$CP:$CP_BASE/log4j-1.2.14.jar"
+	CP="$CP:$CP_BASE/log4j-1.2.17.jar"
 	  
   if [ $# -lt 1 ] 
   	then
