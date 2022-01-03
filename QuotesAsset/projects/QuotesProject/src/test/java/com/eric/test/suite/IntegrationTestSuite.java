@@ -1,6 +1,8 @@
 package com.eric.test.suite;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.core.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Categories;
@@ -22,13 +24,13 @@ import com.eric.test.category.IntegrationTest;
 public class IntegrationTestSuite
 {
 	
-	private static final Logger	methIDfirstMethod 	= Logger.getLogger(IntegrationTestSuite.class.getName() + ".firstMethod()");		
-	private static final Logger methIDlastMethod 	= Logger.getLogger(IntegrationTestSuite.class.getName() + ".lastMethod()");		
+	private static final Log	methIDfirstMethod 	= LogFactory.getLog(IntegrationTestSuite.class.getName() + ".firstMethod()");		
+	private static final Log   	methIDlastMethod 	= LogFactory.getLog(IntegrationTestSuite.class.getName() + ".lastMethod()");		
 	
 	@BeforeClass
 	public static void firstMethod()
 	{		
-		Logger logger = methIDfirstMethod;		
+		Log logger = methIDfirstMethod;		
 		logger.info("Quotes INTEGRATION Test Suite Begins...");		
 		return;
 	}	
@@ -36,7 +38,7 @@ public class IntegrationTestSuite
 	@AfterClass
 	public static void lastMethod()
 	{
-		Logger logger = methIDlastMethod;		
+		Log logger = methIDlastMethod;		
 		logger.info("Quotes INTEGRATION Test Suite Ends...");		
 		return;
 	}	

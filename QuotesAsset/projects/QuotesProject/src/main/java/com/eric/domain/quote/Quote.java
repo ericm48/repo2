@@ -8,10 +8,6 @@
  */
 package com.eric.domain.quote;
 
-import java.util.Enumeration;
-import java.util.Properties;
-
-import com.eric.domain.constant.BaseConstants;
 
 public class Quote 
 {	

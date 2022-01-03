@@ -23,7 +23,6 @@ import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;
 import com.eric.domain.message.ExMessages;
-import com.eric.domain.quote.Quote;
 import com.eric.domain.quote.QuoteHolder;
 import com.eric.ui.listener.DialogListener;
 import com.eric.util.FileUtil;

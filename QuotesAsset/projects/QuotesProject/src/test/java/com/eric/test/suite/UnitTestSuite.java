@@ -1,6 +1,7 @@
 package com.eric.test.suite;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.experimental.categories.Categories;
@@ -26,13 +27,13 @@ import com.eric.util.FileUtil_UT;
 
 public class UnitTestSuite
 {
-	private static final Logger	methIDfirstMethod 	= Logger.getLogger(UnitTestSuite.class.getName() + ".firstMethod()");		
-	private static final Logger methIDlastMethod 	= Logger.getLogger(UnitTestSuite.class.getName() + ".lastMethod()");		
+	private static final Log methIDfirstMethod 	= LogFactory.getLog(UnitTestSuite.class.getName() + ".firstMethod()");		
+	private static final Log methIDlastMethod 	= LogFactory.getLog(UnitTestSuite.class.getName() + ".lastMethod()");		
 	
 	@BeforeClass
 	public static void firstMethod()
 	{		
-		Logger logger = methIDfirstMethod;		
+		Log logger = methIDfirstMethod;		
 		logger.info("Quotes UNIT Test Suite Begins...");		
 		return;
 	}	
@@ -40,7 +41,7 @@ public class UnitTestSuite
 	@AfterClass
 	public static void lastMethod()
 	{
-		Logger logger = methIDlastMethod;		
+		Log logger = methIDlastMethod;		
 		logger.info("Quotes UNIT Test Suite Ends...");		
 		return;
 	}		

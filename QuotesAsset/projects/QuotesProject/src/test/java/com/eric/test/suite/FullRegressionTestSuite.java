@@ -1,9 +1,9 @@
 /**
- * © 2014 CenturyLink. All Rights Reserved.
- */
+  */
 package com.eric.test.suite;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -27,13 +27,13 @@ import com.eric.command.FormatQuoteCommand_UT;
 public class FullRegressionTestSuite
 {
 
-	private static final Logger	methIDfirstMethod 	= Logger.getLogger(FullRegressionTestSuite.class.getName() + ".firstMethod()");		
-	private static final Logger methIDlastMethod 	= Logger.getLogger(FullRegressionTestSuite.class.getName() + ".lastMethod()");		
+	private static final Log methIDfirstMethod 	= LogFactory.getLog(FullRegressionTestSuite.class.getName() + ".firstMethod()");		
+	private static final Log methIDlastMethod 	= LogFactory.getLog(FullRegressionTestSuite.class.getName() + ".lastMethod()");		
 	
 	@BeforeClass
 	public static void firstMethod()
 	{		
-		Logger logger = methIDfirstMethod;		
+		Log logger = methIDfirstMethod;		
 		logger.info("Quotes FULL-REGRESSION Test Suite Begins...");		
 		return;
 	}	
@@ -41,7 +41,7 @@ public class FullRegressionTestSuite
 	@AfterClass
 	public static void lastMethod()
 	{
-		Logger logger = methIDlastMethod;		
+		Log logger = methIDlastMethod;		
 		logger.info("Quotes FULL-REGRESSION Test Suite Ends...");		
 		return;
 	}

@@ -9,7 +9,6 @@
 package com.eric.ui.listener;
 
 import java.io.Serializable;
-import java.util.Properties;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;

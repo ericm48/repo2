@@ -22,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.eric.adapter.QuotesAdapter;
 import com.eric.domain.common.enumeration.AppPropFileKey;
-import com.eric.domain.common.enumeration.PropKeyType;
 import com.eric.domain.common.enumeration.QuotesInputFileType;
 import com.eric.domain.constant.BaseConstants;
 import com.eric.domain.constant.ErrorMessageConstants;

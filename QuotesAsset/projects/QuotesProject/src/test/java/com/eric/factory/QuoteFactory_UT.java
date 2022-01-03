@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.eric.domain.common.enumeration.AppPropFileKey;
 import com.eric.domain.constant.BaseTestConstants;
 import com.eric.domain.quote.QuoteHolder;
 import com.eric.test.util.QuotesTestUtil;
