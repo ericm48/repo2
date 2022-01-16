@@ -3,6 +3,36 @@
 #
 
 Version:
+
+
+3.3.0.2-SNAPSHOT	-ToDo:
+						-Add a 'LAST' & 'MAX' command line options:
+							-LAST shows last quote in file...
+							-MAX shows quote that is listed as MAX (not necessarily last, but should be).
+						-Rewire Logging (log4j.xml) to use an enviro-variable for directory location of
+						 log file, not hardcoded in .xml file.
+						-Add Looping (loopInterval in prop file, 10 seconds, infinite or maxIterations?).
+						-Add functionalty with prop file(s), so-as to configure a different quotes file
+					 	 for that instance.  Quotes file of only:
+					 	 x-Fulton Sheen
+					 	 x-CS Lewis
+					 	 -Matthew Kelley
+					 	 -Saints:
+					 	 	-Mother Teresa
+					 	 	-Thomas Acquinas
+					 	 	-Terese of Avila
+					 	 
+					 	 -Confucious
+					 	 -Einstein
+					 	 x-Shakespear
+					 	 						 	  
+						-Add parent pom.xml.
+						-Add Junit-4.12.
+
+
+3.3.0.0-RELEASE:
+						-Updated log4j to v 1.2.17.
+
 3.2.0.0-SNAPSHOT	-ToDo:
 						-Add a 'LAST' & 'MAX' command line options:
 							-LAST shows last quote in file...
