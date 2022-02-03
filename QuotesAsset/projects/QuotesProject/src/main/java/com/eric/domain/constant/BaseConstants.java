@@ -48,6 +48,7 @@ public class BaseConstants
 	
 	public final static String DASH_G							= "-G";
 	public final static String DASH_T							= "-T";
+	public final static String DASH_H							= "-H";    
 	public final static String BEGINS							= "Begins...";
 	public final static String ENDS								= "Ends...";
 	public final static String KEY_VALUE_OUT					= "KeyType: |%s|, Key: |%s|, Value: |%s|";

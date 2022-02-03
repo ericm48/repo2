@@ -41,76 +41,81 @@ public class CommandLineController
 	 public static void main(String[] args)
 	 {
 
-		  Log logger = methIDMain;
+		Log logger = methIDMain;
 
-		  int targetQuote = 0;
-		  int i = 0;
-		  boolean control = true;
-		  QuoteController qc = null;
+		int targetQuote = 0;
+		int i = 0;
+		boolean control = true;
+		QuoteController qc = null;
 
-		  // =================================================================
-		  // Order Should be:
-		  //
-		  // -g/-G or -t/-T -Applet-GUI Interface or Text Interface
-		  // Quote # -Quote # to Display.
-		  //
-		  // =================================================================
+		// =================================================================
+		// Order Should be:
+		//
+		// -g/-G or -t/-T -Applet-GUI Interface or Text Interface
+		// Quote # -Quote # to Display.
+		//
+		// =================================================================
 
-		  logger.debug(BaseConstants.BEGINS);
+		logger.debug(BaseConstants.BEGINS);
 
-		  if ( args.length > 0 )
-		  {
-				i = 0;
+		i = 0;
 
-				while (control)
-				{
-					 if ( args[i].equalsIgnoreCase(BaseConstants.DASH_G) )
-					 {
-						  qc = new QuoteGUIController();
-					 }
-					 else if ( args[i].equalsIgnoreCase(BaseConstants.DASH_T) )
-					 {
-						  qc = new QuoteTextController();
-					 }
-					 else
-					 {
-						  System.out
-									 .println("\n\n*** ERROR Invalid Argument Received: "
-												+ args[i] + " \n");
-						  control = false;
-						  printUsage();
-						  break;
-					 }
+		if ( args.length <= 0 )
+		{
+			qc = new QuoteTextController();
+			control = false;
+		}
 
-					 if ( args.length > 1 )
-					 {
-						  targetQuote = Integer.valueOf(args[++i]).intValue();
-					 }
+		while ( control )
+		{
 
-					 i++;
-
-					 // Safety Purposes
-					 if ( i >= args.length )
-					 {
-						  control = false;
-						  break;
-					 }
-
-				}
-
-				if ( qc != null )
-				{
-					 qc.showQuote(targetQuote);
-					 qc = null;
-				}
-
-		  }
-		  else
-		  {
+			if ( args[i].equalsIgnoreCase(BaseConstants.DASH_H) )
+			{ 
 				printUsage();
-		  }
+				control = false;
+				break;
+			}
+			else if ( args[i].equalsIgnoreCase(BaseConstants.DASH_G) )
+			{
+				qc = new QuoteGUIController();
+			}
+			else if ( args[i].equalsIgnoreCase(BaseConstants.DASH_T) )
+			{
+				qc = new QuoteTextController();
+			}
+			else
+			{
+					System.out
+								.println("\n\n*** ERROR Invalid Argument Received: "
+										+ args[i] + " \n");
+					control = false;
+					printUsage();
+					break;
+				}
 
-		  logger.debug(BaseConstants.ENDS);
+				if ( args.length > 1 )
+				{
+					targetQuote = Integer.valueOf(args[++i]).intValue();
+				}
+
+				i++;
+
+				// Safety Purposes
+				if ( i >= args.length )
+				{
+					control = false;
+					break;
+				}
+
+		}
+
+		if ( qc != null )
+		{
+				qc.showQuote(targetQuote);
+				qc = null;
+		}
+
+		logger.debug(BaseConstants.ENDS);
 
 	 }
 

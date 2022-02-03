@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: quotes
+  name: quotes
+spec:
+  containers:
+  - name: quotes-bp
+    image: harbor.caas.pez.pivotal.io/tbs/eric/main/quotes:latest
+    command: ["java"]
+    args: ["-jar", "something.jar"]
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
